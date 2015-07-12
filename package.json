@@ -1,0 +1,16 @@
+{
+  "name": "seams",
+  "version": "0.0.1",
+  "description": "Search-Engine-a-a-Micro-Service - A Bluemix app that creates a search engine powered by IBM Cloudant",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bluemixdatacache": "0.0.4",
+    "cfenv": "1.0.x",
+    "cloudant": "^1.1.0",
+    "cors": "^2.7.1",
+    "express": "4.12.x"
+  },
+  "repository": {}
+}

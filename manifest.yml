@@ -1,0 +1,11 @@
+applications:
+- services:
+  - Cloudant Seams
+  - Data Cache Seams
+  disk_quota: 1024M
+  host: seams
+  name: seams
+  path: .
+  domain: mybluemix.net
+  instances: 1
+  memory: 256M
