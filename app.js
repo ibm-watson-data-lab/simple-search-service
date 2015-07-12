@@ -8,6 +8,7 @@
 // for more info, see: http://expressjs.com
 var express = require('express'),
   cors = require('cors'),
+  compression = require('compression'),
   cfenv = require('cfenv'),
   appEnv = cfenv.getAppEnv(),
   app = express(),
@@ -16,6 +17,8 @@ var express = require('express'),
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
+// compress all requests
+app.use(compression())
 
 // search proxy
 app.get('/search', cors(), function (req, res) {
