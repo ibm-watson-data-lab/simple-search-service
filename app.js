@@ -22,6 +22,9 @@ app.use(compression())
 
 // search proxy
 app.get('/search', cors(), function (req, res) {
+  if (typeof req.query.q == "undefined") {
+    req.query.q = "*:*";
+  }
   cloudant.search(req.query, function(err, data) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
