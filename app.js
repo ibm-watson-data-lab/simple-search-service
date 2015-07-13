@@ -30,8 +30,6 @@ app.get('/search', cors(), function (req, res) {
   });
 });
 
-
-
 // start server on the specified port and binding host
 app.listen(appEnv.port, appEnv.bind, function() {
 
