@@ -12,7 +12,8 @@ var express = require('express'),
   cfenv = require('cfenv'),
   appEnv = cfenv.getAppEnv(),
   app = express(),
-  cloudant = require('./lib/db.js');
+  db = require('./lib/db.js'),
+  schema = require('./lib/schema.js');
 
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
@@ -22,16 +23,23 @@ app.use(compression())
 
 // search proxy
 app.get('/search', cors(), function (req, res) {
-  if (typeof req.query.q == "undefined") {
-    req.query.q = "*:*";
-  }
-  cloudant.search(req.query, function(err, data) {
+  db.search(req.query, function(err, data) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
     }
     res.send(data);
   });
 });
+
+app.get('/schema', cors(), function (req, res) {
+  schema.load(function(err, data) {
+    if (err) {
+      return res.status(404).send({error: "Could not load schema", reason: "not found"});
+    }
+    res.send(data);
+  });
+});
+
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, appEnv.bind, function() {
