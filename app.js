@@ -31,7 +31,7 @@ app.get('/search', cors(), function (req, res) {
   });
 });
 
-app.get('/schema', cors(), function (req, res) {
+app.get('/schema', function (req, res) {
   schema.load(function(err, data) {
     if (err) {
       return res.status(404).send({error: "Could not load schema", reason: "not found"});
