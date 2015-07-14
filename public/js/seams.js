@@ -1,12 +1,22 @@
 var schema = null;
 
+
+var ms = function() {
+  var d = new Date();
+  return d.getTime();
+};
+
 var search = function() {
+  var startTime = ms();
+  $('#serps').html("");
   var q = $('#q').val();
   $.ajax({
     url: "/search",
     data: { q: q},
     dataType: "json"
   }).done(function(x) {
+    var endTime = ms();
+    $('#searchtime').html(endTime - startTime + " ms");
     $('#serps').html(JSON.stringify(x, null, " "));
   }).fail(function(e) {
     console.log(e);
@@ -100,6 +110,4 @@ $( document ).ready(function() {
       populateData();
   });
 
-  
-  // Handler for .ready() called.
 });

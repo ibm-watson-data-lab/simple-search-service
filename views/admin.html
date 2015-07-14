@@ -20,11 +20,15 @@
 <body>
   <div class="container">
 
-    <div class="jumbotron">
-      <h1>SEaMS - Search Engine as-a Micro Service</h1>
-      <p>A search engine app</p>
-      <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-    </div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">SEaMS</a>
+        </div>
+
+      </div><!-- /.container-fluid -->
+    </nav>
 
     <div>
 
@@ -46,6 +50,7 @@
               <input type="text" class="form-control" id="q" placeholder="">
             </div>
             <button type="submit" class="btn btn-default">Search</button>
+            <span id="searchtime"></span>
           </form>
           <pre id="serps"></pre>
         </div>
@@ -72,8 +77,16 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js"></script>
   <script src="/js/seams.js"></script>
+  <script type="text/javascript">
+    $( document ).ready(function() {
+  
+      populateSchema(function() {
+          populateData();
+      });
+
+    });
+  </script>
   
 </body>
 </html>

@@ -14,6 +14,7 @@ var express = require('express'),
   app = express(),
   db = require('./lib/db.js'),
   proxy = require('./lib/proxy.js'),
+  path = require('path'),
   schema = require('./lib/schema.js');
 
 // serve the files out of ./public as our main files
@@ -24,6 +25,16 @@ app.use(compression());
 
 // set up the Cloudant proxy
 app.use(proxy());
+
+// search proxy
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+// search proxy
+app.get('/admin', function (req, res) {
+  res.sendFile(path.join(__dirname,'views','admin.html'));
+});
 
 // search proxy
 app.get('/search', cors(), function (req, res) {
