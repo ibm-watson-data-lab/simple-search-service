@@ -1,25 +1,18 @@
-# Node.js Starter Application
+# Search Engine as-a Micro Service (seams)
 
-Bluemix provides a Node.js starter application as a template so that you can
-add your code and push the changes back to the Bluemix environment.
+Seams is an installable Bluemix app that creates a seach engine service with no code. On installation, seams uses:
 
-## Files
+* Node.js runtime
+* a Cloudant database
+* the IBM Datacache service
 
-The Node.js starter application has files as below:
+The seams user interface allows you to define the fields you would like to store and then provides a simple Content 
+Management System to add/edit/delete data. The relevant fields are indexed automatically and a search API is presented 
+on the `/search` endpoint, including:
 
-* app.js
+* fielded search - ?q=colour:black+AND+brand:fender
+* free-text search - ?q=black+fender+strat
+* pagination 
+* faceting
+* caching of popular searches
 
-	This file contains the server side JavaScript code for your application
-	written using the express server package.
-
-* public/
-
-	This directory contains public resources of the application, that will be
-	served up by this server
-
-* package.json
-
-	This file contains metadata about your application, that is used by both
-	the `npm` program to install packages, but also Bluemix when it's
-	staging your application.  For more information, see:
-	<https://docs.npmjs.com/files/package.json>
