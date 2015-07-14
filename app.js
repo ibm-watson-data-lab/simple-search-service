@@ -13,13 +13,17 @@ var express = require('express'),
   appEnv = cfenv.getAppEnv(),
   app = express(),
   db = require('./lib/db.js'),
+  proxy = require('./lib/proxy.js'),
   schema = require('./lib/schema.js');
 
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
 // compress all requests
-app.use(compression())
+app.use(compression());
+
+// set up the Cloudant proxy
+app.use(proxy());
 
 // search proxy
 app.get('/search', cors(), function (req, res) {
