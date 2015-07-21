@@ -1,15 +1,16 @@
 body { margin-top:60px; padding-bottom:60px}
 
 #schemacontent { 
-  height:300px;
 }
 
 #serps { 
-  margin-top:20px;
-  height:300px;
 }
 
 #searchtime {
   margin-left:25px;
+  color:#aaa;
+}
+
+#fileuploadprogress {
   color:#aaa;
 }

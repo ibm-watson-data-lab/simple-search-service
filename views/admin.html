@@ -30,77 +30,61 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <div>
 
-      <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#search" aria-controls="search" role="tab" data-toggle="tab">Search</a></li>
-        <li role="presentation"><a href="#schema" aria-controls="schema" role="tab" data-toggle="tab">Schema</a></li>
-        <li role="presentation"><a href="#data" aria-controls="data" role="tab" data-toggle="tab">Data</a></li>
-        <li role="presentation"><a href="#help" aria-controls="help" role="tab" data-toggle="tab">Help</a></li>
-      </ul>
-
-      <!-- Tab panes -->
-      <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="search">
-          <h2>Search</h2>
-          <form onsubmit="return search();">
-            <div class="form-group">
-              <label for="q">q</label>
-              <input type="text" class="form-control" id="q" placeholder="">
-            </div>
-            <button type="submit" class="btn btn-default">Search</button>
-            <span id="searchtime"></span>
-          </form>
-          <pre id="serps"></pre>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title">
+              1 of 3 - Upload data
+          </h4>
         </div>
-        
-        <div role="tabpanel" class="tab-pane" id="schema">
-          <h2>Schema</h2>
-          <div id="schemacontent"></div>
-        </div>
-        
-        <div role="tabpanel" class="tab-pane" id="data">
-          <h2>Data</h2>
-          <form action="/upload" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="filetype">File Type</label>
-              <select id="filetype" name="filetype">
-                <option value="csv">Comma-separated</option>
-                <option value="tsv">Tab-separated</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="fle">File to upload</label>
-              <input id="file" name="file" type="file" />
-            </div>
-            <button type="submit" class="btn btn-default">Search</button>
-          </form>
-          <div id="datacontent"></div>
-        </div>
-        
-        <div role="tabpanel" class="tab-pane" id="help">
-          <h2>Help</h2>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+              <p>You have no data in your database. Please upload a comma-separated file (csv) or a tab-separated file containing the
+                 the data you wish to store and search</p>
+            
+              <div class="form-group">
+                <label for="fle">File to upload</label>
+                <input id="file" name="file" type="file" />
+                &nbsp;<span id="fileuploadprogress"></span>
+              </div>
+          </div>
         </div>
       </div>
-
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+          <h4 class="panel-title">
+              2 of 3 - Schema
+          </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+              <div id="schemacontent"></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingThree">
+          <h4 class="panel-title">
+             Third thing
+          </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+             ooh yeah
+          </div>
+        </div>
+      </div>
     </div>
+
+
     
-  </div>
+  </div> <!-- container -->
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="/js/seams.js"></script>
-  <script type="text/javascript">
-    $( document ).ready(function() {
-  
-      populateSchema(function() {
-          populateData();
-      });
-
-    });
-  </script>
   
 </body>
 </html>

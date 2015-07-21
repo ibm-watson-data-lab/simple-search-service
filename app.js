@@ -10,7 +10,9 @@ var express = require('express'),
   proxy = require('./lib/proxy.js'),
   path = require('path'),
   cache = require('./lib/cache.js'),
-  schema = require('./lib/schema.js');
+  schema = require('./lib/schema.js'),
+  inference = require('./lib/inference.js');
+
 
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
@@ -63,8 +65,11 @@ app.post('/upload', function(req, res){
     files: req.files,
     body: req.body
   };
+console.log(obj);
   cache.put(obj.files.file.name, obj, function(err, data) {
-    res.send({name: obj.files.file.name});
+    inference.infer(obj.files.file.path, function(err, data) {
+      res.send(data);
+    });
   });
 });
 
