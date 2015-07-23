@@ -59,19 +59,33 @@
         </div>
         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
           <div class="panel-body">
+              <h3>File upload complete</h3>
+              <p>Please review the fields we have found in the uploaded file. Choose the data types of each field; this will
+                   transform numbers and booleans to be stored as such in the database. </p>
+              <p> You can also choose for a field to be  faceted or not by checking the fields facet tick box. A faceted 
+                   field will be counted in the result set e.g. if 'colour' was faceted, then the search results 
+                   could indicate that there are 10 red items, 4 blue items and 1 green item. </p>
+              <p> When you have made your decision, click the 'Import' button to begin the import process.</p>
               <div id="schemacontent"></div>
+              <p>
+                <button id="importbutton" type="submit" class="btn btn-success btn-lg" onclick="return importClicked()">Import</button>
+                &nbsp; <span id="importstatus"></span>
+              </p>
           </div>
         </div>
       </div>
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingThree">
           <h4 class="panel-title">
-             Third thing
+             Search
           </h4>
         </div>
         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
-             ooh yeah
+            <h5 id="importstatus2"></h5>
+            <p>Your data was imported successfully. Please use the /search endpoint to query your database
+              or try out the interactive search tool</p>
+             <p><a class="btn btn-primary btn-lg" href="/admin/search" role="button">Search</a></p>
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "^1.4.0",
     "bluemixdatacache": "0.0.5",
+    "body-parser": "^1.13.2",
     "cfenv": "1.0.x",
     "cloudant": "^1.1.0",
     "compression": "^1.5.1",

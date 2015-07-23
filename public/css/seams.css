@@ -3,7 +3,13 @@ body { margin-top:60px; padding-bottom:60px}
 #schemacontent { 
 }
 
-#serps { 
+#facets, #documents, #serps { 
+  margin-top:20px;
+  display: none;
+}
+
+#searchheadings {
+  display: none;  
 }
 
 #searchtime {
@@ -13,4 +19,8 @@ body { margin-top:60px; padding-bottom:60px}
 
 #fileuploadprogress {
   color:#aaa;
+}
+
+.alert-special {
+  overflow: hidden;
 }

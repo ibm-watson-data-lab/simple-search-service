@@ -17,8 +17,11 @@ var express = require('express'),
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
-// upload directory
-app.use(multer({ dest: process.env.TMPDIR, limits: { files: 1, fileSize: 1000000 }}));
+// multi-part uploads 
+var multipart = multer({ dest: process.env.TMPDIR, limits: { files: 1, fileSize: 1000000 }});
+
+// posted body parser
+var bodyParser = require('body-parser')({extended:true})
 
 // compress all requests
 app.use(compression());
@@ -26,17 +29,33 @@ app.use(compression());
 // set up the Cloudant proxy
 app.use(proxy());
 
-// search proxy
+// home
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// search proxy
-app.get('/admin', function (req, res) {
-  res.sendFile(path.join(__dirname,'views','admin.html'));
+
+// admin home
+app.get('/admin/home', function (req, res) {
+  res.sendFile(path.join(__dirname,'views','adminhome.html'));
 });
 
-// search proxy
+// admin delete
+app.get('/admin/delete', function (req, res) {
+  res.sendFile(path.join(__dirname,'views','admindelete.html'));
+});
+
+// admin upload
+app.get('/admin/upload', function (req, res) {
+  res.sendFile(path.join(__dirname,'views','adminupload.html'));
+});
+
+// admin search
+app.get('/admin/search', function (req, res) {
+  res.sendFile(path.join(__dirname,'views','adminsearch.html'));
+});
+
+// search api 
 app.get('/search', cors(), function (req, res) {
   db.search(req.query, function(err, data) {
     if (err) {
@@ -60,32 +79,54 @@ app.get('/schema', function (req, res) {
 
 
 // upload  CSV
-app.post('/upload', function(req, res){
+app.post('/upload', multipart, function(req, res){
   var obj = {
     files: req.files,
-    body: req.body
+    body: req.body,
   };
-console.log(obj);
   cache.put(obj.files.file.name, obj, function(err, data) {
     inference.infer(obj.files.file.path, function(err, data) {
+      data.upload_id = req.files.file.name;
       res.send(data);
     });
   });
 });
 
 // import previously uploaded CSV
-app.get('/import', function(req, res){
-  console.log("key", req.query)
-  cache.get(req.query.key, function(err, data) {
-    console.log(err,data);
+app.post('/import', bodyParser, function(req, res){
+  console.log("****",req.body.schema);
+  console.log("****");
+  cache.get(req.body.upload_id, function(err, d) {
+    console.log(err,d);
     if(err) {
       return res.status(404).end();
     }
-    dbimport.file(data.files.file.path, data.body.filetype, function(err, data) {
-      res.status(204).end()
+    var currentUpload = d;
+    
+    // run this in parallel to save time
+    var theschema = JSON.parse(req.body.schema);
+    schema.save(theschema, function(err, d) {
+      console.log("schema saved",err,d);
+      // import the data
+      dbimport.file(currentUpload.files.file.path, theschema, function(err, d) {
+        console.log("data imported",err,d);
+      });
     });
-  });
+    
+    res.status(204).end();
 
+  });
+});
+
+app.get('/import/status', function(req, res) {
+  var status = dbimport.status();
+  res.send(status);
+});
+
+app.post('/deleteeverything', function(req, res) {
+  db.deleteAndCreate(function(err, data) {
+    res.send(data);
+  });
 });
 
 // start server on the specified port and binding host
