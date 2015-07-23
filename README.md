@@ -16,3 +16,8 @@ on the `/search` endpoint, including:
 * faceting
 * caching of popular searches
 
+## workflow
+
+* call POST /upload passing the filename and type in, returns an id back for the next stage
+* call GET /preview?id=x to get JSON of the inferred schema
+* call GET /import to actually do the import

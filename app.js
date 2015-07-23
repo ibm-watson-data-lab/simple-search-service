@@ -11,6 +11,7 @@ var express = require('express'),
   path = require('path'),
   cache = require('./lib/cache.js'),
   schema = require('./lib/schema.js'),
+  isloggedin = require('./lib/isloggedin.js'),
   inference = require('./lib/inference.js');
 
 
@@ -36,27 +37,27 @@ app.get('/', function (req, res) {
 
 
 // admin home
-app.get('/admin/home', function (req, res) {
+app.get('/admin/home', isloggedin(), function (req, res) {
   res.sendFile(path.join(__dirname,'views','adminhome.html'));
 });
 
 // admin delete
-app.get('/admin/delete', function (req, res) {
+app.get('/admin/delete', isloggedin(), function (req, res) {
   res.sendFile(path.join(__dirname,'views','admindelete.html'));
 });
 
 // admin upload
-app.get('/admin/upload', function (req, res) {
+app.get('/admin/upload', isloggedin(), function (req, res) {
   res.sendFile(path.join(__dirname,'views','adminupload.html'));
 });
 
 // admin search
-app.get('/admin/search', function (req, res) {
+app.get('/admin/search', isloggedin(), function (req, res) {
   res.sendFile(path.join(__dirname,'views','adminsearch.html'));
 });
 
 // search api 
-app.get('/search', cors(), function (req, res) {
+app.get('/search', cors(), isloggedin(), function (req, res) {
   db.search(req.query, function(err, data) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
@@ -65,21 +66,8 @@ app.get('/search', cors(), function (req, res) {
   });
 });
 
-
-// fetch the schema
-app.get('/schema', function (req, res) {
-  schema.load(function(err, data) {
-    if (err) {
-      return res.status(404).send({error: "Could not load schema", reason: "not found"});
-    }
-    res.send(data);
-  });
-});
-
-
-
 // upload  CSV
-app.post('/upload', multipart, function(req, res){
+app.post('/upload', isloggedin(),  multipart, function(req, res){
   var obj = {
     files: req.files,
     body: req.body,
@@ -93,7 +81,7 @@ app.post('/upload', multipart, function(req, res){
 });
 
 // import previously uploaded CSV
-app.post('/import', bodyParser, function(req, res){
+app.post('/import', isloggedin(), bodyParser, function(req, res){
   console.log("****",req.body.schema);
   console.log("****");
   cache.get(req.body.upload_id, function(err, d) {
@@ -114,16 +102,15 @@ app.post('/import', bodyParser, function(req, res){
     });
     
     res.status(204).end();
-
   });
 });
 
-app.get('/import/status', function(req, res) {
+app.get('/import/status', isloggedin(), function(req, res) {
   var status = dbimport.status();
   res.send(status);
 });
 
-app.post('/deleteeverything', function(req, res) {
+app.post('/deleteeverything', isloggedin(), function(req, res) {
   db.deleteAndCreate(function(err, data) {
     res.send(data);
   });
