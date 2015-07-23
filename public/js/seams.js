@@ -14,13 +14,11 @@ var search = function() {
   $('#facets').html("");
   
   var q = $('#q').val();
-  console.log("q",q);
   $.ajax({
     url: "/search",
     data: { q: q},
     dataType: "json"
   }).done(function(x) {
-    console.log("searh results",x)
     var endTime = ms();
     $('#serps').show();
     $('#facets').show();
@@ -46,12 +44,14 @@ var search = function() {
 
 var deleteEverything= function() {
   // trigger the import
+  $('#deletebutton').attr('disabled', true);
   $.ajax({
     url: "/deleteeverything",
     method: "post",
     dataType: "json"
   }).done(function(x) {
     currentUpload = null;
+    $('#deletefeedback').html("All of your data is gone.")
     console.log("delete done");
   }).fail(function(e) {
     console.log("delete error",e);
