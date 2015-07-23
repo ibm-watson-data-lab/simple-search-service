@@ -10,6 +10,9 @@ var ms = function() {
 var search = function() {
   var startTime = ms();
   $('#serps').html("");
+  $('#documents').html("");
+  $('#facets').html("");
+  
   var q = $('#q').val();
   console.log("q",q);
   $.ajax({
