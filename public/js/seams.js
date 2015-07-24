@@ -52,7 +52,7 @@ var deleteEverything= function() {
   }).done(function(x) {
     currentUpload = null;
     $('#deletefeedback').html("All of your data is gone.")
-    console.log("delete done");
+    location.href="/admin/home";
   }).fail(function(e) {
     console.log("delete error",e);
   });
@@ -116,6 +116,64 @@ var populateData = function() {
   });
 }
 */
+
+var renderPreview = function(callback) {
+  var html = "";
+  $.ajax({
+    url: "/preview",
+    method: "get",
+    dataType: "json"
+  }).done(function(x) {
+    console.log(x);
+    if (x.total_rows == 0 ) {
+      return callback(null, '<h3>0 documents</h3>');
+    }
+    html = '<h3>' + (x.total_rows - 2) + ' documents</h3>';
+    html += '<table class="table table-striped">\n';
+    html += "<tr>\n";
+    var schema = { fields: []};
+    for(var j in x.rows[0].doc) {
+      var field = j;
+      if (field != "_id" && field != "_rev") {     
+        html += "<th>\n";
+        html += field;
+        schema.fields.push({ name:field});
+        html += "</th>\n";
+      }
+    }
+    html += "</tr>\n";
+    for(var i in x.rows) {
+      var doc = x.rows[i].doc;
+      if (doc._id != "schema" && !doc._id.match(/^_design/)) {
+        html += "<tr>";
+      
+        for(var j in schema.fields) {
+          var field = schema.fields[j];
+          html += "<td>\n";
+          var val = doc[field.name];
+          if (typeof val == "undefined") {
+            val ="";
+          } else if (typeof val == "string") {
+            if (val.length > 20) {
+              val = val.substr(0,20) + "...";              
+            }
+          } else {
+            if (val) {
+              val = val.toString();
+            }
+          
+          }
+          html += val;
+          html += "</td>\n";
+        }
+        html += "</tr>\n";
+      }
+    }
+    html += "</table>\n";
+    callback(null,html);
+  });
+  
+};
 
 // returns the HTML to render a data type pull-down list
 // for field 'n' which has data type 't'
@@ -184,47 +242,8 @@ var renderSchema = function(x) {
   return html;
 };
 
-
-// upload the attached file
-// the server should return the schema JSON and the first three lines of the parsed file
-// the schema can then be rendered by calling 'renderSchema' and we can open up the 
-// second part of the accordion
-var sendFile = function(formData) {
-  $('#fileuploadprogress').html("");
-  $.ajax({
-    type: 'post',
-    url: '/upload',
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (reply) {
-      // do something
-      currentUpload = reply;
-      for(var i in reply.fields) {
-        reply.fields[i].safename=reply.fields[i].name.toLowerCase().replace(/\W/g,"_");
-      }
-      var html = renderSchema(reply);
-      $('#collapseOne').collapse('hide');
-      $('#collapseThree').collapse('hide');
-      $('#collapseTwo').collapse('show');
-      $('#schemacontent').html(html);
-    },
-    xhrFields: {
-      onprogress: function (evt) {
-        if(evt.lengthComputable) {
-          if (evt.lengthComputable) {
-            var percentComplete = evt.loaded / evt.total;
-            percentComplete = parseInt(percentComplete * 100);
-            $('#fileuploadprogress').html(percentComplete + "%");
-          }
-        } else {
-          $('#fileuploadprogress').html("...");
-        }
-      }
-    }
-  });
-};
-
+// check the progress of an import by polling GET /import/status every second
+// until it completes
 var pollStatus = function() {
   $.ajax({
     url: "/import/status",
@@ -298,8 +317,38 @@ $( document ).ready(function() {
 
   // grab your file object from a file input
   $('#file').change(function () {
-    var formData = new FormData();
+   /* var formData = new FormData();
     formData.append('file', $('#file')[0].files[0]); 
-    sendFile(formData);
+    sendFile(formData);*/
+     $('#uploadform').ajaxForm({
+         beforeSend: function() {
+             $('#fileuploadprogress').html("0%");
+         },
+         uploadProgress: function(event, position, total, percentComplete) {
+             var percentVal = percentComplete + '%';
+             $('#fileuploadprogress').html(percentVal);
+             console.log(percentVal);
+         },
+         success: function() {
+             var percentVal = '100%';
+             $('#fileuploadprogress').html("100%");
+         },
+     	complete: function(xhr) {
+        // do something
+        var reply = JSON.parse(xhr.responseText);
+        currentUpload = reply;
+        for(var i in reply.fields) {
+          reply.fields[i].safename=reply.fields[i].name.toLowerCase().replace(/\W/g,"_");
+        }
+        var html = renderSchema(reply);
+        $('#collapseOne').collapse('hide');
+        $('#collapseThree').collapse('hide');
+        $('#collapseTwo').collapse('show');
+        $('#schemacontent').html(html);
+//     		console.log(xhr);
+     	}
+     }).submit(); 
+     
+   
   });
 });

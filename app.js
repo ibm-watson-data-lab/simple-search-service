@@ -116,6 +116,13 @@ app.post('/deleteeverything', isloggedin(), function(req, res) {
   });
 });
 
+app.get('/preview', isloggedin(), function(req, res) {
+  db.preview(function(err, data) {
+    res.send(data);
+  });
+});
+
+
 // start server on the specified port and binding host
 app.listen(appEnv.port, appEnv.bind, function() {
 

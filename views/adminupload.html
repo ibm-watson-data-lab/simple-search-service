@@ -43,11 +43,13 @@
               <p>You have no data in your database. Please upload a comma-separated file (csv) or a tab-separated file containing the
                  the data you wish to store and search</p>
             
-              <div class="form-group">
-                <label for="fle">File to upload</label>
-                <input id="file" name="file" type="file" />
-                &nbsp;<span id="fileuploadprogress"></span>
-              </div>
+              <form id="uploadform" class="form" action="/upload" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="fle">File to upload</label>
+                  <input id="file" name="file" type="file" />
+                  &nbsp;<span id="fileuploadprogress"></span>
+                </div>
+              </form>
           </div>
         </div>
       </div>
@@ -69,7 +71,7 @@
               <div id="schemacontent"></div>
               <p>
                 <button id="importbutton" type="submit" class="btn btn-success btn-lg" onclick="return importClicked()">Import</button>
-                &nbsp; <span id="importstatus"></span>
+                <div id="importstatus"></div>
               </p>
           </div>
         </div>
@@ -97,6 +99,7 @@
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="/js/jquery.form.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="/js/seams.js"></script>
   

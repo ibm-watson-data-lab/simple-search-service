@@ -21,6 +21,14 @@ body { margin-top:60px; padding-bottom:60px}
   color:#aaa;
 }
 
+#importstatus {
+  color:#aaa;
+}
+
+#preview {
+  overflow: scroll;
+}
+
 .alert-special {
   overflow: hidden;
 }

@@ -37,11 +37,26 @@
       <p><a class="btn btn-success btn-lg" href="/admin/search" role="button">Search</a></p>
       <p><a class="btn btn-danger btn-lg" href="/admin/delete" role="button">Delete</a></p>      
     </div>
+    
+    <div id="preview">
+      
+      
+    </div>
+    
+
+  
+  </div> <!-- container -->
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="/js/seams.js"></script>
+  
+  <script type="text/javascript">
+    renderPreview(function(err, html) {
+      $('#preview').html(html);
+    });
+  </script>
   
 </body>
 </html>
