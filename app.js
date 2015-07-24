@@ -98,6 +98,7 @@ app.post('/import', isloggedin(), bodyParser, function(req, res){
       // import the data
       dbimport.file(currentUpload.files.file.path, theschema, function(err, d) {
         console.log("data imported",err,d);
+        cache.clearAll();
       });
     });
     

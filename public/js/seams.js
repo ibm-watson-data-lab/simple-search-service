@@ -320,6 +320,7 @@ $( document ).ready(function() {
    /* var formData = new FormData();
     formData.append('file', $('#file')[0].files[0]); 
     sendFile(formData);*/
+     $('#file').hide();
      $('#uploadform').ajaxForm({
          beforeSend: function() {
              $('#fileuploadprogress').html("0%");
