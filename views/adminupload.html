@@ -44,11 +44,11 @@
                  the data you wish to store and search</p>
             
               <form id="uploadform" class="form" action="/upload" method="post" enctype="multipart/form-data">
-                <div class="form-group">
+                <div id="fileuploadcontrol" class="form-group">
                   <label for="fle">File to upload</label>
                   <input id="file" name="file" type="file" />
-                  &nbsp;<span id="fileuploadprogress"></span>
                 </div>
+                <div id="fileuploadprogress"></div>
               </form>
           </div>
         </div>
