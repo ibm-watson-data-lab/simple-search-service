@@ -19,7 +19,7 @@ var express = require('express'),
 app.use(express.static(__dirname + '/public'));
 
 // multi-part uploads 
-var multipart = multer({ dest: process.env.TMPDIR, limits: { files: 1, fileSize: 1000000 }});
+var multipart = multer({ dest: process.env.TMPDIR, limits: { files: 1, fileSize: 100000000 }});
 
 // posted body parser
 var bodyParser = require('body-parser')({extended:true})

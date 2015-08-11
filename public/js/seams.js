@@ -246,7 +246,7 @@ var renderSchema = function(x) {
 // until it completes
 var pollStatus = function() {
   $.ajax({
-    url: "/import/status",
+    url: "/import/status?r="+Math.random(),
     method: "get",
     dataType: "json"
   }).done(function(x) {
@@ -300,7 +300,7 @@ var importClicked = function() {
   }).done(function(x) {
     currentUpload = null;
     console.log("import done");
-    pollStatus();
+    setTimeout(pollStatus, 1000);
 
     
   }).fail(function(e) {
