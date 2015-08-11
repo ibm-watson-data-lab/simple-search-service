@@ -117,6 +117,15 @@ var populateData = function() {
 }
 */
 
+var removeDoc = function(id, arr) {
+  for(var i in arr) {
+    if(arr[i].id == id) {
+      arr.splice(i,1);
+      return arr;
+    }
+  }
+}
+
 var renderPreview = function(callback) {
   var html = "";
   $.ajax({
@@ -128,6 +137,9 @@ var renderPreview = function(callback) {
     if (x.total_rows == 0 ) {
       return callback(null, '<h3>0 documents</h3>');
     }
+    x.rows = removeDoc("schema",x.rows);
+    x.rows = removeDoc("_design/search",x.rows);
+    console.log(x);
     html = '<h3>' + (x.total_rows - 2) + ' documents</h3>';
     html += '<table class="table table-striped">\n';
     html += "<tr>\n";
