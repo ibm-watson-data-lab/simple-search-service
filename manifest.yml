@@ -13,5 +13,5 @@ applications:
   memory: 256M
   random-route: true
   command: node app.js
-- services:
-  - seams-cloudant-service
+  services:
+    - seams-cloudant-service
