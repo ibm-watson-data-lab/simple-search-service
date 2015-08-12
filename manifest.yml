@@ -1,7 +1,6 @@
 applications:
 - services:
   - Cloudant Seams
-  - Data Cache Seams
   disk_quota: 1024M
   host: seams
   name: seams

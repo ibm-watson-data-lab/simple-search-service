@@ -133,18 +133,16 @@ var renderPreview = function(callback) {
     method: "get",
     dataType: "json"
   }).done(function(x) {
-    console.log(x);
     if (x.total_rows == 0 ) {
       return callback(null, '<h3>0 documents</h3>');
     }
-    x.rows = removeDoc("schema",x.rows);
-    x.rows = removeDoc("_design/search",x.rows);
-    console.log(x);
+    removeDoc("schema",x.rows);
+    removeDoc("_design/search",x.rows);
     html = '<h3>' + (x.total_rows - 2) + ' documents</h3>';
     html += '<table class="table table-striped">\n';
     html += "<tr>\n";
     var schema = { fields: []};
-    for(var j in x.rows[0].doc) {
+               for(var j in x.rows[0].doc) {
       var field = j;
       if (field != "_id" && field != "_rev") {     
         html += "<th>\n";
