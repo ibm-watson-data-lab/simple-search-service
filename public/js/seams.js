@@ -283,7 +283,7 @@ var pollStatus = function() {
 }
 
 // when the user has chosen their schema, they click the import button 
-// and this functioin is called. We fetch the schema by finding the values
+// and this function is called. We fetch the schema by finding the values
 // of the appropriate controls and sent it up to the server, which triggers
 // the actual import process
 var importClicked = function() {
@@ -291,7 +291,7 @@ var importClicked = function() {
   $('#importbutton').attr('disabled',true);
   var fields = [ ];
   for(var i in currentUpload.fields) {
-    var d = $('select[name=' + currentUpload.fields[i].safename);
+    var d = $('select[name=' + currentUpload.fields[i].safename + ']');
     console.log(d);
     var obj = {}
     obj.name = d.attr('name');
