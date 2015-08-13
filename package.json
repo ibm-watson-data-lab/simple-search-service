@@ -9,6 +9,7 @@
   "dependencies": {
     "async": "^1.4.2",
     "body-parser": "^1.13.2",
+    "cf-deployment-tracker-client": "0.0.7",
     "cfenv": "1.0.x",
     "cloudant": "^1.1.0",
     "compression": "^1.5.1",
