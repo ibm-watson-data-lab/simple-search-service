@@ -58,65 +58,6 @@ var deleteEverything= function() {
   });
 }
 
-
-/*
-var populateSchema = function(cb) {
-  $.ajax({
-    url: "/schema",
-    dataType: "json"
-  }).done(function(x) {
-    renderSchema(x);
-    cb(null, x);
-  }).fail(function(e) {
-    cb(e,null);
-  });
-};
-
-var populateData = function() {
-  $.ajax({
-    url: "/proxy/seams/_all_docs?include_docs=true",
-    dataType: "json"
-  }).done(function(x) {
-    var html = '<table class="table table-striped">\n';
-    html += "<tr>\n";
-    for(var j in schema.fields) {
-      var field = schema.fields[j];
-      html += "<th>\n";
-      html += field.name;
-      html += "</th>\n";
-    }
-    html += "</tr>\n";
-    for(var i in x.rows) {
-      if (x.rows[i].id != "schema" && !x.rows[i].id.match(/^_design/)) {
-        html += "<tr>";
-        var doc = x.rows[i].doc;
-      
-        for(var j in schema.fields) {
-          var field = schema.fields[j];
-          html += "<td>\n";
-          var val = doc[field.name];
-          if (typeof val == "undefined") {
-            val ="";
-          } else if (typeof val == "string") {
-            if (val.length > 20) {
-              val = val.substr(0,20) + "...";              
-            }
-          } else {
-            val = val.toString();
-          }
-          html += val;
-          html += "</td>\n";
-        }
-        html += "</tr>\n";
-      }
-    }
-    html += "</table>\n";
-    
-    $('#datacontent').html(html);
-  });
-}
-*/
-
 var removeDoc = function(id, arr) {
   for(var i in arr) {
     if(arr[i].id == id) {
@@ -185,10 +126,20 @@ var renderPreview = function(callback) {
   
 };
 
+var datatypechange = function(e) {
+  var d = $('select[name=' + e + ']');
+  var v = d.val();
+  if(v == "string" || v == "arrayofstrings") {
+    $('input#' + e).prop("disabled", false);
+  } else {
+    $('input#' + e).prop("disabled", true);
+  }
+}
+
 // returns the HTML to render a data type pull-down list
 // for field 'n' which has data type 't'
 var typeWidget = function(n,t) {
-  var html = '<select name="' + n + '" + class="datatype">\n';
+  var html = '<select name="' + n + '" + class="datatype" onchange="datatypechange(\'' + n +'\')">\n';
   var opts = [ "string", "number", "boolean", "arrayofstrings"];
   for(var i in opts) {
     var j = opts[i];
@@ -204,9 +155,12 @@ var typeWidget = function(n,t) {
 
 // returns the HTML to render a checkbox for field 'n'
 // which is faceted or not (t)
-var facetWidget = function(n,t) {
+var facetWidget = function(n,t,v) {
   var html = '<input type="checkbox" value="true" name="' + n + '" id="' + n + '"';
-  if (t == "true") {
+  if (t == "number" || t == "boolean") {
+    html += ' disabled="disabled"';
+  }
+  if (v == "true") {
     html += ' checked="checked"';
   }
   html += ' />\n';
@@ -228,7 +182,7 @@ var renderSchema = function(x) {
     var f = x.fields[i];
     html += "<td>" + f.name + "</td>\n";
     html += "<td>" + typeWidget(f.safename,f.type) + "</td>\n";
-    html += "<td>" + facetWidget(f.safename,f.facet.toString()) + "</td>\n";
+    html += "<td>" + facetWidget(f.safename,f.type,f.facet.toString()) + "</td>\n";
     for(var j in x.data) {
       var obj = x.data[j];
       var val = obj[f.name];
@@ -292,11 +246,10 @@ var importClicked = function() {
   var fields = [ ];
   for(var i in currentUpload.fields) {
     var d = $('select[name=' + currentUpload.fields[i].safename + ']');
-    console.log(d);
     var obj = {}
     obj.name = d.attr('name');
     obj.type = d.val();
-    obj.facet = $('#' + d.attr('name')).is(':checked');
+    obj.facet = ($('#' + d.attr('name')).is(':checked') && !$('#' + d.attr('name')).prop("disabled"));
     fields.push(obj);
   }
   schema = { fields: fields};
