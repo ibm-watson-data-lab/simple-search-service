@@ -112,6 +112,7 @@ app.get('/import/status', isloggedin(), function(req, res) {
 });
 
 app.post('/deleteeverything', isloggedin(), function(req, res) {
+  cache.clearAll();
   db.deleteAndCreate(function(err, data) {
     res.send(data);
   });
