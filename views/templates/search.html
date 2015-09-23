@@ -1,0 +1,38 @@
+<h1>
+  Search
+</h1>
+
+<div>
+    <form class="form">
+      <div class="form-group" id="searchcontrol">
+        <label for="searchterm">Search query</label>
+        <input type="text" class="form-control" id="q" placeholder="" name="searchterm">
+      	<button type="submit" class="btn btn-primary" ng-click="search()"> Search </button>
+      	<span id="searchtime"></span>
+      </div>
+    </form>
+    
+    <div class="row" id="searchheadings">
+      <div class="col-md-4">
+        <h3>Raw JSON</h3>
+      </div>
+      <div class="col-md-4">
+        <h3>Documents</h3>
+      </div>
+      <div class="col-md-4">
+        <h3>Facets</h3>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-4">
+        <pre id="serps"></pre>
+      </div>
+      <div class="col-md-4">
+        <div id="documents"></div>
+      </div>
+      <div class="col-md-4">
+        <pre id="facets"></pre>
+      </div>
+    </div>
+</div>

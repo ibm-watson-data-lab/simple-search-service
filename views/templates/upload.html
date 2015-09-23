@@ -1,0 +1,35 @@
+<h1>
+  Upload Data
+</h1>
+
+<div ng-show="currentStatus == 'imported'" class="alert alert-success">
+  <p>
+    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was uploaded and imported successfully.</strong> Please use the <a href="#search">/search</a> endpoint to query your database or try out the interactive search tool.
+  </p>
+</div>
+
+<div ng-show="currentStatus == 'uploaded'" class="alert alert-success">
+  <p>
+    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was uploaded successfully.</strong> Please review and <a href="#import">import</a> the schema.
+  </p>
+</div>
+
+<div ng-show="!currentStatus || currentStatus == 'new'">
+    <p>You have no data in your database. Please upload a comma-separated file (csv) or a tab-separated file containing the
+       the data you wish to store and search</p>
+  
+    <form id="uploadform" class="form" action="/upload" method="post" enctype="multipart/form-data">
+      <div id="fileuploadcontrol" class="form-group">
+        <label for="file">File to upload</label>
+        <!-- <input id="file" name="file" type="file" class="btn btn-warning" /> -->
+        <span class="btn btn-primary">
+        	Browse <input id="file" name="file" type="file">
+        </span>
+      </div>
+      <div id="fileuploadprogress"></div>
+    </form>
+</div>
+
+<div class="page-btn-bar" ng-show="currentStatus && currentStatus != 'new'">
+	<button type="button" class="btn btn-primary" ng-click="goToNextPage('import')"> Continue </button>
+</div>

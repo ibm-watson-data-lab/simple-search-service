@@ -4,56 +4,102 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>seams</title>
+  
+  <title>IBM Cloud Data Services | Simple Search Service</title>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" /> 
-  <link rel="stylesheet" href="/css/seams.css" /> 
-
-
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-</head>
-<body>
-  <div class="container">
-
-    <div class="jumbotron">
-      <h1>SEaMS</h1>
-      <h2>Search Engine as-a Micro Service</h2>
-      <p>&nbsp;</p>
-      <p><a class="btn btn-primary btn-lg" href="/admin/home" role="button">Login</a></p>
-      
-    </div>
-    
-    <div class="row">
-      <div class="col-md-4">
-        <div class="alert alert-warning">
-          <h2><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> UPLOAD</h2>
-          <p>Upload a CSV or TSV file and import it into the IBM Cloudant, NoSQL database</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="alert alert-info">
-          <h2><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span> INDEX</h2>
-          <p>All the fields are indexed; simply choose which to facet in the search results</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="alert alert-success">
-          <h2><span class="glyphicon glyphicon-search" aria-hidden="true"></span> SEARCH</h2>
-          <p>Access the SEaMS RESTful API to build a user-interface into your application</p>
-        </div>
-      </div>
-    </div>
-
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/css/seams.css" />
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  
+  <script src="/js/jquery.form.js"></script>
+  
   <script src="/js/seams.js"></script>
-  
-  
+</head>
+<body ng-app="seamsApp">
+<!-- start header -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	    <div class="container-fluid">
+	    	<div class="row">
+		        <div class="navbar-header col-sm-6">
+		            <span class="navbar-brand">
+		                <a rel="home" href="https://developer.ibm.com/clouddataservices">
+		                    <span>Cloud Data Services</span>
+		                </a>
+		            </span>
+		        </div>
+	        </div>
+	    </div>
+	</nav>
+<!-- end header -->
+
+<!-- start content -->
+	<div class="page-content container-fluid" ng-controller="seamsController">
+		<div class="row">
+
+<!-- start sidebar -->
+			<div class="col-sm-3 sidebar">
+				<div class="sidebar-title">
+					<a href="/">Simple Search Service</a>
+				</div>
+				<div>
+					<ul class="nav nav-sidebar">
+						<li ng-class="{'active':!selectedView || selectedView === 'about'}">
+							<a href="#/about">About</a>
+						</li>
+						<li ng-class="{'active':selectedView === 'upload'}">
+							<a href="#/upload">Upload</a>
+						</li>
+						<li ng-class="{'active':selectedView === 'import', 'disabled':!currentStatus || currentStatus == 'new'}">
+							<a ng-if="currentStatus && currentStatus != 'new'" href="#/import">Import</a>
+							<a ng-if="!currentStatus || currentStatus == 'new'">Import</a>
+						</li>
+						<li ng-class="{'active':selectedView === 'search', 'disabled':currentStatus != 'imported'}">
+							<a ng-if="currentStatus == 'imported'" href="#/search">Search</a>
+							<a ng-if="currentStatus != 'imported'">Search</a>
+						</li>
+						<li ng-class="{'active':selectedView === 'api'}">
+							<a href="#/api">API</a>
+						</li>
+						<li ng-class="{'active':selectedView === 'settings'}">
+							<a href="#/settings">Settings</a>
+						</li>
+					</ul>
+				</div>
+				<div class="sidebar-footer">
+					<a href="https://github.com/ibm-cds-labs/seams" target="_blank">Fork Simple Search Service on Github</a>
+				</div>
+			</div>
+<!-- end sidebar -->
+
+<!-- start main -->
+			<div class="col-sm-9 col-sm-offset-3 main" ng-view>
+				
+			</div>
+<!-- end main -->
+
+		</div>
+	</div>
+<!-- end content -->
+
+<div class="modal fade" id="deleteData" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="modal-title">Delete Data</span>
+			</div>
+			<div class="modal-body" id="deleteDataBody">
+				<span>Are you sure you want to delete all of your data?</span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button id="deletebutton" type="button" class="btn btn-primary btn-danger" ng-click="deleteEverything()">Delete All</button>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>

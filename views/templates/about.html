@@ -1,0 +1,32 @@
+<h1>
+  Simple Search Service
+</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="message-box">
+      <h2>
+      	<a href="#/upload">Upload</a>
+      </h2>
+      <p>Upload a CSV or TSV file to be imported into the IBM Cloudant, NoSQL database</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="message-box">
+      <h2>
+      	<a ng-if="currentStatus && currentStatus != 'new'" href="#/import">Import</a>
+      	<a ng-if="!currentStatus || currentStatus == 'new'">Import</a>
+      </h2>
+      <p>All the fields are imported; simply choose which to facet in the search results</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="message-box">
+      <h2>
+      	<a ng-if="currentStatus == 'imported'" href="#/search">Search</a>
+      	<a ng-if="currentStatus != 'imported'">Search</a>
+      </h2>
+      <p>Access the Simple Search Service RESTful API to build a user-interface into your application</p>
+    </div>
+  </div>
+</div>

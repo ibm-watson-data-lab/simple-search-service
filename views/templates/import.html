@@ -1,0 +1,33 @@
+<h1>
+  Import
+</h1>
+
+<div ng-show="currentStatus == 'imported'" class="alert alert-success">
+  <p>
+    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was imported successfully.</strong> Please use the <a href="#search">/search</a> endpoint to query your database or try out the interactive search tool.
+  </p>
+</div>
+
+<div ng-show="!currentStatus || currentStatus == 'new'">
+    <p>You have no data in your database. Please <a href="#upload">upload</a> a comma-separated file (csv) or a tab-separated file containing the
+       the data you wish to store and search</p>
+</div>
+
+<div ng-show="currentStatus == 'uploaded'">
+    <p>Please review the fields we have found in the uploaded file. Choose the data types of each field; this will
+         transform numbers and booleans to be stored as such in the database. </p>
+    <p> You can also choose for a field to be  faceted or not by checking the fields facet tick box. A faceted 
+         field will be counted in the result set e.g. if 'colour' was faceted, then the search results 
+         could indicate that there are 10 red items, 4 blue items and 1 green item. </p>
+    <p> When you have made your decision, click the 'Import' button to begin the import process.</p>
+    <div id="schemacontent" class="api-table"></div>
+    <div>
+      <button id="importbutton" type="submit" class="btn btn-primary" ng-click="importClicked()"> Import </button>
+      <span class="glyphicon glyphicon-refresh glyphicon-spinner import-spinner"></span>
+      <div id="importstatus"></div>
+    </div>
+</div>
+
+<div class="page-btn-bar" ng-show="currentStatus == 'imported'">
+	<button type="button" class="btn btn-primary" ng-click="goToNextPage('search')"> Continue </button>
+</div>

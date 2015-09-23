@@ -35,26 +35,11 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-
-// admin home
-app.get('/admin/home', isloggedin(), function (req, res) {
-  res.sendFile(path.join(__dirname,'views','adminhome.html'));
+// templates
+app.get('/templates/:name', function(req, res) {
+	res.sendFile(path.join(__dirname, 'views/templates', req.params.name));
 });
 
-// admin delete
-app.get('/admin/delete', isloggedin(), function (req, res) {
-  res.sendFile(path.join(__dirname,'views','admindelete.html'));
-});
-
-// admin upload
-app.get('/admin/upload', isloggedin(), function (req, res) {
-  res.sendFile(path.join(__dirname,'views','adminupload.html'));
-});
-
-// admin search
-app.get('/admin/search', isloggedin(), function (req, res) {
-  res.sendFile(path.join(__dirname,'views','adminsearch.html'));
-});
 
 // search api 
 app.get('/search', cors(), isloggedin(), function (req, res) {
