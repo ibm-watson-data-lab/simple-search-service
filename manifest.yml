@@ -1,17 +1,17 @@
 ---
 declared-services:
-  seams-cloudant-service:
+  simple-search-service-cloudant-service:
     label: cloudantNoSQLDB
     plan: Shared
 applications:
-- name: seams
+- name: simple-search-service
   path: .
   instances: 1
   disk_quota: 512M
   memory: 256M
-  host: seams-${random-word}
+  host: simple-search-service-${random-word}
   domain: mybluemix.net
   random-route: true
   command: node app.js
   services:
-  - seams-cloudant-service
+  - simple-search-service-cloudant-service

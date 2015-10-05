@@ -1,7 +1,7 @@
 {
-  "name": "seams",
+  "name": "simple-search-service",
   "version": "0.0.1",
-  "description": "Search-Engine-a-a-Micro-Service - A Bluemix app that creates a search engine powered by IBM Cloudant",
+  "description": "A Node app that creates a faceted search engine, powered by IBM Cloudant",
   "scripts": {
     "start": "node app.js"
   },
@@ -22,5 +22,5 @@
     "redis": "^0.12.1",
     "request": "^2.58.0"
   },
-  "repository": "https://github.com/ibm-cds-labs/seams"
+  "repository": "https://github.com/ibm-cds-labs/simple-search-service"
 }
