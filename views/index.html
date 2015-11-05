@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+
   <title>IBM Cloud Data Services | Simple Search Service</title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
   <link rel="stylesheet" href="/css/seams.css" />
-  
+
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  
+
   <script src="/js/jquery.form.js"></script>
-  
+
   <script src="/js/seams.js"></script>
 </head>
 <body ng-app="seamsApp">
@@ -51,10 +51,10 @@
 							<a href="#/about">About</a>
 						</li>
 						<li ng-class="{'active':selectedView === 'upload'}">
-							<a href="#/upload">Upload</a>
+							<a href="#/upload">Upload data</a>
 						</li>
 						<li ng-class="{'active':selectedView === 'import', 'disabled':!currentStatus || currentStatus == 'new'}">
-							<a ng-if="currentStatus && currentStatus != 'new'" href="#/import">Import</a>
+							<a ng-if="currentStatus && currentStatus != 'new'" href="#/import">Create Index</a>
 							<a ng-if="!currentStatus || currentStatus == 'new'">Import</a>
 						</li>
 						<li ng-class="{'active':selectedView === 'search', 'disabled':currentStatus != 'imported'}">
@@ -77,7 +77,7 @@
 
 <!-- start main -->
 			<div class="col-sm-9 col-sm-offset-3 main" ng-view>
-				
+
 			</div>
 <!-- end main -->
 
