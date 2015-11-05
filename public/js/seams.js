@@ -18,7 +18,7 @@ seamsApp.config(['$routeProvider', function ($routeProvider) {
 seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
     function($scope, $route, $routeParams) {
 		$scope.$root.selectedView = $routeParams.pathname;
-		
+
 		switch($routeParams.pathname) {
 			case 'api':
 				$scope.$root.renderPreview(function(err, html) {
@@ -54,7 +54,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    this.$route = $route;
 	    this.$location = $location;
 	    this.$routeParams = $routeParams;
-	    
+
 	    $scope.$root.currentUpload = null;
 
 	    $scope.$root.ms = function() {
@@ -67,7 +67,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	      $('#serps').html("");
 	      $('#documents').html("");
 	      $('#facets').html("");
-	      
+
 	      var q = $('#q').val();
 	      $.ajax({
 	        url: "/search",
@@ -85,9 +85,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	        var html ="";
 	        for(var i in x.rows) {
-	          html += '<div class="alert alert-success alert-special" role="alert">';
+	          html += '<pre><code>';
 	          html += JSON.stringify(x.rows[i], null, " ");
-	          html += '</div>';
+	          html += '</code></pre>';
 	        }
 	        $('#documents').html(html);
 	      }).fail(function(e) {
@@ -95,7 +95,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	      });
 	      return false;
 	    }
-	    
+
 	    $scope.$root.deleteEverything = function() {
 	    	// trigger the import
 	    	$('#deletebutton').attr('disabled', true);
@@ -111,7 +111,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	    console.log("delete error",e);
 	    	});
 	    }
-	    
+
 	    $scope.$root.getTotalRows = function(callback) {
 	    	$.ajax({
 	    		url: "/preview",
@@ -151,10 +151,10 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		            $scope.$root.$apply();
 		            $scope.$root.goToNextPage("import");
 	         	}
-	         }).submit(); 
+	         }).submit();
 	    }
-	    
-	    // when the user has chosen their schema, they click the import button 
+
+	    // when the user has chosen their schema, they click the import button
 	    // and this function is called. We fetch the schema by finding the values
 	    // of the appropriate controls and sent it up to the server, which triggers
 	    // the actual import process
@@ -172,7 +172,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	        fields.push(obj);
 	      }
 	      var schema = { fields: fields};
-	      
+
 	      // trigger the import
 	      $.ajax({
 	        url: "/import",
@@ -182,14 +182,14 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	      }).done(function(x) {
 	        $scope.$root.currentUpload = null;
 	        console.log("import done");
-	        setTimeout($scope.$root.pollStatus, 1000);	        
+	        setTimeout($scope.$root.pollStatus, 1000);
 	      }).fail(function(e) {
 	        console.log("import error",e);
 	      });
-	      
+
 	      console.log("SCHEMA",schema);
 	    };
-	    
+
 	    // check the progress of an import by polling GET /import/status every second
 	    // until it completes
 	    $scope.$root.pollStatus = function() {
@@ -201,7 +201,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	    if(x) {
 	    	      var html = x.total + " documents written";
 	    	      $('#importstatus').html(html);
-	    	      
+
 	    	      if (x.complete) {
 	    	    	  setTimeout(function() {
 		    	    	  $scope.$root.getTotalRows(function(total) {
@@ -224,7 +224,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 		// given a schema object (x.fields) - this function returns the html
 		// which displays a table of each field in the schema, its data type
-	    // and whether its faceted or not, together with an example value from the 
+	    // and whether its faceted or not, together with an example value from the
 		// uploaded file (x.data)
 	    $scope.$root.renderSchema = function(x) {
 		   var html = '<table class="table table-striped">\n';
@@ -245,7 +245,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		         val ="";
 		       } else if (typeof val == "string") {
 		         if (val.length > 20) {
-		           val = val.substr(0,20) + "...";              
+		           val = val.substr(0,20) + "...";
 		         }
 		       } else {
 		         val = val.toString();
@@ -319,7 +319,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		    var schema = { fields: []};
 		    for(var j in x.rows[0].doc) {
 		      var field = j;
-		      if (field != "_id" && field != "_rev") {     
+		      if (field != "_id" && field != "_rev") {
 		        html += "<th>\n";
 		        html += field;
 		        schema.fields.push({ name:field});
@@ -331,7 +331,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		      var doc = x.rows[i].doc;
 		      if (doc._id != "schema" && !doc._id.match(/^_design/)) {
 		        html += "<tr>";
-		      
+
 		        for(var j in schema.fields) {
 		          var field = schema.fields[j];
 		          html += "<td>\n";
@@ -340,13 +340,13 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		            val ="";
 		          } else if (typeof val == "string") {
 		            if (val.length > 20) {
-		              val = val.substr(0,20) + "...";              
+		              val = val.substr(0,20) + "...";
 		            }
 		          } else {
 		            if (val) {
 		              val = val.toString();
 		            }
-		          
+
 		          }
 		          html += val;
 		          html += "</td>\n";
@@ -358,7 +358,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		    callback(null,html);
 		  });
 		};
-	    
+
 	    $scope.$root.goToNextPage = function(page) {
 	    	$location.path(page);
 	    }
