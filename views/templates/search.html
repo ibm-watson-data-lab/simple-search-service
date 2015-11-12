@@ -2,37 +2,70 @@
   Search
 </h1>
 
-<div>
-    <form class="form">
-      <div class="form-group" id="searchcontrol">
-        <label for="searchterm">Search query</label>
+<p>
+  Preview how the service works here, and then dive into <a href="#api">the API</a> to put this service to work in your app. <a role="button" data-toggle="collapse" data-target="#queryTips"><span class="caret"></span> Query tips</a>
+</p>
+
+<div class="collapse" id="queryTips">
+  <ul>
+    <li>
+      <code>*:*</code> will bring back everything you've indexed
+    </li>
+    <li>
+      <code>[key]:'[value]'</code> will bring back results that match the <code>[key]</code> with the <code>[value]</code>; e.g., <code>town:'ashfield'</code>
+    </li>
+    <li>
+      <code>[key1]:'[value1] OR [key2]:'[value2]'</code> is the syntax for multiple matches
+    </li>
+    <li>
+      Combine free text and faceted search like this: <code>willowbank AND [key]:'[value]'</code>
+    </li>
+    <li>
+      The simple search service assigns default parameter values to your queries, including <code>includes_docs=true</code> and <code>limit=20</code>. <a href="#/api">Learn more about the API</a>
+    </li>
+  </ul>
+</div>
+
+<form class="form" ng-submit="search()">
+  <div class="form-group" id="searchcontrol">
+    <div class="input-group">
+      <div class="input-group-addon">https://.../search?q=</div>
         <input type="text" class="form-control" id="q" placeholder="" name="searchterm">
-      	<button type="submit" class="btn btn-primary" ng-click="search()"> Search </button>
-      	<span id="searchtime"></span>
-      </div>
-    </form>
-    
-    <div class="row" id="searchheadings">
-      <div class="col-md-4">
-        <h3>Raw JSON</h3>
-      </div>
-      <div class="col-md-4">
-        <h3>Documents</h3>
-      </div>
-      <div class="col-md-4">
-        <h3>Facets</h3>
       </div>
     </div>
-    
+    <!-- <button type="submit" class="btn btn-primary" ng-click="search()"> Search </button> -->
+  </div>
+</form>
+
+    <hr />
+
+    <h2>
+      Results <small id="searchtime"></small>
+
+    </h2>
+    <p>
+      Results come back as JSON with a handful of nested objects, two of which are broken out, below. <a role="button" data-toggle="collapse" data-target="#rawJSON"><span class="caret"></span> View the raw JSON</a>
+    </p>
+    <div class="collapse" id="rawJSON">
+      <pre id="serps">
+        JSON here
+      </pre>
+    </div>
+    <div class="row" id="searchheadings">
+      <div class="col-md-4">
+        <h4>Facets <small>from <code>"counts": {...}</code></small></h4>
+      </div>
+      <div class="col-md-8">
+        <h4>Documents <small>from <code>"rows":[...]</code></small></h4>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-md-4">
-        <pre id="serps"></pre>
-      </div>
-      <div class="col-md-4">
-        <div id="documents"></div>
-      </div>
-      <div class="col-md-4">
         <pre id="facets"></pre>
+      </div>
+      <div class="col-md-8">
+        <div id="documents"></div>
       </div>
     </div>
 </div>
