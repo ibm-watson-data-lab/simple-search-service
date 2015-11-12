@@ -1,10 +1,10 @@
 <h1>
-  Seams API
+  Simple Search Service API
 </h1>
 
 <div>
-	<p>Access the seams API at 
-		<a ng-if="currentStatus == 'imported'" href="#search">/search</a> 
+	<p>Access the seams API at
+		<a ng-if="currentStatus == 'imported'" href="#search">/search</a>
 		<span ng-if="currentStatus != 'imported'">/search</span>
 	   passing in parameters:
 	</p>
@@ -57,15 +57,14 @@
   "from_cache": true
 }
           </pre>
-          where <b>total_rows</b> is the number of rows in the result set, <b>bookmark</b> is the string 
+          where <b>total_rows</b> is the number of rows in the result set, <b>bookmark</b> is the string
           to pass back into the API in a subsequent call to get the next page of results,
           <b>rows</b> is an array of document objects that match the supplied query,
-          <b>counts</b> is an object containing counts of each field that has been faceted and 
+          <b>counts</b> is an object containing counts of each field that has been faceted and
           <b>from_cache</b> represents whether the results came from cache or not.
         </p>
 </div>
 
 <div id="preview" class="api-table">
-    	
+
 </div>
-    
