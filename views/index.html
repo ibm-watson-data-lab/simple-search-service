@@ -55,14 +55,14 @@
 						</li>
 						<li ng-class="{'active':selectedView === 'import', 'disabled':!currentStatus || currentStatus == 'new'}">
 							<a ng-if="currentStatus && currentStatus != 'new'" href="#/import">Create Index</a>
-							<a ng-if="!currentStatus || currentStatus == 'new'">Import</a>
+							<a ng-if="!currentStatus || currentStatus == 'new'">Create Index</a>
 						</li>
 						<li ng-class="{'active':selectedView === 'search', 'disabled':currentStatus != 'imported'}">
-							<a ng-if="currentStatus == 'imported'" href="#/search">Search</a>
-							<a ng-if="currentStatus != 'imported'">Search</a>
+							<a ng-if="currentStatus == 'imported'" href="#/search">Preview Search</a>
+							<a ng-if="currentStatus != 'imported'">Preview Search</a>
 						</li>
 						<li ng-class="{'active':selectedView === 'api'}">
-							<a href="#/api">API</a>
+							<a href="#/api">View API</a>
 						</li>
 						<li ng-class="{'active':selectedView === 'settings'}">
 							<a href="#/settings">Settings</a>
