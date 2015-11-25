@@ -109,6 +109,31 @@ app.get('/preview', isloggedin(), function(req, res) {
   });
 });
 
+app.get('/schema', isloggedin(), function(req, res) {
+  db.dbSchema(function(err, data) {
+    res.send(data);
+  });
+});
+
+//settings api 
+app.get('/settings', isloggedin(), function (req, res) {
+	db.settings(function(err, data) {
+	 if (err) {
+	   return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+	 }
+	 res.send(data);
+	});
+});
+
+app.post('/settings', isloggedin(), bodyParser, function(req, res) {
+	db.settings(req.body, function(err, data) {
+		 if (err) {
+		   return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+		 }
+		 res.send(data);
+	});
+});
+
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, appEnv.bind, function() {

@@ -3,11 +3,11 @@
 </h1>
 
 <div>
-	<p>Access the seams API at
-		<a ng-if="currentStatus == 'imported'" href="#search">/search</a>
-		<span ng-if="currentStatus != 'imported'">/search</span>
-	   passing in parameters:
-	</p>
+    <p>Access the seams API at
+        <a ng-if="currentStatus == 'imported'" href="#search">/search</a>
+        <span ng-if="currentStatus != 'imported'">/search</span>
+       passing in parameters:
+    </p>
 </div>
 
 <div class="api-table">
@@ -36,7 +36,7 @@
       <tr>
         <td>limit</td>
         <td>The number of records to return</td>
-        <td>10</td>
+        <td>{{settings.querylimit}}</td>
       </tr>
     </table>
 </div>
@@ -65,6 +65,13 @@
         </p>
 </div>
 
-<div id="preview" class="api-table">
-
+<div class="api-examples-wrapper" ng-show="currentStatus == 'imported' && dbschema">
+  <h1>
+    API Examples
+  </h1>
+  <div class="api-examples">
+    <div api-example apiExampleAction="apiExampleFacetSearch" apiExampleTitle="Faceted Search"></div>
+    <div api-example apiExampleAction="apiExampleTextSearch" apiExampleTitle="Text Search"></div>
+    <div api-example apiExampleAction="apiExampleLogicSearch" apiExampleTitle="Logic Search"></div>
+  </div>
 </div>

@@ -2,13 +2,26 @@
   Settings
 </h1>
 
-<p>
-  Rough ideas: can the user edit <code>limit</code> and other API params here?
-</p>
-
-<div class="row">
-  <div class="col-md-3">
-        <label for="deletedata">Delete all data</label>
+<div class="form-horizontal api-settings">
+<div class="form-group">
+  <label for="deletedata" class="col-sm-2">Delete all data</label>
+  <div class="col-sm-2">
+    <button name="deletedata" data-toggle="modal" data-target="#deleteData" class="btn btn-primary btn-danger">Delete</button>
   </div>
-  <button name="deletedata" data-toggle="modal" data-target="#deleteData" class="btn btn-primary btn-danger">Delete</button>
+</div>
+<div class="api-settings-form">
+  <div class="form-group">
+    <label for="querylimit" class="col-sm-2">Query limit</label>
+    <div class="col-sm-2">
+      <input name="querylimit" type="number" class="form-control" min=1 ng-model="settings.querylimit" ng-change="dirty = true" required>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-2">
+      <button id="savesettings" type="button" class="btn btn-default" ng-click="dirty = false;saveSettings();" ng-disabled="dirty != true || saving">
+        {{ saving ? 'Saving...' : 'Save' }}
+      </button>
+    </div>
+  </div>
+</div>
 </div>

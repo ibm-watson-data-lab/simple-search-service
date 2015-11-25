@@ -1,0 +1,51 @@
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="message-box">
+      <h2>
+        <a ng-click="toggle()"> {{apiExampleTitle}} </a>
+        <span ng-show="apiExampleDocs.data.from_cache" class="api-search-example-cache"> from cache </span>
+      </h2>
+      <div class="collapse api-search-example" id="{{apiExampleId}}">
+      
+        <div class="row api-search-example-info">
+            <div class="col-md-10">
+                <strong>REST URL: </strong>
+                <a ng-show="apiExampleDocs" href="{{apiExampleDocs.rest_uri | truncateUrl}}" target="_blank">{{apiExampleDocs.rest_uri | truncateUrl:true}}</a>
+                <span ng-show="!apiExampleDocs" class="glyphicon glyphicon-refresh glyphicon-spinner"></span>
+            </div>
+            <div class="col-md-2 api-search-example-info-json">
+                <a role="button" data-toggle="collapse" data-target="#{{apiExampleId}}_raw" ng-click="showingJson = !showingJson">
+                <span class="glyphicon" ng-class="{'glyphicon-triangle-bottom':showingJson, 'glyphicon-triangle-right':!showingJson}"></span> View the raw JSON </a>
+            </div>
+        </div>
+        
+        <div class="row api-search-example-raw">
+            <div class="col-md-12">
+                <pre id="{{apiExampleId}}_raw" class="collapse">{{ apiExampleDocs.data | json }}</pre>
+            </div>
+        </div>
+        
+        
+        <div class="row api-search-example-results">
+            <div class="col-md-12">
+              <div class="row api-search-example-results-summary">
+                  <div class="col-md-10" ng-show="apiExampleDocs.data.total_rows >= 0"><span ng-class="{'api-summary-message':message}">{{message ? message : 'Showing ' + apiExampleDocs.data.rows.length + ' of ' + apiExampleDocs.data.total_rows}}</span></div>
+              </div>
+              <div class="api-search-example-results-table">
+                <table class="table table-striped">
+                  <tr>
+                    <th ng-repeat="docfield in apiExampleDocs.fields">{{docfield.name}}</th>
+                  </tr>
+                  <tr ng-repeat="row in apiExampleDocs.data.rows">
+                    <td ng-repeat="docfield in apiExampleDocs.fields">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:25}}</td> 
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

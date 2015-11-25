@@ -21,15 +21,19 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 
 		switch($routeParams.pathname) {
 			case 'api':
-				$scope.$root.renderPreview(function(err, html) {
-					$('#preview').html(html);
-	        	});
+				if (!$scope.$root.dbschema) {
+					$scope.$root.getCurrentSchema(function(err, data) {
+						if (err) {
+						    $scope.$root.dbschema = { fields: [] };
+						}
+					});
+				}
 				break;
 			case 'upload':
 				$('#file').change(function () {
 					$scope.$root.fileUploaded();
 	        	});
-				$scope.$root.getTotalRows(function(total) {
+				$scope.$root.getPreview(function(data) {
 			    	$scope.$root.$apply();
 			    });
 				break;
@@ -40,8 +44,17 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 				}
 				break;
 			case 'search':
-				$('#q').val("*:*");
-	            $scope.$root.search();
+				if (!$scope.$root.dbschema) {
+					$scope.$root.getCurrentSchema(function(err, data) {
+						if (err) {
+						    $scope.$root.dbschema = { fields: [] };
+						}
+						$scope.$root.search();
+					});
+				}
+				else {
+					$scope.$root.search();
+				}
 				break;
 			default:
 				break;
@@ -49,8 +62,8 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 	}
 ]);
 
-seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$location',
-    function($scope, $route, $routeParams, $location) {
+seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$location', '$http',
+    function($scope, $route, $routeParams, $location, $http) {
 	    this.$route = $route;
 	    this.$location = $location;
 	    this.$routeParams = $routeParams;
@@ -63,37 +76,18 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    };
 
 	    $scope.$root.search = function() {
-	      var startTime = $scope.$root.ms();
-	      $('#serps').html("");
-	      $('#documents').html("");
-	      $('#facets').html("");
-
-	      var q = $('#q').val();
-	      $.ajax({
-	        url: "/search",
-	        data: { q: q},
-	        dataType: "json"
-	      }).done(function(x) {
-	        var endTime = $scope.$root.ms();
-	        $('#serps').show();
-	        $('#facets').show();
-	        $('#documents').show();
-	        $('#searchheadings').show();
-	        $('#searchtime').html(endTime - startTime + " ms");
-	        $('#serps').html(JSON.stringify(x, null, " "));
-	        $('#facets').html(JSON.stringify(x.counts, null, " "));
-
-	        var html ="";
-	        for(var i in x.rows) {
-	          html += '<pre><code>';
-	          html += JSON.stringify(x.rows[i], null, " ");
-	          html += '</code></pre>';
-	        }
-	        $('#documents').html(html);
-	      }).fail(function(e) {
-	        console.log(e);
-	      });
-	      return false;
+	    	var q = $('#q').val();
+	    	if (!q || q.length == 0) {
+	    		$('#q').val("*:*");
+	    		$('#q').val("*:*");
+	    	}
+			$scope.$root.performSearch({
+				q: q
+			}, function(err, response) {
+				$scope.$root.searchDocs = response;
+			});
+			
+			return false;
 	    }
 
 	    $scope.$root.deleteEverything = function() {
@@ -112,15 +106,18 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	});
 	    }
 
-	    $scope.$root.getTotalRows = function(callback) {
+	    $scope.$root.getPreview = function(callback) {
+			$scope.$root.searching = true;
 	    	$.ajax({
 	    		url: "/preview",
 	    	    method: "get",
 	    	    dataType: "json"
 	    	}).done(function(x) {
 		    	$scope.$root.currentStatus = x.total_rows > 0 ? "imported" : $scope.$root.currentStatus;
+		    	$scope.$root.previewData = x;
+				$scope.$root.searching = false;
 	    		if (callback) {
-	    			callback(x.total_rows);
+	    			callback(x);
 	    		}
 	    	});
 	    };
@@ -204,7 +201,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	    	      if (x.complete) {
 	    	    	  setTimeout(function() {
-		    	    	  $scope.$root.getTotalRows(function(total) {
+		    	    	  $scope.$root.getPreview(function(data) {
 		    	    	      $('.import-spinner').css('display','none');
 		    	    	      $('#importstatus').html("COMPLETE! " + html);
 		    	    	      $scope.$root.$apply();
@@ -299,75 +296,366 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		      return arr;
 		    }
 		  }
-		}
+		};
+		
+		$scope.$root.apiExampleFacetSearch = function(callback) {
+			var term = $scope.$root.getSearchQuery(true);
+			if (term != null) {
+				$scope.$root.performSearch({
+					q: term
+				}, function(err, response) {
+					callback(response);
+				});
+			}
+		};
+		
+		$scope.$root.apiExampleTextSearch = function(callback) {
+			var term = $scope.$root.getSearchQuery(false);
+			if (term != null) {
+				$scope.$root.performSearch({
+					q: term.replace(/!/g, "\\!")
+				}, function(err, response) {
+					callback(response);
+				});
+			}
+		};
+		
+		$scope.$root.apiExampleLogicSearch = function(callback) {
+			var term = null;
+			var term1 = $scope.$root.getSearchQuery(true);
+			var term2 = $scope.$root.getSearchQuery(false);
 
-		$scope.$root.renderPreview = function(callback) {
-		  var html = "";
-		  $.ajax({
-		    url: "/preview",
-		    method: "get",
-		    dataType: "json"
-		  }).done(function(x) {
-		    if (x.total_rows == 0 ) {
-		      return callback(null, '<h3>0 documents</h3>');
-		    }
-		    $scope.$root.removeDoc("schema",x.rows);
-		    $scope.$root.removeDoc("_design/search",x.rows);
-		    html = '<h3>' + (x.total_rows - 2) + ' documents</h3>';
-		    html += '<table class="table table-striped">\n';
-		    html += "<tr>\n";
-		    var schema = { fields: []};
-		    for(var j in x.rows[0].doc) {
-		      var field = j;
-		      if (field != "_id" && field != "_rev") {
-		        html += "<th>\n";
-		        html += field;
-		        schema.fields.push({ name:field});
-		        html += "</th>\n";
-		      }
-		    }
-		    html += "</tr>\n";
-		    for(var i in x.rows) {
-		      var doc = x.rows[i].doc;
-		      if (doc._id != "schema" && !doc._id.match(/^_design/)) {
-		        html += "<tr>";
+			if (term2 != null) {
+				term = "(\"" + term2.replace(/!/g, "\\!").replace(" ", "\" AND \"") + "\")";
+			}
+			if (term1 != null) {
+				if (term != null) {
+					term += (" OR " + term1);
+				}
+				else {
+					term = term1;
+				}
+			}
+			if (term != null) {
+				$scope.$root.performSearch({
+					q: term
+				}, function(err, response) {
+					callback(response);
+				});
+			}
+		};
+		
+		$scope.$root.getSearchQuery = function(useFacet) {
+			var previewData = $scope.$root.previewData;
+			if (useFacet) {
+				var facet = null;
+				var facetedfields = $scope.$root.dbschema.facetedfields || [];
+				//perform faceted search
+				if (facetedfields.length > 0) {
+					var randomrow = 0;
+					var fieldname = facetedfields[Math.floor(Math.random() * facetedfields.length)];
+					for (var i=0; i<20; i++) {
+						randomrow = Math.floor(Math.random() * previewData.rows.length);
+						var text = previewData.rows[randomrow].doc[fieldname];
+						if (text != null && typeof text !== 'undefined') {
+							facet = fieldname + ":" + "\"" + text + "\"";
+							break;
+						}
+					}
+				}
+				return facet;
+			}
+			else {
+				var text = null;
+				var unfacetedfields = $scope.$root.dbschema.unfacetedfields || [];
+				//perform text search
+				if (unfacetedfields.length > 0) {
+					var randomrow = 0;
+					var fieldname = unfacetedfields[Math.floor(Math.random() * unfacetedfields.length)];
+					for (var i=0; i<20; i++) {
+						randomrow = Math.floor(Math.random() * previewData.rows.length);
+						text = previewData.rows[randomrow].doc[fieldname];
+						if (text != null && typeof text !== 'undefined' && text != "null") {
+							text = text.split(" ", 2).join(" ");
+							break;
+						}
+					}
+				}
+				return text;
+			}
+		};
+		
+		$scope.$root.getCurrentSchema = function(callback) {
+			$scope.$root.searching = true;
+			$http.get("/schema")
+				.success(function(data) {
+					$scope.$root.dbschema = data;
 
-		        for(var j in schema.fields) {
-		          var field = schema.fields[j];
-		          html += "<td>\n";
-		          var val = doc[field.name];
-		          if (typeof val == "undefined") {
-		            val ="";
-		          } else if (typeof val == "string") {
-		            if (val.length > 20) {
-		              val = val.substr(0,20) + "...";
-		            }
-		          } else {
-		            if (val) {
-		              val = val.toString();
-		            }
+					var unfacetedfields = [];
+					var facetedfields = [];
+			        for(var i in data.fields) {
+			        	if (data.fields[i].type === "string") {
+			        		if (data.fields[i].facet == true) {
+				                facetedfields.push(data.fields[i].name);
+				            }
+			        		else {
+			        			unfacetedfields.push(data.fields[i].name);
+				            }
+			        	}
+			        }
+			        
+			        $scope.$root.dbschema.unfacetedfields = unfacetedfields;
+			        $scope.$root.dbschema.facetedfields = facetedfields;
 
-		          }
-		          html += val;
-		          html += "</td>\n";
-		        }
-		        html += "</tr>\n";
-		      }
-		    }
-		    html += "</table>\n";
-		    callback(null,html);
-		  });
+					$scope.$root.searching = false;
+					callback(null, data);
+				})
+				.error(function(data, status, headers, config) {
+				    console.log("Error retrieving schema:", data, status);
+				      
+				    var error = {
+				    	status: status,
+				    	data: data
+				    };
+				    
+					callback(error)
+				});
+		};
+		
+		$scope.$root.getSettings = function () {
+			var restapi = '/settings';
+			$http.get(restapi)
+			  .success(function(data) {
+				  $scope.$root.settings = data;
+			  })
+			  .error(function(data, status, headers, config) {
+			      console.log("Error retrieving settings:", data, status);
+			      $scope.$root.settings = {};
+			  });
+		};
+		
+		$scope.$root.saveSettings = function () {
+		    $scope.$root.saving = true;
+			$http.post("/settings", $scope.$root.settings, {json: true})
+			  .success(function(data) {
+				  $scope.$root.settings = data;
+				  $scope.$root.saving = false;
+			  })
+			  .error(function(data, status, headers, config) {
+			      console.log("Error saving settings:", data, status);
+			      $scope.$root.settings = $scope.$root.settings || {};
+				  $scope.$root.saving = false;
+			  });
+		};
+		
+		$scope.$root.performSearch = function (params, callback) {
+			//force a limit
+			if (!params.limit) {
+				if (!$scope.settings || typeof $scope.settings.querylimit != "number") {
+					$scope.settings.querylimit = 20;
+				}
+				else if ($scope.settings.querylimit < 1) {
+					$scope.settings.querylimit = 20;
+				}
+				params.limit = $scope.settings.querylimit;
+			}
+			
+			var restapi = '/search?' + decodeURIComponent( $.param( params ) );
+			var resturi = $location.protocol() + "://" + $location.host() + ($location.port() ? (':'+$location.port()) : '') + restapi;
+			var startTime = $scope.$root.ms();
+			$scope.$root.searching = true;
+			
+			$http.get(restapi)
+			  .success(function(data) {
+			      var results = {
+			    	  rest_uri: resturi,
+			    	  fields: [],
+			    	  facets: [],
+			    	  time: ($scope.$root.ms() - startTime),
+			    	  data: data
+			      };
+			      
+			      var first = data.rows[0];
+			      
+			      if (first) {
+				      for(var field in first) {
+					      if (field != "_id" && field != "_rev" && field != "_order") {
+					        results.fields.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string") });
+					      }
+					  }
+	
+				      for(var field in data.counts) {
+					      results.facets.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string") });
+				      }
+			      }
+			      
+			      $scope.$root.searching = false;
+			      callback(null, results);
+			  })
+			  .error( function(data, status, headers, config) {
+			      console.log("Error performing search:", data, status);
+			      
+			      var error = {
+			    	  status: status,
+			    	  data: data
+			      };
+			      
+			      var results = {
+			    	  rest_uri: resturi,
+			    	  fields: [],
+			    	  facets: [],
+			    	  data: data
+			      };
+			      
+			      $scope.$root.searching = false;
+			      callback(error, results);
+			  });
 		};
 
 	    $scope.$root.goToNextPage = function(page) {
 	    	$location.path(page);
-	    }
+	    };
+	    
+	    $scope.$root.getSettings();
 
-		$scope.$root.getTotalRows(function(total) {
+		$scope.$root.getPreview(function(data) {
 	    	$scope.$root.$apply();
 	    });
 	}]
 );
+
+seamsApp.filter('ellipsize', function() {
+	return function(text,length) {
+		var ellipsize = text ? text : "";
+		if (typeof text == "string") {
+			if (ellipsize.length > length) {
+				ellipsize = (ellipsize.substr(0, length) + "...");
+			}
+		}
+		return ellipsize;
+  }
+});
+
+seamsApp.filter('truncateUrl', function() {
+	return function(uri, striphost) {
+		var simplified = uri;
+		if (typeof simplified == "string") {
+			var start = simplified.indexOf("://");
+			if (start > 0) {
+				var end = simplified.indexOf('/', start+3);
+				var host = simplified.indexOf('@');
+				if (host < start+2) {
+					host = start+2
+				}
+				if (host < end) {
+					simplified = simplified.substring(0, start+3)
+							   + (striphost ? "..." : '')
+							   + simplified.substring(striphost ? end : host+1);
+				}
+			}
+		}
+		return simplified;
+  }
+});
+
+seamsApp.directive('apiExample', function(){
+	return {
+	  restrict: 'A',
+	  scope: {
+		  apiExampleAction: '=apiexampleaction',
+		  apiExampleTitle: '@apiexampletitle'
+	  },
+	  templateUrl: function( element, attr) {
+	      return "/templates/apiexample.html";
+	  },
+	  replace: true,
+	  link: function(scope, elem, attrs){
+	      scope.apiExampleId = (new Date()).getTime();
+	      
+	      scope.toggle = function() {
+		      if (scope.$root.dbschema) {
+		    	  $('#'+scope.apiExampleId).collapse("toggle");
+		    	  if (!scope.apiExampleDocs) {
+				      scope.apiExampleAction(function(response) {
+				    	  scope.apiExampleDocs = response;
+				      });
+		    	  }
+		      }
+	      }
+	  }
+	};
+});
+
+seamsApp.directive('previewSearchHtml', function(){
+	return {
+	  restrict: 'A',
+	  scope: true,
+	  templateUrl: function( element, attrs) {
+		  return "/templates/searchhtml.html";
+	  },
+	  replace: true,
+	  link: function(scope, element, attrs) {
+			
+	      scope.apiSearch = function(key, value) {
+	    	  if (typeof key != "undefined") {
+		    	  var query = key;
+		    	  if (value) {
+		    		  query += ":\""+value+"\"";
+		    		  var search = scope.searchString();
+	
+		    		  if (search.indexOf(query) > -1) {
+		    	    	  query = search.replace(query, "").replace(" AND  AND ", " AND ");
+		    		  }
+		    		  else {
+		    			  var regex = new RegExp(key+":\".*?\"", "i");
+			    		  
+			    		  var facet = search.match(regex);
+			    		  if (facet) {
+			    			  query = search.replace(facet, query);
+			    		  }
+			    		  else {
+			    			  query += (" AND " + search);
+			    		  }
+		    		  }
+		    		  
+	    	    	  if (query.indexOf(" AND ") == 0) {
+			    		  query = query.substring(query.indexOf(" AND ") + 5);
+			    	  }
+			    	  if (query.lastIndexOf(" AND ") == query.length - 5) {
+			    		  query = query.substring(0, query.lastIndexOf(" AND "));
+			    	  }
+			    	  if (query.length == 0) {
+	    	    		  query = "*:*";
+	    	    	  }
+		    	  }
+		    	  else {
+		    		  query = encodeURIComponent(query).replace(/!/g, "\\!");
+		    	  }
+		    	  
+		    	  if ($('#q')) {
+		    		  $('#q').val(query);
+		    	  }
+		    	  
+		    	  scope.search();
+	    	  }
+		  };
+		  
+		  scope.searchString = function() {
+	    	  var search = scope.searchDocs.rest_uri;
+	    	  search = search.substring(search.indexOf('?'));
+	    	  var qIdx = search.indexOf("q=");
+	    	  var aIdx = search.indexOf("&", qIdx);
+	    	  search = search.substring(qIdx+2, aIdx).replace("*:*", "").replace(/\+AND\+/g, " AND ");
+	    	  return decodeURIComponent(search);
+		  };
+		  
+		  scope.isSelected = function(facet, value) {
+			  var q = facet + ":\"" + value + '\"';
+	    	  return scope.searchDocs.rest_uri.indexOf(q) > -1;
+		  };
+	  }
+	};
+});
 
 var datatypechange = function(e) {
   var d = $('select[name=' + e + ']');

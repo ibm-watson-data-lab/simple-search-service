@@ -1,0 +1,42 @@
+
+<div class="row">
+  <div class="col-md-12">
+      <p>
+        Results can easily be used to power Web applications, such as Search Engines.
+      </p>
+      <div class="api-search-example" id="apiSearchExample">
+        
+        <div class="row api-search-example-results">
+            <div class="col-md-3 api-search-example-sidebar">
+              <div class="row api-search-example-sidebar-facet" ng-repeat="(countkey, countvalue) in searchDocs.data.counts">
+                  <div class="col-md-12">
+                    <div class="api-facet-title"><strong>{{countkey}}:</strong></div>
+                    <button class="api-facets-button" ng-repeat="(facetkey, facetvalue) in countvalue" ng-click="apiSearch(countkey, facetkey);" ng-class="{'api-facets-button-selected': isSelected(countkey,facetkey)}">
+                      <span>{{facetkey}}</span>: <span>{{facetvalue}}</span>
+                    </button>
+                  </div>
+              </div>
+            
+            </div>
+            
+            <div class="col-md-9">
+              <div class="row api-search-example-results-summary">
+                  <div class="col-md-10" ng-show="searchDocs.data.total_rows >= 0"><span ng-class="{'api-summary-message':message}">{{message ? message : 'Showing ' + searchDocs.data.rows.length + ' of ' + searchDocs.data.total_rows}}</span></div>
+              </div>
+              <div class="api-search-example-results-table">
+                <table class="table table-striped">
+                  <tr>
+                    <th ng-repeat="docfield in searchDocs.fields">{{docfield.name}}</th>
+                  </tr>
+                  <tr ng-repeat="row in searchDocs.data.rows">
+                    <td ng-repeat="docfield in searchDocs.fields">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</td> 
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
+        
+      </div>
+      
+  </div>
+</div>
