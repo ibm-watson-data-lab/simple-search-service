@@ -57,6 +57,7 @@ app.post('/upload', isloggedin(),  multipart, function(req, res){
     files: req.files,
     body: req.body,
   };
+  dbimport.clear();
   cache.put(obj.files.file.name, obj, function(err, data) {
     inference.infer(obj.files.file.path, function(err, data) {
       data.upload_id = req.files.file.name;
