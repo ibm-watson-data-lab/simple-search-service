@@ -302,8 +302,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			var term = $scope.$root.getSearchQuery(true);
 			if (term != null) {
 				$scope.$root.performSearch({
-					q: term
+					q: term.q
 				}, function(err, response) {
+					response.searchparams = term.params;
 					callback(response);
 				});
 			}
@@ -313,8 +314,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			var term = $scope.$root.getSearchQuery(false);
 			if (term != null) {
 				$scope.$root.performSearch({
-					q: term.replace(/!/g, "\\!")
+					q: term.q.replace(/!/g, "\\!").replace(/:/g, "")
 				}, function(err, response) {
+					response.searchparams = term.params;
 					callback(response);
 				});
 			}
@@ -324,22 +326,27 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			var term = null;
 			var term1 = $scope.$root.getSearchQuery(true);
 			var term2 = $scope.$root.getSearchQuery(false);
+			var param1 = null;
+			var param2 = null;
 
 			if (term2 != null) {
-				term = "(\"" + term2.replace(/!/g, "\\!").replace(" ", "\" AND \"") + "\")";
+				param2 = term2.params;
+				term = "(\"" + term2.q.replace(/!/g, "\\!").replace(/:/g, "") + "\")";
 			}
 			if (term1 != null) {
+				param1 = term1.params;
 				if (term != null) {
-					term += (" OR " + term1);
+					term += (" OR " + term1.q);
 				}
 				else {
-					term = term1;
+					term = term1.q;
 				}
 			}
 			if (term != null) {
 				$scope.$root.performSearch({
 					q: term
 				}, function(err, response) {
+					response.searchparams = [ param2, param1 ];
 					callback(response);
 				});
 			}
@@ -349,6 +356,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			var previewData = $scope.$root.previewData;
 			if (useFacet) {
 				var facet = null;
+				var params = null;
 				var facetedfields = $scope.$root.dbschema.facetedfields || [];
 				//perform faceted search
 				if (facetedfields.length > 0) {
@@ -359,11 +367,15 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 						var text = previewData.rows[randomrow].doc[fieldname];
 						if (text != null && typeof text !== 'undefined') {
 							facet = fieldname + ":" + "\"" + text + "\"";
+							params = {
+								field: fieldname,
+								value: text
+							}
 							break;
 						}
 					}
 				}
-				return facet;
+				return {q: facet, params: params};
 			}
 			else {
 				var text = null;
@@ -377,11 +389,15 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 						text = previewData.rows[randomrow].doc[fieldname];
 						if (text != null && typeof text !== 'undefined' && text != "null") {
 							text = text.split(" ", 2).join(" ");
+							params = {
+								field: "",
+								value: text
+							}
 							break;
 						}
 					}
 				}
-				return text;
+				return {q: text, params: params};
 			}
 		};
 
@@ -451,7 +467,10 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		$scope.$root.performSearch = function (params, callback) {
 			//force a limit
 			if (!params.limit) {
-				if (!$scope.settings || typeof $scope.settings.querylimit != "number") {
+				if (!$scope.settings) {
+					$scope.settings = {};
+				}
+				if (typeof $scope.settings.querylimit != "number") {
 					$scope.settings.querylimit = 20;
 				}
 				else if ($scope.settings.querylimit < 1) {
@@ -563,25 +582,30 @@ seamsApp.directive('apiExample', function(){
 	  restrict: 'A',
 	  scope: {
 		  apiExampleAction: '=apiexampleaction',
-		  apiExampleTitle: '@apiexampletitle'
+		  apiExampleTitle: '@apiexampletitle',
+		  apiExampleTemplate: '@apiexampletemplate'
 	  },
 	  templateUrl: function( element, attr) {
-	      return "/templates/apiexample.html";
+	      return "/templates/" + (attr.apiexampletemplate || "apiexample.html");
 	  },
 	  replace: true,
 	  link: function(scope, elem, attrs){
 	      scope.apiExampleId = (new Date()).getTime();
 
 	      scope.toggle = function() {
-		      if (scope.$root.dbschema) {
-		    	  $('#'+scope.apiExampleId).collapse("toggle");
-		    	  if (!scope.apiExampleDocs) {
-				      scope.apiExampleAction(function(response) {
-				    	  scope.apiExampleDocs = response;
-				      });
-		    	  }
-		      }
-	      }
+	    	  $('#'+scope.apiExampleId).collapse("toggle");
+	      };
+
+	      scope.$root.getCurrentSchema(function(err, data) {
+			if (err) {
+			    scope.$root.dbschema = { fields: [] };
+			}
+	    	if (!scope.apiExampleDocs) {
+			    scope.apiExampleAction(function(response) {
+			    	scope.apiExampleDocs = response;
+			    });
+	    	}
+	      });
 	  }
 	};
 });

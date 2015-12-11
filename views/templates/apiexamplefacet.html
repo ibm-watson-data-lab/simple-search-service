@@ -8,7 +8,9 @@
         <span ng-show="apiExampleDocs.data.from_cache" class="api-search-example-cache"> from cache </span>
       </h2>
       <div class="collapse in api-search-example" id="{{apiExampleId}}">
-
+        <p class="api-search-example-copy" ng-show="apiExampleDocs">
+            Searching for <strong>{{apiExampleDocs.searchparams.field}}</strong> with value of <strong>{{apiExampleDocs.searchparams.value}}</strong>
+        </p>
         <div class="row api-search-example-info">
         <!-- <pre>{{apiExampleDocs.searchparams|json}}</pre> -->
             <div class="col-md-10">
