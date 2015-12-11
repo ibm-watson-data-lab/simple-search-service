@@ -1,32 +1,45 @@
-<h1>
-  Simple Search Service
-</h1>
+<h1 id="toc_0">Welcome to the Simple Search Service</h1>
 
-<div class="row">
-  <div class="col-md-4">
-    <div class="message-box">
-      <h2>
-      	<a href="#/upload">Upload</a>
-      </h2>
-      <p>Upload a CSV or TSV file to be imported into the IBM Cloudant, NoSQL database</p>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="message-box">
-      <h2>
-      	<a ng-if="currentStatus && currentStatus != 'new'" href="#/import">Import</a>
-      	<a ng-if="!currentStatus || currentStatus == 'new'">Import</a>
-      </h2>
-      <p>All the fields are imported; simply choose which to facet in the search results</p>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="message-box">
-      <h2>
-      	<a ng-if="currentStatus == 'imported'" href="#/search">Search</a>
-      	<a ng-if="currentStatus != 'imported'">Search</a>
-      </h2>
-      <p>Access the Simple Search Service RESTful API to build a user-interface into your application</p>
-    </div>
-  </div>
-</div>
+<p>Buckle up, you&#39;re about to build a <strong>fully functional, faceted search engine</strong> and <strong>content discovery API</strong> just by clicking a few buttons. </p>
+
+<p>[video]</p>
+
+<p>Excited? So are we. Let&#39;s get into it. We&#39;ll do all the heavy lifting for you. Just follow the instructions. But don&#39;t worry, this walkthrough is no wizard. If you&#39;re a developer and you want to dig in beyond what you see here, we&#39;ve got you covered: </p>
+
+<ul>
+<li><a href="https://developer.ibm.com/clouddataservices/simple-search-service">The tutorial spells out how we built it</a></li>
+<li><a href="https://github.com/ibm-cds-labs/simple-search-service">All of the code is on Github</a></li>
+</ul>
+
+<p>Feel free to fork the code and extend the app. If you have feedback, and want to contribute to master, <a href="https://github.com/ibm-cds-labs/simple-search-service/issues">check out our backlog</a>.</p>
+
+<h2 id="toc_1">Is this really a service?</h2>
+
+<p>Yes. We use the Simple Search Service to power the <a href="https://developer.ibm.com/clouddataservices/how-tos/#!&amp;filter=%5B%7B%22key%22%3A%22technologies%22%2C%22value%22%3A%22Cloudant%22%7D%5D">search engine in our developer center</a>, and it&#39;s also the API that powers <a href="https://console.ng.bluemix.net/data/discovery/fullservice/cloudant-nosql-db/resources">content discovery in Bluemix</a>. </p>
+
+<p>If you followed those links, you probably noticed that hey content is identical. That&#39;s because the content is served from the same Cloudant database, via the same API. The <strong>Preview Search</strong> and <strong>Preview API</strong> pages of this app will show you how we used this service to do just that. </p>
+
+<p>First, let&#39;s index some data.</p>
+
+<h2 id="toc_2">Get data</h2>
+
+<p>The Simple Search Service indexes CSVs and TSVs. If you don&#39;t have data in that format, no problem. We have some data you can use to kick the tires:</p>
+
+<ul>
+<li>Households near Liverpool (CSV)</li>
+<li>Movies (TSV)</li>
+<li>Guitars (CSV)</li>
+</ul>
+
+<p>If you have some data dumps of your own, feel free to use those. If you&#39;re new to data dumps in our required formats, start with these guides for exporting CSVs and TSVs from:</p>
+
+<ul>
+<li><a href="https://developer.ibm.com/clouddataservices/2015/09/22/export-cloudant-json-as-csv-rss-or-ical/">CouchDB / Cloudant</a></li>
+<li><a href="https://dev.mysql.com/doc/mysql-utilities/1.5/en/mysqldbexport.html">MySQL</a></li>
+<li><a href="https://docs.mongodb.org/manual/reference/program/mongoexport/">MongoDB</a></li>
+<li><a href="http://stackoverflow.com/questions/6521531/how-do-you-print-the-result-of-a-postgresql-query-in-csv-or-tsv-format-from-the">PostgreSQL</a></li>
+</ul>
+
+<hr>
+
+<p><a href="#/upload">Next: Upload some data</a></p>

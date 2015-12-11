@@ -368,61 +368,13 @@ a.btn-primary:visited:hover {
 .message-box .api-search-example {
     padding: 10px 20px;
 }
-.api-search-example-info {
-    
-}
-.api-search-example-info-json {
-    font-size: 0.85em;
-    text-align: right;
-}
-.api-search-example-raw > div {
-    border-bottom: 1px solid #ddd;
-    padding: 15px;
-}
-.api-search-example-sidebar {
-    /* padding: 10px 15px 25px 25px; */
-}
-.api-search-example-sidebar-facet {
-    margin-top: 10px;
-}
-.api-search-example-sidebar-facet:nth-child(odd) .api-facets-button {
-    border: 1px solid #0096ff;
-    color: #0096ff;
-}
-.api-search-example-sidebar-facet:nth-child(even) .api-facets-button {
-    border: 1px solid #f16a54;
-    color: #f16a54;
-}
-.api-search-example-sidebar-facet:nth-child(odd) .api-facets-button:hover,
-.api-search-example-sidebar-facet:nth-child(odd) .api-facets-button-selected {
-    background-color: #0096ff;
-    color: #ffffff;
-}
-.api-search-example-sidebar-facet:nth-child(even) .api-facets-button:hover,
-.api-search-example-sidebar-facet:nth-child(even) .api-facets-button-selected {
-    background-color: #f16a54;
-    color: #ffffff;
-}
+
 .api-facet-title {
     margin-bottom: 5px;
     margin-top: 10px;
+    text-transform: capitalize;
 }
-.api-facets-button {
-    background-color: transparent;
-    font-size: 0.75em;
-    margin: 0 5px 1px 0;
-}
-.api-facets-button span:first-child {
-    font-weight: 500;
-}
-.api-search-example-results-summary {
-    font-size: 0.8em;
-    margin-bottom: -20px;
-    margin-top: 20px;
-}
-.api-summary-message {
-    color: #c9302c;
-}
+
 .api-search-busy {
     background-color: rgba(0, 0, 0, 0.45);
     color: #ffffff;
