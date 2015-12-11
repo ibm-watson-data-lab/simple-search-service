@@ -86,7 +86,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			}, function(err, response) {
 				$scope.$root.searchDocs = response;
 			});
-			
+
 			return false;
 	    }
 
@@ -297,7 +297,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		    }
 		  }
 		};
-		
+
 		$scope.$root.apiExampleFacetSearch = function(callback) {
 			var term = $scope.$root.getSearchQuery(true);
 			if (term != null) {
@@ -308,7 +308,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				});
 			}
 		};
-		
+
 		$scope.$root.apiExampleTextSearch = function(callback) {
 			var term = $scope.$root.getSearchQuery(false);
 			if (term != null) {
@@ -319,7 +319,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				});
 			}
 		};
-		
+
 		$scope.$root.apiExampleLogicSearch = function(callback) {
 			var term = null;
 			var term1 = $scope.$root.getSearchQuery(true);
@@ -344,7 +344,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				});
 			}
 		};
-		
+
 		$scope.$root.getSearchQuery = function(useFacet) {
 			var previewData = $scope.$root.previewData;
 			if (useFacet) {
@@ -384,7 +384,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				return text;
 			}
 		};
-		
+
 		$scope.$root.getCurrentSchema = function(callback) {
 			$scope.$root.searching = true;
 			$http.get("/schema")
@@ -403,7 +403,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				            }
 			        	}
 			        }
-			        
+
 			        $scope.$root.dbschema.unfacetedfields = unfacetedfields;
 			        $scope.$root.dbschema.facetedfields = facetedfields;
 
@@ -412,16 +412,16 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				})
 				.error(function(data, status, headers, config) {
 				    console.log("Error retrieving schema:", data, status);
-				      
+
 				    var error = {
 				    	status: status,
 				    	data: data
 				    };
-				    
+
 					callback(error)
 				});
 		};
-		
+
 		$scope.$root.getSettings = function () {
 			var restapi = '/settings';
 			$http.get(restapi)
@@ -433,7 +433,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			      $scope.$root.settings = {};
 			  });
 		};
-		
+
 		$scope.$root.saveSettings = function () {
 		    $scope.$root.saving = true;
 			$http.post("/settings", $scope.$root.settings, {json: true})
@@ -447,7 +447,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				  $scope.$root.saving = false;
 			  });
 		};
-		
+
 		$scope.$root.performSearch = function (params, callback) {
 			//force a limit
 			if (!params.limit) {
@@ -459,12 +459,12 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				}
 				params.limit = $scope.settings.querylimit;
 			}
-			
+
 			var restapi = '/search?' + decodeURIComponent( $.param( params ) );
 			var resturi = $location.protocol() + "://" + $location.host() + ($location.port() ? (':'+$location.port()) : '') + restapi;
 			var startTime = $scope.$root.ms();
 			$scope.$root.searching = true;
-			
+
 			$http.get(restapi)
 			  .success(function(data) {
 			      var results = {
@@ -474,39 +474,39 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			    	  time: ($scope.$root.ms() - startTime),
 			    	  data: data
 			      };
-			      
+
 			      var first = data.rows[0];
-			      
+
 			      if (first) {
 				      for(var field in first) {
 					      if (field != "_id" && field != "_rev" && field != "_order") {
 					        results.fields.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string") });
 					      }
 					  }
-	
+
 				      for(var field in data.counts) {
 					      results.facets.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string") });
 				      }
 			      }
-			      
+
 			      $scope.$root.searching = false;
 			      callback(null, results);
 			  })
 			  .error( function(data, status, headers, config) {
 			      console.log("Error performing search:", data, status);
-			      
+
 			      var error = {
 			    	  status: status,
 			    	  data: data
 			      };
-			      
+
 			      var results = {
 			    	  rest_uri: resturi,
 			    	  fields: [],
 			    	  facets: [],
 			    	  data: data
 			      };
-			      
+
 			      $scope.$root.searching = false;
 			      callback(error, results);
 			  });
@@ -515,7 +515,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    $scope.$root.goToNextPage = function(page) {
 	    	$location.path(page);
 	    };
-	    
+
 	    $scope.$root.getSettings();
 
 		$scope.$root.getPreview(function(data) {
@@ -571,7 +571,7 @@ seamsApp.directive('apiExample', function(){
 	  replace: true,
 	  link: function(scope, elem, attrs){
 	      scope.apiExampleId = (new Date()).getTime();
-	      
+
 	      scope.toggle = function() {
 		      if (scope.$root.dbschema) {
 		    	  $('#'+scope.apiExampleId).collapse("toggle");
@@ -595,20 +595,20 @@ seamsApp.directive('previewSearchHtml', function(){
 	  },
 	  replace: true,
 	  link: function(scope, element, attrs) {
-			
+
 	      scope.apiSearch = function(key, value) {
 	    	  if (typeof key != "undefined") {
 		    	  var query = key;
 		    	  if (value) {
 		    		  query += ":\""+value+"\"";
 		    		  var search = scope.searchString();
-	
+
 		    		  if (search.indexOf(query) > -1) {
 		    	    	  query = search.replace(query, "").replace(" AND  AND ", " AND ");
 		    		  }
 		    		  else {
 		    			  var regex = new RegExp(key+":\".*?\"", "i");
-			    		  
+
 			    		  var facet = search.match(regex);
 			    		  if (facet) {
 			    			  query = search.replace(facet, query);
@@ -617,7 +617,7 @@ seamsApp.directive('previewSearchHtml', function(){
 			    			  query += (" AND " + search);
 			    		  }
 		    		  }
-		    		  
+
 	    	    	  if (query.indexOf(" AND ") == 0) {
 			    		  query = query.substring(query.indexOf(" AND ") + 5);
 			    	  }
@@ -631,15 +631,15 @@ seamsApp.directive('previewSearchHtml', function(){
 		    	  else {
 		    		  query = encodeURIComponent(query).replace(/!/g, "\\!");
 		    	  }
-		    	  
+
 		    	  if ($('#q')) {
 		    		  $('#q').val(query);
 		    	  }
-		    	  
+
 		    	  scope.search();
 	    	  }
 		  };
-		  
+
 		  scope.searchString = function() {
 	    	  var search = scope.searchDocs.rest_uri;
 	    	  search = search.substring(search.indexOf('?'));
@@ -648,7 +648,7 @@ seamsApp.directive('previewSearchHtml', function(){
 	    	  search = search.substring(qIdx+2, aIdx).replace("*:*", "").replace(/\+AND\+/g, " AND ");
 	    	  return decodeURIComponent(search);
 		  };
-		  
+
 		  scope.isSelected = function(facet, value) {
 			  var q = facet + ":\"" + value + '\"';
 	    	  return scope.searchDocs.rest_uri.indexOf(q) > -1;

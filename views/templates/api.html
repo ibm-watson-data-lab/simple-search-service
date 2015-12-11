@@ -1,74 +1,27 @@
 <h1>
-  Simple Search Service API
+  Preiew API
 </h1>
 
-<div>
-    <p>Access the seams API at
-        <a ng-if="currentStatus == 'imported'" href="#search">/search</a>
-        <span ng-if="currentStatus != 'imported'">/search</span>
-       passing in parameters:
-    </p>
-</div>
+<p>
+  Now that you've seen how search works, now take a look at extending the search engine into a content discovery service, where a search result can be embedded into a page when the page knows what to ask of the search engine.
+</p>
 
-<div class="api-table">
-    <table class="table">
-      <tr>
-        <th>Parameter</th>
-        <th>Description</th>
-        <th>e.g.</th>
-      </tr>
-      <tr>
-        <td>q</td>
-        <td>The query you want to perform</td>
-        <td>
-           <ul>
-             <li>
-               <a ng-if="currentStatus == 'imported'" href="#search?q=*:*">*:*</a>
-               <span ng-if="currentStatus != 'imported'">*:*</span>
-               - search for everything
-             </li>
-             <li>[fieldname]:'[value]' - fielded search</li>
-             <li>[fieldname1]:'[value1]' OR [fieldname2]:'[value2]' - query logic</li>
-             <li>[value] - match any field</li>
-          </ul>
-        </td>
-      </tr>
-      <tr>
-        <td>limit</td>
-        <td>The number of records to return</td>
-        <td>{{settings.querylimit}}</td>
-      </tr>
-    </table>
-</div>
+<pre>
+  {{ apiExampleDocs.rest_uri | json }}
+</pre>
 
-<div>
-        <p>The API returns a JSON object like this:
-          <pre>
-{
-  "total_rows": 26,
-  "bookmark": "",
-  "rows": [
-     { },
-     { },
-     ...
-  ],
-  "counts": {
-  },
-  "from_cache": true
-}
-          </pre>
-          where <b>total_rows</b> is the number of rows in the result set, <b>bookmark</b> is the string
-          to pass back into the API in a subsequent call to get the next page of results,
-          <b>rows</b> is an array of document objects that match the supplied query,
-          <b>counts</b> is an object containing counts of each field that has been faceted and
-          <b>from_cache</b> represents whether the results came from cache or not.
-        </p>
-</div>
+<!--
+<pre>
+  {{ dbschema | json }}
+</pre>
+
+<pre>
+  {{ getSearchQuery(true) | json }}
+</pre>
+-->
+
 
 <div class="api-examples-wrapper" ng-show="currentStatus == 'imported' && dbschema">
-  <h1>
-    API Examples
-  </h1>
   <div class="api-examples">
     <div api-example apiExampleAction="apiExampleFacetSearch" apiExampleTitle="Faceted Search"></div>
     <div api-example apiExampleAction="apiExampleTextSearch" apiExampleTitle="Text Search"></div>

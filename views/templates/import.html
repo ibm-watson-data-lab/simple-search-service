@@ -1,25 +1,31 @@
 <h1>
-  Import
+  Create Search Index
 </h1>
 
 <div ng-show="currentStatus == 'imported'" class="alert alert-success">
   <p>
-    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was imported successfully.</strong> Please use the <a href="#search">/search</a> endpoint to query your database or try out the interactive search tool.
+    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was indexed successfully.</strong>
   </p>
 </div>
 
 <div ng-show="!currentStatus || currentStatus == 'new'">
-    <p>You have no data in your database. Please <a href="#upload">upload</a> a comma-separated file (csv) or a tab-separated file containing the
-       the data you wish to store and search</p>
+  <p>
+    Upload a comma separated values (CSV) or tab separated values (TSV) file.
+  </p>
 </div>
 
 <div ng-show="currentStatus == 'uploaded'">
-    <p>Please review the fields we have found in the uploaded file. Choose the data types of each field; this will
-         transform numbers and booleans to be stored as such in the database. </p>
-    <p> You can also choose for a field to be  faceted or not by checking the fields facet tick box. A faceted 
-         field will be counted in the result set e.g. if 'colour' was faceted, then the search results 
-         could indicate that there are 10 red items, 4 blue items and 1 green item. </p>
-    <p> When you have made your decision, click the 'Import' button to begin the import process.</p>
+
+    <p>
+      Here's a preview of your data. Make sure the data types are correct. (E.g., if you want to <code>facet</code> by a number, you'll need to change the data type from <code>number</code> to <code>string</code>.)
+    </p>
+    <p>
+      <strong>Pay extra attention to the Facet column.</strong> Check the checkbox next to those values you want to search by, and we'll automatically index those values as <code>counts</code> (i.e., <em>facets</em>).
+    </p>
+    <p>
+      <a href="https://docs.cloudant.com/search.html#faceting" target="_blank">Learn more about faceting</a>
+    </p>
+
     <div id="schemacontent" class="api-table"></div>
     <div>
       <button id="importbutton" type="submit" class="btn btn-primary" ng-click="importClicked()"> Import </button>

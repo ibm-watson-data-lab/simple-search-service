@@ -1,13 +1,14 @@
 
 <div class="row">
   <div class="col-md-12">
+
     <div class="message-box">
       <h2>
-        <a ng-click="toggle()"> {{apiExampleTitle}} </a>
+        <a ng-click="toggle()">{{apiExampleTitle}}</a>
         <span ng-show="apiExampleDocs.data.from_cache" class="api-search-example-cache"> from cache </span>
       </h2>
       <div class="collapse api-search-example" id="{{apiExampleId}}">
-      
+
         <div class="row api-search-example-info">
             <div class="col-md-10">
                 <strong>REST URL: </strong>
@@ -19,14 +20,14 @@
                 <span class="glyphicon" ng-class="{'glyphicon-triangle-bottom':showingJson, 'glyphicon-triangle-right':!showingJson}"></span> View the raw JSON </a>
             </div>
         </div>
-        
+
         <div class="row api-search-example-raw">
             <div class="col-md-12">
                 <pre id="{{apiExampleId}}_raw" class="collapse">{{ apiExampleDocs.data | json }}</pre>
             </div>
         </div>
-        
-        
+
+
         <div class="row api-search-example-results">
             <div class="col-md-12">
               <div class="row api-search-example-results-summary">
@@ -38,14 +39,15 @@
                     <th ng-repeat="docfield in apiExampleDocs.fields">{{docfield.name}}</th>
                   </tr>
                   <tr ng-repeat="row in apiExampleDocs.data.rows">
-                    <td ng-repeat="docfield in apiExampleDocs.fields">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:25}}</td> 
+                    <td ng-repeat="docfield in apiExampleDocs.fields">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:25}}</td>
                   </tr>
                 </table>
               </div>
             </div>
         </div>
-        
+
       </div>
     </div>
+
   </div>
 </div>
