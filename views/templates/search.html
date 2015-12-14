@@ -35,61 +35,63 @@
     <!-- <button type="submit" class="btn btn-primary" ng-click="search()"> Search </button> -->
 </form>
 
-    <hr />
+<hr />
 
-    <h2>
-      Results <small id="searchtime" ng-show="!searching">{{searchDocs.time}} ms</small><span ng-show="searching" class="glyphicon glyphicon-refresh glyphicon-spinner"></span>
-    </h2>
+<h2>
+  Results <small id="searchtime" ng-show="!searching">{{searchDocs.time}} ms</small><span ng-show="searching" class="glyphicon glyphicon-refresh glyphicon-spinner"></span>
+</h2>
 
-    <ul class="nav nav-tabs preview-search-nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a data-target="#viewashtml" aria-controls="viewashtml" role="tab" data-toggle="tab">HTML</a></li>
-      <li role="presentation"><a data-target="#viewasjson" aria-controls="viewasjson" role="tab" data-toggle="tab">JSON Preview</a></li>
-      <li role="presentation"><a data-target="#viewAsRawJSON" aria-controls="viewAsRawJSON" role="tab" data-toggle="tab">Raw JSON</a></li>
-    </ul>
+<ul class="nav nav-tabs preview-search-nav-tabs" role="tablist">
+  <li role="presentation" class="active"><a data-target="#viewashtml" aria-controls="viewashtml" role="tab" data-toggle="tab">HTML</a></li>
+  <li role="presentation"><a data-target="#viewasjson" aria-controls="viewasjson" role="tab" data-toggle="tab">JSON Preview</a></li>
+  <li role="presentation"><a data-target="#viewAsRawJSON" aria-controls="viewAsRawJSON" role="tab" data-toggle="tab">Raw JSON</a></li>
+</ul>
 
-    <div class="tab-content preview-search-tab-content">
+<div class="tab-content preview-search-tab-content">
 
-      <div role="tabpanel" class="tab-pane api-examples active" id="viewashtml">
-        <div preview-search-html></div>
+  <div role="tabpanel" class="tab-pane api-examples active" id="viewashtml">
+    <div preview-search-html></div>
+  </div>
+
+  <div role="tabpanel" class="tab-pane" id="viewasjson">
+    <p>
+      The facets and rows you see in the HTML tab are revealed as JSON, below.
+    </p>
+
+    <div class="row" id="searchheadings">
+      <div class="col-md-3">
+        <h4>
+          Facets <small>aka <code>counts</code></small>
+        </h4>
       </div>
-
-      <div role="tabpanel" class="tab-pane" id="viewasjson">
-        <p>
-          The facets and rows you see in the HTML tab are revealed as JSON, below.
-        </p>
-
-        <div class="row" id="searchheadings">
-          <div class="col-md-3">
-            <h4>
-              Facets <small>aka <code>counts</code></small>
-            </h4>
-          </div>
-          <div class="col-md-9">
-            <h4>
-              Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : 'Showing ' + searchDocs.data.rows.length + ' of ' + searchDocs.data.total_rows}}</small>
-            </h4>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-3">
-            <pre id="facets">{{ searchDocs.data.counts | json }}</pre>
-          </div>
-          <div class="col-md-9">
-            <pre id="documents">{{ searchDocs.data.rows | json }}</pre>
-          </div>
-        </div>
+      <div class="col-md-9">
+        <h4>
+          Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : 'Showing ' + searchDocs.data.rows.length + ' of ' + searchDocs.data.total_rows}}</small>
+        </h4>
       </div>
-
-      <div role="tabpanel" class="tab-pane api-examples" id="viewAsRawJSON">
-        <p>
-          Here's the full JSON object returned from the service.
-        </p>
-        <pre>
-          {{ searchDocs.data | json }}
-        </pre>
-      </div>
-
     </div>
 
+    <div class="row">
+      <div class="col-md-3">
+        <pre id="facets">{{ searchDocs.data.counts | json }}</pre>
+      </div>
+      <div class="col-md-9">
+        <pre id="documents">{{ searchDocs.data.rows | json }}</pre>
+      </div>
+    </div>
+  </div>
 
+  <div role="tabpanel" class="tab-pane api-examples" id="viewAsRawJSON">
+    <p>
+      Here's the full JSON object returned from the service.
+    </p>
+    <pre>
+      {{ searchDocs.data | json }}
+    </pre>
+  </div>
+
+</div>
+
+<p>
+  <button type="button" class="btn btn-primary" ng-click="goToNextPage('api')"> Continue </button>
+</p>
