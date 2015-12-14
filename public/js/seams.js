@@ -465,20 +465,6 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		};
 
 		$scope.$root.performSearch = function (params, callback) {
-			//force a limit
-			if (!params.limit) {
-				if (!$scope.settings) {
-					$scope.settings = {};
-				}
-				if (typeof $scope.settings.querylimit != "number") {
-					$scope.settings.querylimit = 20;
-				}
-				else if ($scope.settings.querylimit < 1) {
-					$scope.settings.querylimit = 20;
-				}
-				params.limit = $scope.settings.querylimit;
-			}
-
 			var restapi = '/search?' + decodeURIComponent( $.param( params ) );
 			var resturi = $location.protocol() + "://" + $location.host() + ($location.port() ? (':'+$location.port()) : '') + restapi;
 			var startTime = $scope.$root.ms();
