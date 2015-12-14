@@ -1,25 +1,10 @@
 <h1>
-  Preiew API
+  Preview API
 </h1>
 
 <p>
-  Now that you've seen how search works, now take a look at extending the search engine into a content discovery service, where a search result can be embedded into a page when the page knows what to ask of the search engine.
+  Now that you've seen how search works, now take a look at extending the search engine into a content discovery service. Here, the interface uses it's own context to query the search engine.
 </p>
-
-<pre>
-  {{ apiExampleDocs.rest_uri | json }}
-</pre>
-
-<!--
-<pre>
-  {{ dbschema | json }}
-</pre>
-
-<pre>
-  {{ getSearchQuery(true) | json }}
-</pre>
--->
-
 
 <div class="api-examples-wrapper" ng-show="currentStatus == 'imported' && dbschema">
   <div class="api-examples">
@@ -28,3 +13,7 @@
     <div api-example apiExampleAction="apiExampleLogicSearch" apiExampleTitle="Logic Search"></div>
   </div>
 </div>
+
+<p>
+  <button type="button" class="btn btn-primary" ng-click="goToNextPage('settings')"> Continue </button>
+</p>
