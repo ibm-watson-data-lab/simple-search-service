@@ -418,6 +418,7 @@ a.btn-primary:visited:hover {
 #savesettings {
     margin-top: 25px;
 }
+.api-search-example-results-table,
 .search-table-wrapper {
 	overflow-x: auto;
 }
