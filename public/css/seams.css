@@ -414,9 +414,6 @@ a.btn-primary:visited:hover {
     width: 120px;
 }
 .api-settings-form {
-    border-top: 1px solid #ddd;
-    margin-top: 25px;
-    padding-top: 25px;
 }
 #savesettings {
     margin-top: 25px;
