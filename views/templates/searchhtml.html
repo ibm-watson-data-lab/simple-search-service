@@ -34,6 +34,7 @@
             </div>
           </div>
           <div class="col-md-9">
+          <div class="search-table-wrapper">
             <table class="table table-striped">
               <tr>
                 <th ng-repeat="docfield in searchDocs.fields">{{docfield.name}}</th>
@@ -42,6 +43,7 @@
                 <td ng-repeat="docfield in searchDocs.fields">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</td>
               </tr>
             </table>
+          </div>
           </div>
         </div><!--row-->
       </div><!--apiSearchExamle-->

@@ -418,3 +418,6 @@ a.btn-primary:visited:hover {
 #savesettings {
     margin-top: 25px;
 }
+.search-table-wrapper {
+	overflow-x: auto;
+}
