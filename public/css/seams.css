@@ -396,6 +396,7 @@ a.btn-primary:visited:hover {
     border-bottom: 1px solid #ddd;
     border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
+    margin-bottom: 25px;
     padding: 20px 10px;
 }
 .preview-search-nav-tabs > li > a {
