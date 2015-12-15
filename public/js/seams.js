@@ -80,6 +80,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	if (!q || q.length == 0) {
 	    		$('#q').val("*:*");
 	    		$('#q').val("*:*");
+	    		q = "*:*";
 	    	}
 			$scope.$root.performSearch({
 				q: q
@@ -631,7 +632,7 @@ seamsApp.directive('previewSearchHtml', function(){
 	    	    	  if (query.indexOf(" AND ") == 0) {
 			    		  query = query.substring(query.indexOf(" AND ") + 5);
 			    	  }
-			    	  if (query.lastIndexOf(" AND ") == query.length - 5) {
+			    	  if (query.lastIndexOf(" AND ") != -1 && query.lastIndexOf(" AND ") == query.length - 5) {
 			    		  query = query.substring(0, query.lastIndexOf(" AND "));
 			    	  }
 			    	  if (query.length == 0) {
@@ -655,7 +656,9 @@ seamsApp.directive('previewSearchHtml', function(){
 	    	  search = search.substring(search.indexOf('?'));
 	    	  var qIdx = search.indexOf("q=");
 	    	  var aIdx = search.indexOf("&", qIdx);
-	    	  search = search.substring(qIdx+2, aIdx).replace("*:*", "").replace(/\+AND\+/g, " AND ");
+	    	  if (qIdx > -1) {
+	    		  search = search.substring(qIdx+2, (aIdx > -1 ? aIdx : search.length)).replace("*:*", "").replace(/\+AND\+/g, " AND ");
+	    	  }
 	    	  return decodeURIComponent(search);
 		  };
 
