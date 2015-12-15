@@ -1,8 +1,6 @@
 <h1 id="toc_0">Welcome to the Simple Search Service</h1>
 
-<p>Buckle up, you&#39;re about to build a <strong>fully functional, faceted search engine</strong> and <strong>content discovery API</strong> just by clicking a few buttons. </p>
-
-<p>[video]</p>
+<p>Buckle up, you&#39;re about to build an API that can deliver a <strong>fully functional, faceted search engine</strong> and <strong>content discovery service</strong>, just by clicking a few buttons. </p>
 
 <p>Excited? So are we. Let&#39;s get into it. We&#39;ll do all the heavy lifting for you. Just follow the instructions. But don&#39;t worry, this walkthrough is no wizard. If you&#39;re a developer and you want to dig in beyond what you see here, we&#39;ve got you covered: </p>
 
@@ -17,7 +15,7 @@
 
 <p>Yes. We use the Simple Search Service to power the <a href="https://developer.ibm.com/clouddataservices/how-tos/#!&amp;filter=%5B%7B%22key%22%3A%22technologies%22%2C%22value%22%3A%22Cloudant%22%7D%5D">search engine in our developer center</a>, and it&#39;s also the API that powers <a href="https://console.ng.bluemix.net/data/discovery/fullservice/cloudant-nosql-db/resources">content discovery in Bluemix</a>. </p>
 
-<p>If you followed those links, you probably noticed that hey content is identical. That&#39;s because the content is served from the same Cloudant database, via the same API. The <strong>Preview Search</strong> and <strong>Preview API</strong> pages of this app will show you how we used this service to do just that. </p>
+<p>If you followed those links, you probably noticed that the content is identical. That&#39;s because the content is served from the same Cloudant database, via the same API. The <strong>Preview Search</strong> and <strong>Preview API</strong> pages of this app will show you how we used this service to do just that. </p>
 
 <p>First, let&#39;s index some data.</p>
 
@@ -26,9 +24,8 @@
 <p>The Simple Search Service indexes CSVs and TSVs. If you don&#39;t have data in that format, no problem. We have some data you can use to kick the tires:</p>
 
 <ul>
-<li>Households near Liverpool (CSV)</li>
-<li>Movies (TSV)</li>
-<li>Guitars (CSV)</li>
+<li><a href="https://github.com/ibm-cds-labs/open-data/blob/master/uk/hp.csv" target="_blank">UK Addresses</a> (CSV)</li>
+<li><a href="https://github.com/ibm-cds-labs/open-data/blob/master/movies/movies.tsv" target="_blank">Movies</a> (TSV)</li>
 </ul>
 
 <p>If you have some data dumps of your own, feel free to use those. If you&#39;re new to data dumps in our required formats, start with these guides for exporting CSVs and TSVs from:</p>
@@ -42,4 +39,6 @@
 
 <hr>
 
-<p><a href="#/upload">Next: Upload some data</a></p>
+<p>
+  <button type="button" class="btn btn-primary" ng-click="goToNextPage('upload')"> Continue </button>
+</p>
