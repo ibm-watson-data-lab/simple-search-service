@@ -3,25 +3,35 @@
 </h1>
 
 <div class="form-horizontal api-settings">
-<div class="form-group">
-  <label for="deletedata" class="col-sm-2">Delete all data</label>
-  <div class="col-sm-2">
-    <button name="deletedata" data-toggle="modal" data-target="#deleteData" class="btn btn-primary btn-danger">Delete</button>
-  </div>
-</div>
-<div class="api-settings-form">
-  <div class="form-group">
-    <label for="querylimit" class="col-sm-2">Query limit</label>
-    <div class="col-sm-2">
-      <input name="querylimit" type="number" class="form-control" min=1 ng-model="settings.querylimit" ng-change="dirty = true" required>
+  <div class="api-settings-form">
+
+    <div class="form-group">
+      <label for="querylimit" class="col-sm-2">Query limit</label>
+      <div class="col-sm-2">
+        <input name="querylimit" type="number" class="form-control" min=1 ng-model="settings.querylimit" ng-change="dirty = true" required>
+      </div>
+      <div class="col-sm-10 col-sm-offset-2">
+        <span id="helpBlock" class="help-block">Sets the <code>limit</code> parameter on API calls.</span>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-2">
-      <button id="savesettings" type="button" class="btn btn-default" ng-click="dirty = false;saveSettings();" ng-disabled="dirty != true || saving">
-        {{ saving ? 'Saving...' : 'Save' }}
-      </button>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button id="savesettings" type="button" class="btn btn-default" ng-click="dirty = false;saveSettings();" ng-disabled="dirty != true || saving">
+          {{ saving ? 'Saving...' : 'Save' }}
+        </button>
+      </div>
     </div>
+
   </div>
 </div>
-</div>
+
+<hr />
+
+<h2>
+  Delete data
+</h2>
+<p>
+  If you want to use this service to index different data, or to re-index the same data with different facets or data types, you can blow away your database, and the indexes, and start over again.
+</p>
+<button name="deletedata" data-toggle="modal" data-target="#deleteData" class="btn btn-primary btn-danger">Delete data</button>
