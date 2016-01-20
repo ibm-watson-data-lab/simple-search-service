@@ -43,7 +43,7 @@ Clone this repository then run `npm install` to add the Node.js libraries requir
 Then create an environment variable that mimics Cloud Foundry e.g.
 
 ```
-export VCAP_SERVICES='{"cloudantNoSQLDB":[{"name":"Cloudant SSS","label":"cloudantNoSQLDB","plan":"Shared","credentials":{"username":"USERNAME","password":"PASSWORD","host":"HOSTNAME","port":443,"url":"https://USERNAME:PASSWORD:HOSTNAME"}}]}'
+export VCAP_SERVICES='{"cloudantNoSQLDB":[{"name":"simple-search-service-cloudant-service","label":"cloudantNoSQLDB","plan":"Shared","credentials":{"username":"USERNAME","password":"PASSWORD","host":"HOSTNAME","port":443,"url":"https://USERNAME:PASSWORD:HOSTNAME"}}]}'
 ```
 
 replacing the `USERNAME`, `PASSWORD` and `HOSTNAME` placeholders for your own Cloudant account's details.
