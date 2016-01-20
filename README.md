@@ -26,7 +26,8 @@ A more detailed walkthrough of using Simple Search Service is available [here](h
 
 ### Architecture Diagram
 
-<!-- Insert diagram here -->
+<!-- Temporary diagram -->
+![Architecture of Simple Search Service](https://developer.ibm.com/clouddataservices/wp-content/uploads/sites/47/2016/01/tmp_simple_search_sketch.jpg)
 
 ## Running the app on Bluemix
 
