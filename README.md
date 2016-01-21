@@ -22,7 +22,7 @@ Once the data is uploaded, a CORS-enabled, cached API endpoint is available at `
 
 While this app is a demo to showcase how easily you can build an app on Bluemix using Node.js and Cloudant, it also provides a mature search API that scales with the addition of multiple Simple Search Service nodes and a centralized cache using Redis by Compose.io. In fact, a similar architecture powers the search experience in the Bluemix services catalog.
 
-A more detailed walkthrough of using Simple Search Service is available [here](http://developer.ibm.com/clouddataservices/2016/01/09/introducing-simple-faceted-search-service/).
+A more detailed walkthrough of using Simple Search Service is available [here](https://developer.ibm.com/clouddataservices/2016/01/21/introducing-simple-faceted-search-service/).
 
 ### Architecture Diagram
 
