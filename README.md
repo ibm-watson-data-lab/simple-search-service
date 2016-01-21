@@ -72,7 +72,7 @@ For manual deploys, deployment tracking can be disabled by removing `require("cf
 
 #### License 
 
-Copyright 2016 [IBM Cloud Data Services](https://developer.ibm.com/clouddataservices/)
+Copyright 2016 IBM Cloud Data Services
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
