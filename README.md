@@ -2,17 +2,17 @@
 
 Simple Search Service is an IBM Bluemix app that lets you quickly create a faceted search engine, exposing an API you can use to bring search into your own apps. The service also creates a website that lets you preview the API and test it against your own data.
 
-Once deployed, use the browser to upload CSV or TSV data. Specify which fields to facet, and the service handles the rest.
+Once deployed, use the browser to upload CSV or TSV data. Specify the fields to facet, and the service handles the rest.
 
 ## How it works
 
 The application uses these Bluemix services:
 
-* Node.js runtime
+* a Node.js runtime
 * a Cloudant database
 * a Redis in-memory database from Compose.io (Optional)
 
-Once the data is uploaded a CORS-enabled, cached, API endpoint is available at `<your domain name>/search`. The endpoint takes advantage of Cloudant's integration with Lucene full-text indexing. Here's what you get:
+Once the data is uploaded, a CORS-enabled, cached API endpoint is available at `<your domain name>/search`. The endpoint takes advantage of Cloudant's built-in integration for Lucene full-text indexing. Here's what you get:
 
 * fielded search - `?q=colour:black+AND+brand:fender`
 * free-text search - `?q=black+fender+strat`
@@ -20,7 +20,7 @@ Once the data is uploaded a CORS-enabled, cached, API endpoint is available at `
 * faceting
 * caching of popular searches
 
-While this app serves as a demo to showcase how easily an app can be built on Bluemix using a Node.js runtime and the Cloudant JSON database service, it also provides a mature search API that scales with the addition of addition of multiple Simple Search Service nodes and a centralized cache with Redis by Compose.io. In fact, it powers the search experience in the Bluemix services catalog.
+While this app is a demo to showcase how easily you can build an app on Bluemix using Node.js and Cloudant, it also provides a mature search API that scales with the addition of multiple Simple Search Service nodes and a centralized cache using Redis by Compose.io. In fact, a similar architecture powers the search experience in the Bluemix services catalog.
 
 A more detailed walkthrough of using Simple Search Service is available [here](http://developer.ibm.com/clouddataservices/2016/01/09/introducing-simple-faceted-search-service/).
 
@@ -57,7 +57,7 @@ node app.js
 
 ### Privacy Notice
 
-The Simple Search Service web application includes code to track deployments to Bluemix and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker] [deploy_track_url] service on each deployment:
+The Simple Search Service web application includes code to track deployments to Bluemix and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/IBM-Bluemix/cf-deployment-tracker-service) service on each deployment:
 
 * Application Name (`application_name`)
 * Space ID (`space_id`)
@@ -72,7 +72,7 @@ For manual deploys, deployment tracking can be disabled by removing `require("cf
 
 #### License 
 
-Copyright [2015] [IBM Cloud Data Services]
+Copyright 2016 [IBM Cloud Data Services](https://developer.ibm.com/clouddataservices/)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
