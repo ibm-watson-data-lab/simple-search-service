@@ -7,99 +7,81 @@
 
   <title>IBM Cloud Data Services | Simple Search Service</title>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="/css/seams.css" />
+  <link href="master.css" rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
   <script src="/js/jquery.form.js"></script>
-
   <script src="/js/seams.js"></script>
 </head>
-<body ng-app="seamsApp">
+<body ng-app="seamsApp" class="capped-layout">
 <!-- start header -->
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-	    <div class="container-fluid">
-	    	<div class="row">
-		        <div class="navbar-header col-sm-6">
-		            <span class="navbar-brand">
-		                <a rel="home" href="https://developer.ibm.com/clouddataservices">
-		                    <span>Cloud Data Services</span>
-		                </a>
-		            </span>
-		        </div>
-	        </div>
-	    </div>
-	</nav>
+  <header class="capped-layout_cap app-banner">
+    <a class="app-banner_title" rel="home" href="https://developer.ibm.com/clouddataservices">IBM Cloud Data Services // Dev</a>
+  </header>
 <!-- end header -->
 
 <!-- start content -->
-	<div class="page-content container-fluid" ng-controller="seamsController">
-		<div class="row">
+  <div ng-controller="seamsController" class="capped-layout_body bookend-layout">
 
 <!-- start sidebar -->
-			<div class="col-sm-3 sidebar">
-				<div class="sidebar-title">
-					<a href="/">Simple Search Service</a>
-				</div>
-				<div>
-					<ul class="nav nav-sidebar">
-						<li ng-class="{'active':!selectedView || selectedView === 'about'}">
-							<a href="#/about">About</a>
-						</li>
-						<li ng-class="{'active':selectedView === 'upload'}">
-							<a href="#/upload">Upload data</a>
-						</li>
-						<li ng-class="{'active':selectedView === 'import', 'disabled':!currentStatus || currentStatus == 'new'}">
-							<a ng-if="currentStatus && currentStatus != 'new'" href="#/import">Create Index</a>
-							<a ng-if="!currentStatus || currentStatus == 'new'">Create Index</a>
-						</li>
-						<li ng-class="{'active':selectedView === 'search', 'disabled':currentStatus != 'imported'}">
-							<a ng-if="currentStatus == 'imported'" href="#/search">Preview Search</a>
-							<a ng-if="currentStatus != 'imported'">Preview Search</a>
-						</li>
-						<li ng-class="{'active':selectedView === 'api'}">
-							<a href="#/api">Preview Content API</a>
-						</li>
-						<li ng-class="{'active':selectedView === 'settings'}">
-							<a href="#/settings">Settings</a>
-						</li>
-					</ul>
-				</div>
-				<div class="sidebar-footer">
-					<a href="https://github.com/ibm-cds-labs/simple-search-service" target="_blank">Fork Simple Search Service on Github</a>
-				</div>
-			</div>
+      <nav class="bookend-layout_bookend theme_white">
+        <ul class="tree-nav">
+          <li class="tree-nav_item" ng-class="{'active':!selectedView || selectedView === 'about'}">
+            <a class="tree-nav_link" href="#/about">Simple Search Service</a>
+            <ul class="tree-nav">
+              <li class="tree-nav_item">
+                <a class="tree-nav_link" href="#/about">Get data</a>
+              </li>
+              <li class="tree-nav_item">
+                <a class="tree-nav_link" href="#/upload">Upload data</a>
+              </li>
+              <li class="tree-nav_item">
+                <a class="tree-nav_link" ng-if="currentStatus && currentStatus != 'new'" href="#/import">Create Index</a>
+                <a class="tree-nav_link" ng-if="!currentStatus || currentStatus == 'new'">Create Index</a>
+              </li>
+              <li class="tree-nav_item">
+                <a class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/search">Preview Search</a>
+                <a class="tree-nav_link" ng-if="currentStatus != 'imported'">Preview Search</a>
+              </li>
+              <li class="tree-nav_item">
+                <a class="tree-nav_link" href="#/api">Preview Content API</a>
+              </li>
+            </ul>
+          </li>
+          <li class="tree-nav_item" ng-class="{'active':selectedView === 'settings'}">
+            <a class="tree-nav_link" href="#/settings">Settings</a>
+          </li>
+        </ul>
+      </nav>
 <!-- end sidebar -->
 
 <!-- start main -->
-			<div class="col-sm-9 col-sm-offset-3 main" ng-view>
+      <div ng-view class="bookend-layout_body theme_dark">
 
-			</div>
+      </div>
 <!-- end main -->
 
-		</div>
-	</div>
+    </div>
+  </div>
 <!-- end content -->
 
-<div class="modal fade" id="deleteData" tabindex="-1" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<span class="modal-title">Delete Data</span>
-			</div>
-			<div class="modal-body" id="deleteDataBody">
-				<span>Are you sure you want to delete all of your data?</span>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button id="deletebutton" type="button" class="btn btn-primary btn-danger" ng-click="deleteEverything()">Delete All</button>
-			</div>
-		</div>
-	</div>
+<div class="modal fade" id="deleteData" tabindex="-1" role="dialog" ng-if="anything">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Delete Data</span>
+      </div>
+      <div class="modal-body" id="deleteDataBody">
+        <span>Are you sure you want to delete all of your data?</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button id="deletebutton" type="button" class="btn btn-primary btn-danger" ng-click="deleteEverything()">Delete All</button>
+      </div>
+    </div>
+  </div>
 </div>
 </body>
 </html>

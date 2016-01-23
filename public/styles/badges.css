@@ -1,0 +1,27 @@
+[data-large-number-badge]::before {
+	content: attr(data-large-number-badge);
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.25rem;
+	font-weight: 800;
+	/*color: #DFE9E9;*/
+	border-radius: 100%;
+	top: -2rem;
+	left: -2rem;
+	height: 3.375rem;
+	width: 3.375rem;
+	background: #7CC7FF;
+}
+
+
+.badges_section-transition {
+	background-color: #EFC100;
+	color: #323232;
+	display: inline-block;
+	margin: 0 0 -3.75rem;
+	padding: 1.125rem 1.25rem;
+	font-size: 1.125rem;
+	transform: translate(-1.25rem, -50%);
+}

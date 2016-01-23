@@ -1,44 +1,55 @@
-<h1 id="toc_0">Welcome to the Simple Search Service</h1>
+<section class="layout_section theme_light">
 
-<p>Buckle up, you&#39;re about to build an API that can deliver a <strong>fully functional, faceted search engine</strong> and <strong>content discovery service</strong>, just by clicking a few buttons. </p>
+<h1 class="type_heading" id="toc_0"><mark class="type_mark">Welcome to the Simple Search Service</mark></h1>
 
-<p>Excited? So are we. Let&#39;s get into it. We&#39;ll do all the heavy lifting for you. Just follow the instructions. But don&#39;t worry, this walkthrough is no wizard. If you&#39;re a developer and you want to dig in beyond what you see here, we&#39;ve got you covered: </p>
+<p class="type_copy">Buckle up, you&#39;re about to build an API that can deliver a fully functional, faceted search engine and content discovery service, just by clicking a few buttons. </p>
 
-<ul>
-<li><a href="https://developer.ibm.com/clouddataservices/simple-search-service">The tutorial spells out how we built it</a></li>
-<li><a href="https://github.com/ibm-cds-labs/simple-search-service">All of the code is on Github</a></li>
+</section>
+
+<section class="layout_section">
+
+<p class="type_copy">Excited? So are we. Let&#39;s get into it. We&#39;ll do all the heavy lifting for you. Just follow the instructions. But don&#39;t worry, this walkthrough is no wizard. If you&#39;re a developer and you want to dig in beyond what you see here, we&#39;ve got you covered: </p>
+
+<ul class="list_unordered compact">
+<li><a class="type_link" href="https://developer.ibm.com/clouddataservices/simple-search-service">The tutorial spells out how we built it</a></li>
+<li><a class="type_link" href="https://github.com/ibm-cds-labs/simple-search-service">All of the code is on Github</a></li>
 </ul>
 
-<p>Feel free to fork the code and extend the app. If you have feedback, and want to contribute to master, <a href="https://github.com/ibm-cds-labs/simple-search-service/issues">check out our backlog</a>.</p>
+<p class="type_copy">Feel free to fork the code and extend the app. If you have feedback, and want to contribute to master, <a class="type_link" href="https://github.com/ibm-cds-labs/simple-search-service/issues">check out our backlog</a>.</p>
 
-<h2 id="toc_1">Is this really a service?</h2>
+<hr>
 
-<p>Yes. We use the Simple Search Service to power the <a href="https://developer.ibm.com/clouddataservices/how-tos/#!&amp;filter=%5B%7B%22key%22%3A%22technologies%22%2C%22value%22%3A%22Cloudant%22%7D%5D">search engine in our developer center</a>, and it&#39;s also the API that powers <a href="https://console.ng.bluemix.net/data/discovery/fullservice/cloudant-nosql-db/resources">content discovery in Bluemix</a>. </p>
+<h2 class="type_heading" id="toc_1"><mark class="type_mark">Is this really a service?</mark></h2>
 
-<p>If you followed those links, you probably noticed that the content is identical. That&#39;s because the content is served from the same Cloudant database, via the same API. The <strong>Preview Search</strong> and <strong>Preview API</strong> pages of this app will show you how we used this service to do just that. </p>
+<p class="type_copy">Yes. We use the Simple Search Service to power the <a class="type_link" href="https://developer.ibm.com/clouddataservices/how-tos/#!&amp;filter=%5B%7B%22key%22%3A%22technologies%22%2C%22value%22%3A%22Cloudant%22%7D%5D">search engine in our developer center</a>, and it&#39;s also the API that powers <a class="type_link" href="https://console.ng.bluemix.net/data/discovery/fullservice/cloudant-nosql-db/resources">content discovery in Bluemix</a>. </p>
 
-<p>First, let&#39;s index some data.</p>
+<p class="type_copy">If you followed those links, you probably noticed that the content is identical. That&#39;s because the content is served from the same Cloudant database, via the same API. The Preview Search and Preview API pages of this app will show you how we used this service to do just that. </p>
 
-<h2 id="toc_2">Get data</h2>
+<p class="type_copy">First, let&#39;s index some data.</p>
 
-<p>The Simple Search Service indexes CSVs and TSVs. If you don&#39;t have data in that format, no problem. We have some data you can use to kick the tires:</p>
+<hr>
 
-<ul>
-<li><a href="https://github.com/ibm-cds-labs/open-data/blob/master/uk/hp.csv" target="_blank">UK Addresses</a> (CSV)</li>
-<li><a href="https://github.com/ibm-cds-labs/open-data/blob/master/movies/movies.tsv" target="_blank">Movies</a> (TSV)</li>
+<h2 class="type_heading" id="toc_2"><mark class="type_mark">Get data</mark></h2>
+
+<p class="type_copy">The Simple Search Service indexes CSVs and TSVs. If you don&#39;t have data in that format, no problem. We have some data you can use to kick the tires:</p>
+
+<ul class="list_unordered compact">
+<li><a class="type_link" href="https://github.com/ibm-cds-labs/open-data/blob/master/uk/hp.csv" target="_blank">UK Addresses</a> (CSV)</li>
+<li><a class="type_link" href="https://github.com/ibm-cds-labs/open-data/blob/master/movies/movies.tsv" target="_blank">Movies</a> (TSV)</li>
 </ul>
 
-<p>If you have some data dumps of your own, feel free to use those. If you&#39;re new to data dumps in our required formats, start with these guides for exporting CSVs and TSVs from:</p>
+<p class="type_copy">If you have some data dumps of your own, feel free to use those. If you&#39;re new to data dumps in our required formats, start with these guides for exporting CSVs and TSVs from:</p>
 
-<ul>
-<li><a href="https://developer.ibm.com/clouddataservices/2015/09/22/export-cloudant-json-as-csv-rss-or-ical/">CouchDB / Cloudant</a></li>
-<li><a href="https://dev.mysql.com/doc/mysql-utilities/1.5/en/mysqldbexport.html">MySQL</a></li>
-<li><a href="https://www.compose.io/articles/comma-values-1-exporting-csv-from-mongodb/">MongoDB</a></li>
-<li><a href="http://stackoverflow.com/questions/6521531/how-do-you-print-the-result-of-a-postgresql-query-in-csv-or-tsv-format-from-the">PostgreSQL</a></li>
+<ul class="list_unordered compact">
+<li><a class="type_link" href="https://developer.ibm.com/clouddataservices/2015/09/22/export-cloudant-json-as-csv-rss-or-ical/">CouchDB / Cloudant</a></li>
+<li><a class="type_link" href="https://dev.mysql.com/doc/mysql-utilities/1.5/en/mysqldbexport.html">MySQL</a></li>
+<li><a class="type_link" href="https://www.compose.io/articles/comma-values-1-exporting-csv-from-mongodb/">MongoDB</a></li>
+<li><a class="type_link" href="http://stackoverflow.com/questions/6521531/how-do-you-print-the-result-of-a-postgresql-query-in-csv-or-tsv-format-from-the">PostgreSQL</a></li>
 </ul>
 
 <hr>
 
 <p>
-  <button type="button" class="btn btn-primary" ng-click="goToNextPage('upload')"> Continue </button>
+  <button type="button" class="_strong-button" ng-click="goToNextPage('upload')"> Continue </button>
 </p>
+</section>

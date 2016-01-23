@@ -1,0 +1,16 @@
+.tag-list {
+	list-style: none;
+	padding: 0;
+}
+
+.tag-list_tag {
+	margin: .25rem 0;
+	line-height: 1.2;
+	color: var(--ibm-color-blue-60);
+	background-color: var(--ibm-color-blue-10);
+}
+
+.tag-list_count {
+	color: #fff;
+	background-color: var(--ibm-color-blue-50);
+}

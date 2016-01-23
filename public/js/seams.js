@@ -220,12 +220,16 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	  });
 	    }
 
+    // Holding which panel in the "Preview Search" view
+    // is selected. Initially set to the HTML panel
+    	$scope.currentSearchPanel = "html";
+
 		// given a schema object (x.fields) - this function returns the html
 		// which displays a table of each field in the schema, its data type
 	    // and whether its faceted or not, together with an example value from the
 		// uploaded file (x.data)
 	    $scope.$root.renderSchema = function(x) {
-		   var html = '<table class="table table-striped">\n';
+		   var html = '<table class="table_basic">\n';
 		   html += '<input type="hidden" name="upload_id" id="upload_id" value="' + x.upload_id + '"/>\n';
 		   html += "<tr>\n";
 		   html += "  <th>name</th><th>type</th><th>facet</th><th>e.g</th>\n";

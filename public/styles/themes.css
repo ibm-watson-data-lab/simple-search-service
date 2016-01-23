@@ -1,0 +1,22 @@
+:root {
+	--dark-color: var(--ibm-color-white);
+	--dark-background: var(--ibm-color-blue-90);
+
+	--light-color: var(--ibm-color-blue-70);
+	--light-background: var(--ibm-color-neutralwhite-40);
+}
+
+
+.theme_dark {
+	color: var(--dark-color);
+	background-color: var(--dark-background);
+}
+.theme_light {
+	color: var(--light-color);
+	background-color: var(--light-background);
+}
+.theme_white {
+	color: var(--light-color);
+	background-color: #fff;
+}
+

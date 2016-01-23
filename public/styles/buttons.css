@@ -1,0 +1,97 @@
+:root{
+  --color-button: var(--ibm-color-teal-30);
+  --color-disabled-button: #d3d9dd;
+  --color-button-darker: #0596d5;
+  --color-weak-button-hover: #eff4f5;
+}
+
+._button,
+._strong-button,
+._weak-button {
+  display: inline-flex;
+  vertical-align: top;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  height: 2.25rem;
+  text-align: center;
+  border: none;
+  background: transparent;
+  transition: color 0.1s ease, background 0.2s ease, box-shadow 0.1s ease;
+  font-size: .875rem;
+  padding: 0 1.75em;
+  font-weight: 700;
+}
+
+._strong-button.hidden {
+	display: none;
+}
+
+._button + ._button,
+._button + ._strong-button,
+._button + ._weak-button,
+._strong-button + ._button,
+._strong-button + ._strong-button,
+._strong-button + ._weak-button,
+._weak-button + ._button,
+._weak-button + ._strong-button,
+._weak-button + ._weak-button {
+  margin-left: 1rem;
+}
+
+._button {
+  color: var(--color-button);
+  border: 1px solid var(--color-button);
+  border-radius: 1px;
+}
+
+._button:not([disabled]):hover,
+._button:not([disabled]):focus {
+  color: var(--ibm-color-teal-20);
+  border-color: var(--ibm-color-teal-20);
+  background-color: var(--ibm-color-blue-80);
+  background-color: rgba(0,0,0,.2);
+}
+
+._button[disabled] {
+  color: var(--color-disabled-button);
+  border-color: var(--color-disabled-button);
+}
+
+._clear-button {
+	margin: 0  1rem;
+}
+
+._clear-button:hover {
+	text-decoration: underline;
+}
+
+._strong-button {
+  /*text-transform: uppercase;*/
+  /*letter-spacing: .05em;*/
+  color: var(--ibm-color-teal-80);
+  background-color: var(--color-button);
+}
+
+._strong-button:not([disabled]):hover,
+._strong-button:not([disabled]):focus {
+  background-color: var(--ibm-color-teal-20);
+}
+
+._strong-button[disabled]{
+  background-color: var(--color-disabled-button);
+	cursor: default;
+}
+
+._weak-button {
+  color: var(--color-button);
+}
+
+._weak-button:not([disabled]):hover, 
+._weak-button:not([disabled]):focus {
+  background-color: var(--color-weak-button-hover);
+}
+
+._weak-button[disabled] {
+  color: var(--color-disabled-button);
+}

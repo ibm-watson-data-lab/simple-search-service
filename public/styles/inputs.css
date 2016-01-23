@@ -1,0 +1,161 @@
+._text-input {
+	font-size: .875rem;
+	font-family: inherit;
+	background-color: #fff;
+	color: black;
+	width: 100%;
+	/*max-width: 24rem;*/
+	outline: none;
+	border: 1px solid #d3d9dd;
+	overflow: initial;
+	line-height: 1;
+	padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+	appearance: none; /*remove spinner input on chrome*/
+}
+
+._text-input.md {
+	width: 30%;
+}
+
+/*remove spinner on ff*/
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+._text-input:not(:read-only):focus {
+	border: 1px solid #0699cc;
+}
+
+._text-input:read-only {
+
+}
+
+._text-input[data-validation="valid"] {
+	
+}
+
+._text-input[data-validation="invalid"] {
+	border: 2px solid red;
+}
+._text-input[data-validation="invalid"]:hover {
+	border: 2px solid #ee3897;
+}
+._text-area {
+	font-size: .875rem;
+	font-family: inherit;
+	background-color: #fff;
+	color: black;
+	width: 100%;
+	max-width: 24em;
+	outline: none;
+	border: 1px solid #d3d9dd;
+	overflow: initial;
+	line-height: 1;
+	padding: .5em;
+	resize: vertical;
+	transition: border 0.2s ease-out-in;
+}
+
+._text-area:not(:read-only):focus {
+	border: 1px solid #0699cc;
+}
+
+._text-area:read-only {
+	
+}
+
+._text-area[data-validation="valid"] {
+	
+}
+
+._text-area[data-validation="invalid"] {
+	
+}
+
+.input-error {
+    font-size: 0.75rem;
+    color: red;
+    padding-top: 5px;
+}
+
+::-webkit-input-placeholder {
+
+}
+::-moz-placeholder { 
+
+}
+:-ms-input-placeholder {
+
+}
+
+._select{
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-image: url("http://playbook.cio.gov/designstandards/assets/img/arrow-down.svg");
+	background-position: right .5rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+	font-size: .875rem;
+	font-family: inherit;
+	background-color: #fff;
+	color: black;
+	width: 100%;
+	max-width: 24em;
+	outline: none;
+	border: 1px solid #d3d9dd;
+	overflow: initial;
+	padding: .5em;
+}
+
+
+.input_file {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.input_file-handle {
+	height: 2rem;
+	font-size: .875rem;
+	background-color: #fff;
+	display: block;
+	color: black;
+	width: 100%;
+	border: 1px solid #d3d9dd;
+	padding: .375rem 0 .375rem .75rem;
+}
+
+.input_file-handle:hover{
+	cursor: pointer;
+}
+
+.input_file-handle:empty::before {
+	content: "Select File";
+	display: block;
+	color: var(--ibm-color-gray-50)
+}
+
+.input_file-handle::after {
+	content: "Browse";
+	display: block;
+	position: absolute;
+	padding: .375rem 1.75rem;
+	top: -1px;
+	right: -1px;
+	height: 2rem;
+	background-color: var(--ibm-color-blue-70);
+	color: var(--ibm-color-teal-30);
+}
+
+[type="checkbox"],
+[type="radio"] {
+	margin: 0 .75em;
+}

@@ -1,36 +1,31 @@
-<h1>
-  Upload Data
-</h1>
+<section class="layout_section theme_light">
+  <h1 class="type_heading"><mark class="type_mark">Upload Data</mark></h1>
+  <p class="type_copy">Upload a comma separated values (CSV) or tab separated values (TSV) file.</p>
+</section>
 
-<div ng-show="currentStatus == 'imported'" class="alert alert-success">
-  <p>
-    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was uploaded and imported successfully.</strong>
-  </p>
-</div>
+<section class="layout_section theme_dark">
+  
+  <div ng-show="currentStatus == 'imported'" class="alert alert-success">
+    <p class="type_copy">Your data was uploaded and imported successfully.</p>
+  </div>
 
-<div ng-show="currentStatus == 'uploaded'" class="alert alert-success">
-  <p>
-    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was uploaded successfully.</strong>
-  </p>
-</div>
+  <div ng-show="currentStatus == 'uploaded'" class="alert alert-success">
+    <p class="type_copy">Your data was uploaded successfully.</p>
+  </div>
 
-<div ng-show="!currentStatus || currentStatus == 'new'">
-  <p>
-    Upload a comma separated values (CSV) or tab separated values (TSV) file.
-  </p>
-
-    <form id="uploadform" class="form" action="/upload" method="post" enctype="multipart/form-data">
-      <div id="fileuploadcontrol" class="form-group">
-        <label for="file">File to upload</label>
-        <!-- <input id="file" name="file" type="file" class="btn btn-warning" /> -->
-        <span class="btn btn-primary">
-        	Browse <input id="file" name="file" type="file">
-        </span>
-      </div>
-      <div id="fileuploadprogress"></div>
+  <div ng-show="!currentStatus || currentStatus == 'new'">
+    <form id="uploadform" action="/upload" method="post" enctype="multipart/form-data">
+      <fieldset class="form_field">
+        <input class="input_file" id="file" type="file" name="file" />
+        <label class="input_file-handle" for="file"></label>
+      </fieldset>
     </form>
-</div>
+    <p class="type_copy">Once you select your file, we'll automatically move to the next step, where you'll create the index for your search service. So choose wisely.</p>
+  </div>
 
-<div class="page-btn-bar" ng-show="currentStatus && currentStatus != 'new'">
-	<button type="button" class="btn btn-primary" ng-click="goToNextPage('import')"> Continue </button>
-</div>
+  <div class="page-btn-bar" ng-show="currentStatus && currentStatus != 'new'">
+    <button type="button" class="_strong-button" ng-click="goToNextPage('import')"> Continue </button>
+  </div>
+
+</section>
+

@@ -1,0 +1,9 @@
+{
+  "use": ["autoprefixer", "postcss-import", "postcssCustomProperties"],
+  "input": "master.css",
+  "output": "bundle.css",
+  "local-plugins": true,
+  "autoprefixer": {
+    "browsers": "> 5%"
+  }
+}

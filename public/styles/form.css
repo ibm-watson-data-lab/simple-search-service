@@ -1,0 +1,220 @@
+.form{
+
+}
+
+.form_field {
+	border: none;
+	margin: 0;
+	padding: 1px 0;
+	margin-bottom: 1rem;
+}
+
+.form_field[data-validation="invalid"] {
+
+}
+
+.form_label {
+	display: block;
+
+	margin: 0 0 .25rem;
+}
+
+.form_field-notes {
+	font-size: .75rem;
+	margin: .25rem 0 0;
+	color: rgba(0,0,0,.6);
+}
+
+.form_field[data-validation="invalid"] .form_field-notes {
+	background: #ee3897;
+	color: rgba(255,255,255,.9);
+	margin-top: .5rem;
+	padding: .5em;
+	border-radius: 4px;
+}
+.form_field[data-validation="invalid"] .form_field-notes::before {
+	content: "";
+	position: absolute;
+	top: -5px;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 5px solid #ee3897;
+}
+
+.form_control-legend{
+	display: block;
+	font-size: .875rem;
+	color: #0699cc;
+	margin: 0 0 .25rem;
+}
+
+.form_control-label{
+	display: block;
+}
+
+
+/*form structure styles*/
+.form_container {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 2rem;
+	flex-wrap: wrap;
+}
+
+.form_standard {
+	flex: 0 1 100%;
+}
+
+.form_double {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+	flex: 0 0 100%;
+}
+
+.form_double > .form_standard:first-of-type {
+	margin-right: 3rem;
+}
+
+
+/*styles for form header*/
+.form_header {
+	display: flex;
+	flex: 0 0 100%;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.75rem;
+}
+
+.form_header-p  {
+
+	color: #192d3a; /*not in colors or ibmcolors variables*/
+	margin: 0;
+}
+
+.form_header-svg  {
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
+
+/*styles for form descriptor (db2 to db2 on cloud only)*/
+.form_description {
+	display: flex;
+	margin-top: 0.5rem;
+}
+
+.form_description-svg {
+	width: 1rem;
+	margin-right: 0.25rem;
+}
+
+.form_description-type {
+	color: #1e2739; /*not in colors or ibmcolors variables*/
+
+	margin: 0;
+}
+
+.form_description-title {
+	font-size: 1.125rem; /*not in type variables*/
+	margin-top: 0;
+}
+
+.form_action-container {
+	margin: 1.25rem 0 0 1rem;
+}
+
+
+/*styles for button container*/
+.button-container {
+	display: flex;
+	align-items: center;
+	margin: 1rem 0;
+}
+
+.button-container > .right{
+    margin-left: auto;
+} 
+
+.button-container.rr {
+	flex-flow: row-reverse;
+}
+
+.button-container.col {
+	align-items: inherit;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+
+/*structural styles for form fields*/
+.field_standard {
+	flex: 0 1 100%;
+}
+
+.field_double, .field_action_double {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+}
+
+.field_double > .field_standard:first-of-type {
+	margin-right: 1rem;
+}
+
+.field_standard.small {
+	flex: 0 1 30%;
+}
+
+
+/*design styles for form fields*/
+input[type="text"], input[type="password"], input[type="number"] {
+	background-color: #f5f6f9;
+	border: 1px solid #eeeff1;
+	transition: background-color 0.2s ease-in, border 0.2s ease-in;
+}
+
+input[type="text"]:hover, input[type="password"]:hover, input[type="number"]:hover {
+
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus {
+	border: 1px solid #959f9f;
+
+}
+
+.form .form_error_container {
+	font-size: 13px;
+	padding-top: 15px;
+}
+
+.form .form_error_container .message{
+	color: #ee3897;
+}
+
+.softlayer-storename,
+.softlayer-url,
+.usernameform_field,
+.api-key,
+.softlayer-url {
+	width: 18rem;
+	/*float: left;*/
+	margin-right: 1.5rem;
+}
+
+.softlayer-url {
+
+}
+
+.usernameform_field {
+
+}
+
+.api-key {
+
+}
+
+.softlayer-url {
+
+}
