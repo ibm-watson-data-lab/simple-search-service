@@ -4,13 +4,24 @@
 }
 
 .tag-list_tag {
+	display: inline-flex;
 	margin: .25rem 0;
-	line-height: 1.2;
+	max-width: 100%;
+}
+
+.tag-list_name{
+	/*display: inline-block;*/
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	color: var(--ibm-color-blue-60);
 	background-color: var(--ibm-color-blue-10);
+	padding: .125rem .25rem;
 }
 
 .tag-list_count {
+	/*display: inline-block;*/
 	color: #fff;
 	background-color: var(--ibm-color-blue-50);
+	padding: .125rem .25rem;
 }

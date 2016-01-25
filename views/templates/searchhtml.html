@@ -8,8 +8,8 @@
       <div class="api-search-example-sidebar-facet" ng-repeat="(countkey, countvalue) in searchDocs.data.counts">
         <p class="api-facet-title">{{countkey}}</p>
         <ol class="tag-list">
-          <li  class="tag-list_tag" ng-repeat="(facetkey, facetvalue) in countvalue">
-            <a role="button" ng-click="apiSearch(countkey, facetkey);">{{facetkey}} <span class="tag-list_count">{{facetvalue}}</span></a>
+          <li class="tag-list_tag" ng-repeat="(facetkey, facetvalue) in countvalue">
+            <a class="tag-list_name" role="button" ng-click="apiSearch(countkey, facetkey);">{{facetkey}}</a><span class="tag-list_count">{{facetvalue}}</span>
           </li>
         </ol>
       </div>

@@ -48,7 +48,7 @@
 	margin-bottom: var(--type-margin-bottom);
 }
 
-.type_copy:last-child{
+.type_copy:last-child:not(:only-child){
 	margin-bottom: 0;
 }
 

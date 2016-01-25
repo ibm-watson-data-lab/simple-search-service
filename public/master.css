@@ -512,7 +512,7 @@ input::-webkit-inner-spin-button {
 	margin-bottom: 1rem;
 }
 
-.type_copy:last-child{
+.type_copy:last-child:not(:only-child){
 	margin-bottom: 0;
 }
 
@@ -950,15 +950,26 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:foc
 }
 
 .tag-list_tag {
+	display: inline-flex;
 	margin: .25rem 0;
-	line-height: 1.2;
+	max-width: 100%;
+}
+
+.tag-list_name{
+	/*display: inline-block;*/
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	color: #325c80;
 	background-color: #c0e6ff;
+	padding: .125rem .25rem;
 }
 
 .tag-list_count {
+	/*display: inline-block;*/
 	color: #fff;
 	background-color: #4178be;
+	padding: .125rem .25rem;
 }
 .app-banner {
 	background-color: #5aaafa;

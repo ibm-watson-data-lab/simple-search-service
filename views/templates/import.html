@@ -15,14 +15,12 @@
 
 </div>
 
-
 </section>
-
+<section class="layout_section">
 
 <div ng-show="currentStatus == 'imported'" class="alert alert-success">
-  <p>
-    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was indexed successfully.</strong>
-  </p>
+  <p class="type_copy">Your data was indexed successfully.</p>
+  <button type="button" class="_strong-button" ng-click="goToNextPage('search')"> Continue </button>
 </div>
 
 <div ng-show="!currentStatus || currentStatus == 'new'">
@@ -38,7 +36,4 @@
       <div id="importstatus"></div>
     </div>
 </div>
-
-<div class="page-btn-bar" ng-show="currentStatus == 'imported'">
-	<button type="button" class="btn btn-primary" ng-click="goToNextPage('search')"> Continue </button>
-</div>
+</section>
