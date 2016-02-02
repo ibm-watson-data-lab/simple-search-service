@@ -11,12 +11,26 @@
 	color: var(--dark-color);
 	background-color: var(--dark-background);
 }
+
 .theme_light {
 	color: var(--light-color);
 	background-color: var(--light-background);
 }
-.theme_white {
-	color: var(--light-color);
+
+
+.bg_white {
 	background-color: #fff;
 }
+.bg_light-tint {
+	background-color: #f9f9fb;
+}
+.bg_light {
+	background-color: var(--light-background);
+}
 
+.bg_dark {
+	background-color: var(--dark-background);
+}
+.bg_black {
+	background-color: #000;
+}

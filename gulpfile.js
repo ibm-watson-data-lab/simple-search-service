@@ -1,15 +1,14 @@
 gulp = require('gulp')
 rename = require('gulp-rename')
 postcss = require('gulp-postcss')
-autoprefixer = require('autoprefixer')
+cssnext = require('postcss-cssnext')
 postcssImport = require('postcss-import')
-postcssCustomProperties = require('postcss-custom-properties')
+
 
 gulp.task('postcss', function(){
   var processors = [
-    autoprefixer,
     postcssImport,
-    postcssCustomProperties
+    cssnext,
   ]
   return gulp.src('public/styles/_master.css')
     .pipe(postcss(processors))

@@ -1,5 +1,5 @@
 .tabbed-panel {
-	margin: 1rem 0 1rem -1.5rem;
+	margin: 1rem 0;
 	color: var(--ibm-color-blue-90);
 }
 
@@ -23,7 +23,7 @@
 	margin-left: .25rem;
 }
 
-.tabbed-panel_tab[data-current="true"] {
+.tabbed-panel_tab.current {
 	background-color: #ffffff;
 }
 
@@ -33,7 +33,7 @@
 	padding: 1.5rem;
 	max-width: 100%;
 }
-
+/*
 .tabbed-panel_panel[data-current="true"] {
 	display: block;
-}
+}*/

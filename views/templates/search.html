@@ -5,14 +5,13 @@
 <section class="layout_section theme_dark">
 
 <form ng-submit="search()">
-  <div class="form-group" id="searchcontrol">
-    <div class="input-group">
-      <div class="input-group-addon">https://.../search?q=</div>
-      <input type="text" class="form-control" id="q" placeholder="" name="searchterm">
-      <!-- <div class="input-group-addon">&limit={{settings.querylimit}}</span></div> -->
+  <div class="form_field" id="searchcontrol">
+    <div class="form_addon-group">
+      <span class="form_text-addon">https://.../search?q=</span>
+      <input type="text" class="input_text" id="q" placeholder="" name="searchterm">
     </div>
   </div>
-    <!-- <button type="submit" class="btn btn-primary" ng-click="search()"> Search </button> -->
+  <button type="submit" class="button_primary" ng-click="search()"> Search </button>
 </form>
 <hr>
 
@@ -20,12 +19,12 @@
 
 <section class="tabbed-panel">
   <ul class="tabbed-panel_tab-group">
-    <li class="tabbed-panel_tab" ng-click="currentSearchPanel = 'html'">HTML</li>
-    <li class="tabbed-panel_tab" ng-click="currentSearchPanel = 'json'">JSON Preview</li>
-    <li class="tabbed-panel_tab" ng-click="currentSearchPanel = 'rawjson'">Raw JSON</li>
+    <li class="tabbed-panel_tab" ng-class="{'current': currentSearchPanel === 'html'}" ng-click="currentSearchPanel = 'html'">HTML</li>
+    <li class="tabbed-panel_tab" ng-class="{'current': currentSearchPanel === 'json'}" ng-click="currentSearchPanel = 'json'">JSON Preview</li>
+    <li class="tabbed-panel_tab" ng-class="{'current': currentSearchPanel === 'rawjson'}" ng-click="currentSearchPanel = 'rawjson'">Raw JSON</li>
   </ul>
 
-  <div id="viewashtml" class="tabbed-panel_panel" ng-if="currentSearchPanel == 'html'">
+  <div id="viewashtml" class="tabbed-panel_panel theme_light" ng-if="currentSearchPanel == 'html'">
     <div preview-search-html></div>
   </div>
 
@@ -55,7 +54,7 @@
 </section>
 
 
-<p>
-  <button type="button" class="_strong-button" ng-click="goToNextPage('api')"> Continue </button>
-</p>
+<div class="button_group">
+  <button type="button" class="button_primary" ng-click="goToNextPage('api')"> Continue </button>
+</div>
 </section>

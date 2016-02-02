@@ -6,7 +6,6 @@
 .table_basic {
   border-collapse: collapse;
   width: 100%;
-  border-top: 1px solid #f0f0f2;
 }
 
 .table_basic tr{
@@ -27,6 +26,7 @@
   font-weight: 300;
   text-align: left;
   padding: .5rem;
+  white-space: nowrap;
 }
 
 .table_basic tbody {
@@ -53,8 +53,6 @@
   border-left: 1px solid var(--ibm-color-blue-80);
 }
 
- 
-
 .table_basic tfoot{
 
 }
@@ -67,75 +65,56 @@
 
 }
 
+/*Dark Themes*/
 
+.theme_dark,
+.theme_light .theme_dark {
 
-.table {
-  border-collapse: collapse;
-  width: 100%;
-  border-top: 1px solid #f0f0f2;
-}
+  & .table_basic {
+    border-bottom: 1px solid var(--ibm-color-blue-80);
+  }
 
-.table_head {
-  font-weight: bold;
-  text-align: left;
-}
+  & .table_basic thead {
+    color: var(--ibm-color-teal-30);
+  }
 
-.table_head .table_heading {
-  padding: 0.5rem 0 0.5rem 1rem;
-}
+  & .table_basic tbody tr:nth-child(odd) {
+    background-color: var(--ibm-color-blue-90);
+  }
 
-.table_data {
-  padding: 0.5rem 0 0.5rem 1rem;
-}
+  & .table_basic tbody tr:nth-child(even) {
+    background-color: var(--ibm-color-blue-70);
+  }
 
-.table_row {
-  border-top: 1px solid #D3D9DD;
-  transition: color 0.15s ease, background-color 0.3s ease;
-}
+  & .table_basic tbody td + td {
+    border-left: 1px solid var(--ibm-color-blue-80);
+  }
 
-.table_body .table_row:hover {
-  background-color: #0596D5;
-  /*color: var(--color-background-10);*/
-}
+} 
 
-.table.zebra-striped .table_row:nth-child(even) {
-  background-color: rgba(0,180,202, .1);
-  background-color: #eff4f5;
-}
+/*Light Themes*/
 
-.table_heading {
-  padding: 1em;
-}
+.theme_light,
+.theme_light .theme_dark .theme_light {
 
-.table_body {
-  border-bottom: 1px solid #f0f0f2;
-}
+  & .table_basic {
+    border-bottom: 1px solid var(--ibm-color-gray-10);
+  }
 
-.table_body .table_row {
-  border-top: 1px solid #f0f0f2;
-}
+  & .table_basic thead {
+    color: var(--ibm-color-teal-50);
+  }
 
-.table_body .table_row:hover {
-  background-color: #eff4f5;
-}
+  & .table_basic tbody tr:nth-child(odd) {
+    background-color: var(--ibm-color-white);
+  }
 
-.table_data {
-  padding: 1em;
-  vertical-align: top;
-}
+  & .table_basic tbody tr:nth-child(even) {
+    background-color: var(--ibm-color-coolwhite-20);
+  }
 
-.table-foot {
+  & .table_basic tbody td + td {
+    border-left: 1px solid var(--ibm-color-gray-10);
+  }
 
-}
-
-.table_foot .table_row {
-  
-}
-
-.table_column {
-
-}
-
-.table_column-group {
-
-}
+} 

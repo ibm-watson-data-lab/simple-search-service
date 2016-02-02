@@ -7,6 +7,14 @@
 	margin: 0 1em;
 }
 
+.grid_column:first-child{
+	margin-left: 0;
+}
+
+.grid_column:last-child{
+	margin-right: 0;
+}
+
 /*Five Columns*/
 
 .five-column .grid_column.one{

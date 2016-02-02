@@ -26,32 +26,32 @@
   <div ng-controller="seamsController" class="capped-layout_body bookend-layout">
 
 <!-- start sidebar -->
-      <nav class="bookend-layout_bookend theme_white">
+      <nav class="bookend-layout_bookend theme_light bg_white">
         <ul class="tree-nav">
-          <li class="tree-nav_item" ng-class="{'active':!selectedView || selectedView === 'about'}">
-            <a class="tree-nav_link" href="#/about">Simple Search Service</a>
+          <li class="tree-nav_item">
+            <a ng-class="{'current': !selectedView || selectedView === 'about'}" class="tree-nav_link" href="#/about">Simple Search Service</a>
             <ul class="tree-nav">
               <li class="tree-nav_item">
-                <a class="tree-nav_link" href="#/about">Get data</a>
+                <a ng-class="{'current': selectedView === 'get'}"  class="tree-nav_link" href="#/get">Get data</a>
               </li>
               <li class="tree-nav_item">
-                <a class="tree-nav_link" href="#/upload">Upload data</a>
+                <a ng-class="{'current': selectedView === 'upload'}" class="tree-nav_link" href="#/upload">Upload data</a>
               </li>
               <li class="tree-nav_item">
-                <a class="tree-nav_link" ng-if="currentStatus && currentStatus != 'new'" href="#/import">Create Index</a>
-                <a class="tree-nav_link" ng-if="!currentStatus || currentStatus == 'new'">Create Index</a>
+                <a ng-class="{'current': selectedView === 'import'}" class="tree-nav_link" ng-if="currentStatus && currentStatus != 'new'" href="#/import">Create Index</a>
+                <a class="tree-nav_link disabled" ng-if="!currentStatus || currentStatus == 'new'">Create Index</a>
               </li>
               <li class="tree-nav_item">
-                <a class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/search">Preview Search</a>
-                <a class="tree-nav_link" ng-if="currentStatus != 'imported'">Preview Search</a>
+                <a ng-class="{'current': selectedView === 'search'}" class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/search">Preview Search</a>
+                <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Preview Search</a>
               </li>
               <li class="tree-nav_item">
-                <a class="tree-nav_link" href="#/api">Preview Content API</a>
+                <a ng-class="{'current': selectedView === 'api'}" class="tree-nav_link" href="#/api">Preview Content API</a>
               </li>
             </ul>
           </li>
           <li class="tree-nav_item" ng-class="{'active':selectedView === 'settings'}">
-            <a class="tree-nav_link" href="#/settings">Settings</a>
+            <a ng-class="{'current': selectedView === 'settings'}" class="tree-nav_link" href="#/settings">Settings</a>
           </li>
         </ul>
       </nav>
@@ -67,21 +67,5 @@
   </div>
 <!-- end content -->
 
-<div class="modal fade" id="deleteData" tabindex="-1" role="dialog" ng-if="anything">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="modal-title">Delete Data</span>
-      </div>
-      <div class="modal-body" id="deleteDataBody">
-        <span>Are you sure you want to delete all of your data?</span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button id="deletebutton" type="button" class="btn btn-primary btn-danger" ng-click="deleteEverything()">Delete All</button>
-      </div>
-    </div>
-  </div>
-</div>
 </body>
 </html>

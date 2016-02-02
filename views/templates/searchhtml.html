@@ -1,22 +1,18 @@
 <div> <!-- Needed for insertion -->
 
   <p class="type_copy">Here, we're taking what the API returns -- JSON -- and writing it into the page so you can interact with it.</p>
-  <div class="grid_row five-column">
-    <div class="grid_column one">
+
+
       <h4>Facets <small>aka <code>counts</code></small></h4>
 
       <div class="api-search-example-sidebar-facet" ng-repeat="(countkey, countvalue) in searchDocs.data.counts">
         <p class="api-facet-title">{{countkey}}</p>
-        <ol class="tag-list">
-          <li class="tag-list_tag" ng-repeat="(facetkey, facetvalue) in countvalue">
-            <a class="tag-list_name" role="button" ng-click="apiSearch(countkey, facetkey);">{{facetkey}}</a><span class="tag-list_count">{{facetvalue}}</span>
-          </li>
-        </ol>
+        <p class="tag-cloud">
+          <a class="tag-cloud_tag" ng-repeat="(facetkey, facetvalue) in countvalue" role="button" ng-click="apiSearch(countkey, facetkey);">{{facetkey}} <span class="tag-cloud_count">{{facetvalue}}</span></a>
+        </p>
       </div>
 
-    </div>
 
-    <div class="grid_column four">
       <h4>Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : 'Showing ' + searchDocs.data.rows.length + ' of ' + searchDocs.data.total_rows}}</small></h4>
 
       <div class="table_basic-container">
@@ -32,7 +28,6 @@
         </table>
       </div>
 
-    </div>
-  </div>
+
 
 </div>

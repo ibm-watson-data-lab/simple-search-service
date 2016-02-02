@@ -43,12 +43,6 @@ hr {
 	display: none;
 }
 
-.workspace{
-	flex: 1;
-	max-height: 100vh;
-	overflow: auto;
-}
-
 @import "alerts.css";
 @import "buttons.css";
 @import "tables.css";
