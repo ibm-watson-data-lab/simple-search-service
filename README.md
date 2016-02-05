@@ -36,8 +36,6 @@ The fastest way to deploy this application to Bluemix is to click the **Deploy t
 
 [![Deploy to Bluemix](https://deployment-tracker.mybluemix.net/stats/2956f80082fb32656c54ebba001dbdf3/button.svg)](https://bluemix.net/deploy?repository=https://github.com/ibm-cds-labs/simple-search-service)
 
-
-
 **Don't have a Bluemix account?** If you haven't already, you'll be prompted to sign up for a Bluemix account when you click the button.  Sign up, verify your email address, then return here and click the the **Deploy to Bluemix** button again. Your new credentials let you deploy to the platform and also to code online with Bluemix and Git. If you have questions about working in Bluemix, find answers in the [Bluemix Docs](https://www.ng.bluemix.net/docs/).
 
 ## Running the app locally
@@ -46,7 +44,7 @@ Clone this repository then run `npm install` to add the Node.js libraries requir
 
 Then create an environment variable that mimics Cloud Foundry e.g.
 
-```
+```sh
 export VCAP_SERVICES='{"cloudantNoSQLDB":[{"name":"simple-search-service-cloudant-service","label":"cloudantNoSQLDB","plan":"Shared","credentials":{"username":"USERNAME","password":"PASSWORD","host":"HOSTNAME","port":443,"url":"https://USERNAME:PASSWORD@HOSTNAME"}}]}'
 ```
 
@@ -54,9 +52,24 @@ replacing the `USERNAME`, `PASSWORD` and `HOSTNAME` placeholders for your own Cl
 
 Then run:
 
-```
+```sh
 node app.js
 ```
+
+## Lockdown mode
+
+If you have uploaded your content into the Simple Search Service but now want only the `/search` endpoint to continue working, then you can enable "Lockdown mode".
+
+Simply set an environment variable called `LOCKDOWN` to `true` before running the Simple Search Service:
+
+```sh
+export LOCKDOWN=true
+node app.js
+```
+
+or set a custom environment variable in Bluemix.
+
+When lockdown mode is detected, all web requests will be get a `403` response except the `/search` endpoint which will continue to work. This prevents your data being modified until lockdown mode is switched off again, by removing the environment variable.
 
 ### Privacy Notice
 
