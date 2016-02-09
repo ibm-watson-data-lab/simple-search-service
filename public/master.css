@@ -1122,6 +1122,8 @@ input::-webkit-inner-spin-button {
 	background-color: #5aaafa;
 	padding: 16px 40px;
 	padding: 1rem 2.5rem;
+	padding-left: 64px;
+	padding-left: 4rem;
 }
 
 .app-banner_title {
@@ -1196,6 +1198,7 @@ input::-webkit-inner-spin-button {
 	    -ms-flex-flow: column nowrap;
 	        flex-flow: column nowrap;
   /*min-height: 100%;*/
+  max-height: 100vh;
 }
 .capped-layout_cap{
   -webkit-box-flex: 0;
@@ -1246,6 +1249,14 @@ input::-webkit-inner-spin-button {
 .workspace{
   padding: 36px 40px;
   padding: 2.25rem 2.5rem;
+}
+
+.scrollable-x {
+  overflow-x: auto;
+}
+
+.scrollable-y {
+  overflow-y: auto;
 }
 .grid_row {
 	display: -webkit-box;
