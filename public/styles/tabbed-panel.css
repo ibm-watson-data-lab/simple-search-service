@@ -1,0 +1,39 @@
+.tabbed-panel {
+	margin: 1rem 0;
+	color: var(--ibm-color-blue-90);
+}
+
+.tabbed-panel_tab-group {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-flow: row-nowrap;
+	justify-content: flex-start;
+}
+
+.tabbed-panel_tab {
+	font-size: 1.25rem;
+	padding: .5rem 1.5rem;
+	cursor: pointer;
+	background-color: var(--ibm-color-coolgray-30);
+}
+
+.tabbed-panel_tab + .tabbed-panel_tab {
+	margin-left: .25rem;
+}
+
+.tabbed-panel_tab.current {
+	background-color: #ffffff;
+}
+
+.tabbed-panel_panel {
+	/*display: none;*/
+	background-color: #ffffff;
+	padding: 1.5rem;
+	max-width: 100%;
+}
+/*
+.tabbed-panel_panel[data-current="true"] {
+	display: block;
+}*/

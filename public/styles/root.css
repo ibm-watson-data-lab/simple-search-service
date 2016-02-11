@@ -1,0 +1,28 @@
+html{
+	min-width: 100vw;
+	min-height: 100vh;
+}
+body{
+	box-sizing: border-box;
+	font: normal normal 400 .875em/1.4 HelveticaNeue, Helvetica Neue, Helvetica, sans-serif;
+	letter-spacing: .025em;
+	vertical-align: baseline;
+	color: color(text);
+	min-width: 100vw;
+	min-height: 100vh;
+	margin: 0;
+	padding: 0;
+}
+*,
+*::before,
+*::after{
+	box-sizing: inherit;
+}
+
+section,
+header,
+footer,
+aside,
+nav{
+	overflow: auto;
+}

@@ -1,0 +1,41 @@
+._progress {
+
+}
+
+._progress[value] {
+	height: 1.75rem;
+	width: 100%;
+	border: 1px solid white;
+
+	/*reset default appearance of progress bar*/
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	/*remove firefox default border*/
+	border: none;
+
+	/*for ie 10 color of progress bar*/
+	color: white;
+
+	/*color for bg of progress bar container*/
+	background-color: #192d3a;
+	border: 2px solid white;
+	box-shadow:0px 0px 0px 1px #192d3a inset;
+
+}
+
+/*webkit style progress bar container*/
+._progress[value]::-webkit-progress-bar {
+	background-color: transparent;
+}
+
+/*webkit style progress bar*/
+._progress[value]::-webkit-progress-value {
+	background-color: white;
+}
+
+/*firefox style progress bar*/
+._progress[value]::-moz-progress-bar {
+	background-color: white;
+}

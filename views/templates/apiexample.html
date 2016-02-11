@@ -1,18 +1,9 @@
 
-<div class="row">
-  <div class="col-md-12">
 
-    <div class="message-box">
-<!--
-      <h2>
-        <a ng-click="toggle()">{{apiExampleTitle}}</a>
-        <span ng-show="apiExampleDocs.data.from_cache" class="api-search-example-cache"> from cache </span>
-      </h2>
--->
+
       <div class="collapse in api-search-example" id="{{apiExampleId}}">
 
         <div class="row api-search-example-info">
-        <!-- <pre>{{apiExampleDocs.searchparams|json}}</pre> -->
             <div class="col-md-10">
                 <strong>REST URL: </strong>
                 <a ng-show="apiExampleDocs" href="{{apiExampleDocs.rest_uri | truncateUrl}}" target="_blank">{{apiExampleDocs.rest_uri | truncateUrl:true}}</a>
@@ -37,7 +28,7 @@
                   <div class="col-md-10" ng-show="apiExampleDocs.data.total_rows >= 0"><span ng-class="{'api-summary-message':message}">{{message ? message : 'Showing ' + apiExampleDocs.data.rows.length + ' of ' + apiExampleDocs.data.total_rows}}</span></div>
               </div>
               <div class="api-search-example-results-table">
-                <table class="table table-striped">
+                <table class="table_basic">
                   <tr>
                     <th ng-repeat="docfield in apiExampleDocs.fields">{{docfield.name}}</th>
                   </tr>
@@ -50,7 +41,3 @@
         </div>
 
       </div>
-    </div>
-
-  </div>
-</div>

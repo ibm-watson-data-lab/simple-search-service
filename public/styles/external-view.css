@@ -1,0 +1,37 @@
+.external-view {
+	width: 100%;
+	margin: 0;
+}
+
+.external-view_caption {
+	border: 2px solid var(--ibm-color-blue-70);
+	margin: 0 0 2px;
+	display: flex;
+	flex-flow: row-nowrap;
+	justify-content: space-between;
+	padding: .625rem .875rem;
+}
+
+.external-view_title {
+	font-size: .875rem;
+	font-weight: 500;
+	margin: 0;
+}
+
+.external-view_link {
+	font-size: .875rem;
+	font-weight: 500;
+	color: var(--ibm-color-teal-30);
+	margin: 0;
+	text-decoration: underline;
+}
+
+.external-view_link:hover {
+	color: var(--ibm-color-teal-20);
+}
+
+.external-view_frame {
+	width: 100%;
+	background-color: #ffffff;
+	border: 10px solid var(--ibm-color-blue-70);
+}

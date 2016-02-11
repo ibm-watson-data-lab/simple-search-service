@@ -1,0 +1,120 @@
+.table_basic-container {
+  max-width: 100%;
+  overflow-x: scroll;
+}
+
+.table_basic {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table_basic tr{
+
+}
+
+.table_basic thead {
+  color: green;
+  border-bottom: 4px solid;
+}
+
+.table_basic thead tr{
+
+}
+
+.table_basic th{
+  font-size: .875rem;
+  font-weight: 300;
+  text-align: left;
+  padding: .5rem;
+  white-space: nowrap;
+}
+
+.table_basic tbody {
+
+}
+
+.table_basic tbody tr {
+
+}
+
+.table_basic tbody tr:nth-child(even) {
+  background-color: var(--ibm-color-neutralwhite-40);
+}
+
+.table_basic tbody td{
+  font-size: .875rem;
+  font-weight: 300;
+  text-align: left;
+  padding: .75rem .5rem;
+  white-space: nowrap;
+}
+
+.table_basic tbody td + td {
+  border-left: 1px solid var(--ibm-color-blue-80);
+}
+
+.table_basic tfoot{
+
+}
+
+.table_basic tfoot tr{
+
+}
+
+.table_basic tfoot td{
+
+}
+
+/*Dark Themes*/
+
+.theme_dark,
+.theme_light .theme_dark {
+
+  & .table_basic {
+    border-bottom: 1px solid var(--ibm-color-blue-80);
+  }
+
+  & .table_basic thead {
+    color: var(--ibm-color-teal-30);
+  }
+
+  & .table_basic tbody tr:nth-child(odd) {
+    background-color: var(--ibm-color-blue-90);
+  }
+
+  & .table_basic tbody tr:nth-child(even) {
+    background-color: var(--ibm-color-blue-70);
+  }
+
+  & .table_basic tbody td + td {
+    border-left: 1px solid var(--ibm-color-blue-80);
+  }
+
+} 
+
+/*Light Themes*/
+
+.theme_light,
+.theme_light .theme_dark .theme_light {
+
+  & .table_basic {
+    border-bottom: 1px solid var(--ibm-color-gray-10);
+  }
+
+  & .table_basic thead {
+    color: var(--ibm-color-teal-50);
+  }
+
+  & .table_basic tbody tr:nth-child(odd) {
+    background-color: var(--ibm-color-white);
+  }
+
+  & .table_basic tbody tr:nth-child(even) {
+    background-color: var(--ibm-color-coolwhite-20);
+  }
+
+  & .table_basic tbody td + td {
+    border-left: 1px solid var(--ibm-color-gray-10);
+  }
+
+} 

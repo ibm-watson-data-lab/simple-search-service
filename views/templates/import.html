@@ -1,39 +1,36 @@
-<h1>
-  Create Search Index
-</h1>
+<section class="layout_section theme_light">
+  <h1 class="type_heading"><mark class="type_mark">Create the Search Index</mark></h1>
 
-<div ng-show="currentStatus == 'imported'" class="alert alert-success">
-  <p>
-    <span class="glyphicon glyphicon-ok"></span> <strong>Your data was indexed successfully.</strong>
-  </p>
-</div>
+  <div ng-show="currentStatus == 'uploaded'">
+    <p class="type_copy">Here's a preview of your data. Make sure the data types are correct. (E.g., if you want to <code>facet</code> by a number, you'll need to change the data type from <code>number</code> to <code>string</code>.)</p>
+    <p class="type_copy"><strong>Pay extra attention to the Facet column.</strong> Check the checkbox next to those values you want to search by, and we'll automatically index those values as <code>counts</code> (i.e., <em>facets</em>).</p>
+    <p class="type_copy"><a class="type_link" href="https://docs.cloudant.com/search.html#faceting" target="_blank">Learn more about faceting</a></p>
+  </div>
 
-<div ng-show="!currentStatus || currentStatus == 'new'">
-  <p>
-    Upload a comma separated values (CSV) or tab separated values (TSV) file.
-  </p>
-</div>
+</section>
 
-<div ng-show="currentStatus == 'uploaded'">
+<section class="layout_section">
 
-    <p>
-      Here's a preview of your data. Make sure the data types are correct. (E.g., if you want to <code>facet</code> by a number, you'll need to change the data type from <code>number</code> to <code>string</code>.)
-    </p>
-    <p>
-      <strong>Pay extra attention to the Facet column.</strong> Check the checkbox next to those values you want to search by, and we'll automatically index those values as <code>counts</code> (i.e., <em>facets</em>).
-    </p>
-    <p>
-      <a href="https://docs.cloudant.com/search.html#faceting" target="_blank">Learn more about faceting</a>
-    </p>
-
-    <div id="schemacontent" class="api-table"></div>
-    <div>
-      <button id="importbutton" type="submit" class="btn btn-primary" ng-click="importClicked()"> Import </button>
-      <span class="glyphicon glyphicon-refresh glyphicon-spinner import-spinner"></span>
-      <div id="importstatus"></div>
+  <div ng-show="currentStatus == 'imported'" class="alert alert-success">
+    <p class="type_copy">Your data was indexed successfully.</p>
+    <div class="button_group">
+      <button type="button" class="button_primary" ng-click="goToNextPage('search')"> Continue </button>
     </div>
-</div>
+  </div>
 
-<div class="page-btn-bar" ng-show="currentStatus == 'imported'">
-	<button type="button" class="btn btn-primary" ng-click="goToNextPage('search')"> Continue </button>
-</div>
+  <div ng-show="!currentStatus || currentStatus == 'new'">
+    <p class="type_copy">Upload a comma separated values (CSV) or tab separated values (TSV) file.</p>
+  </div>
+
+  <div ng-show="currentStatus == 'uploaded'">
+
+      <div id="schemacontent" class="table_container"></div>
+
+      <div class="button_group">
+        <button id="importbutton" type="submit" class="button_primary" ng-click="importClicked()"> Import </button>
+        <!-- <span class="glyphicon glyphicon-refresh glyphicon-spinner import-spinner"></span> -->
+        <div  class="type_copy" id="importstatus"></div>
+      </div>
+  </div>
+
+</section>

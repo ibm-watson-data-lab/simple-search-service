@@ -69,6 +69,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    this.$routeParams = $routeParams;
 
 	    $scope.$root.currentUpload = null;
+			$scope.$root.deleteDialogShown = false;
 
 	    $scope.$root.ms = function() {
 	      var d = new Date();
@@ -91,6 +92,12 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			return false;
 	    }
 
+	    $scope.$root.showDeleteDialog = function() {
+	    	// $('#deleteData').show();
+	    	$scope.$root.deleteDialogShown = true;
+	    	// console.log('hello')
+	    }
+
 	    $scope.$root.deleteEverything = function() {
 	    	// trigger the import
 	    	$('#deletebutton').attr('disabled', true);
@@ -101,6 +108,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	}).done(function(x) {
 	    		$scope.$root.currentUpload = null;
 	    	    $('#deletefeedback').html("All of your data is gone.")
+	    	    $scope.$root.deleteDialogShown = false;
 	    	    location.href= "/";
 	    	}).fail(function(e) {
 	    	    console.log("delete error",e);
@@ -220,16 +228,20 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	  });
 	    }
 
+    // Holding which panel in the "Preview Search" view
+    // is selected. Initially set to the HTML panel
+    	$scope.currentSearchPanel = "html";
+
 		// given a schema object (x.fields) - this function returns the html
 		// which displays a table of each field in the schema, its data type
 	    // and whether its faceted or not, together with an example value from the
 		// uploaded file (x.data)
 	    $scope.$root.renderSchema = function(x) {
-		   var html = '<table class="table table-striped">\n';
+		   var html = '<table class="table_basic">\n';
 		   html += '<input type="hidden" name="upload_id" id="upload_id" value="' + x.upload_id + '"/>\n';
-		   html += "<tr>\n";
+		   html += "<thead>\n";
 		   html += "  <th>name</th><th>type</th><th>facet</th><th>e.g</th>\n";
-		   html += "</tr>\n"
+		   html += "</thead>\n"
 		   for(var i in x.fields) {
 		     html += "<tr>";
 		     var f = x.fields[i];
@@ -262,7 +274,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		// returns the HTML to render a data type pull-down list
 		// for field 'n' which has data type 't'
 		$scope.$root.typeWidget = function(n,t) {
-		  var html = '<select name="' + n + '" + class="datatype" onchange="datatypechange(\'' + n +'\')">\n';
+		  var html = '<select name="' + n + '" + class="input_select" onchange="datatypechange(\'' + n +'\')">\n';
 		  var opts = [ "string", "number", "boolean", "arrayofstrings"];
 		  for(var i in opts) {
 		    var j = opts[i];
@@ -279,14 +291,14 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		// returns the HTML to render a checkbox for field 'n'
 		// which is faceted or not (t)
 		$scope.$root.facetWidget = function(n,t,v) {
-		  var html = '<input type="checkbox" value="true" name="' + n + '" id="' + n + '"';
+		  var html = '<input class="input_checkbox" type="checkbox" value="true" name="' + n + '" id="' + n + '"';
 		  if (t == "number" || t == "boolean") {
 		    html += ' disabled="disabled"';
 		  }
 		  if (v == "true") {
 		    html += ' checked="checked"';
 		  }
-		  html += ' />\n';
+		  html += ' /><label class="input_checkbox-handle" for="' + n + '"></label>\n';
 		  return html;
 		};
 

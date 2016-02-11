@@ -1,97 +1,60 @@
-<h1>
-  Preview Search
-</h1>
+<section class="layout_section theme_light">
+  <h1 class="type_heading">Preview Search</h1>
+  <p class="type_copy">Use the text input to search, and use the facets to filter. <code>*:*</code> will bring back everything you've indexed <code>[key]:'[value]'</code> will bring back results that match the <code>[key]</code> with the <code>[value]</code>; e.g., <code>town:'ashfield'</code> <code>[key1]:'[value1]' OR [key2]:'[value2]'</code> is the syntax for multiple matches. Combine free text and faceted search like this: <code>willowbank AND [key]:'[value]'</code></p>
+</section>
+<section class="layout_section theme_dark">
 
-<p>
-  Use the text input to search, and use the facets to filter. <a role="button" data-toggle="collapse" data-target="#queryTips">Search tips</a> <span class="caret"></span>
-</p>
-
-
-<div class="collapse" id="queryTips">
-  <ul>
-    <li>
-      <code>*:*</code> will bring back everything you've indexed
-    </li>
-    <li>
-      <code>[key]:'[value]'</code> will bring back results that match the <code>[key]</code> with the <code>[value]</code>; e.g., <code>town:'ashfield'</code>
-    </li>
-    <li>
-      <code>[key1]:'[value1]' OR [key2]:'[value2]'</code> is the syntax for multiple matches
-    </li>
-    <li>
-      Combine free text and faceted search like this: <code>willowbank AND [key]:'[value]'</code>
-    </li>
-  </ul>
-</div>
-
-<form class="form" ng-submit="search()">
-  <div class="form-group" id="searchcontrol">
-    <div class="input-group">
-      <div class="input-group-addon">https://.../search?q=</div>
-      <input type="text" class="form-control" id="q" placeholder="" name="searchterm">
-      <!-- <div class="input-group-addon">&limit={{settings.querylimit}}</span></div> -->
+<form ng-submit="search()">
+  <div class="form_field" id="searchcontrol">
+    <div class="form_addon-group">
+      <span class="form_text-addon">https://.../search?q=</span>
+      <input type="text" class="input_text" id="q" placeholder="" name="searchterm">
     </div>
   </div>
-    <!-- <button type="submit" class="btn btn-primary" ng-click="search()"> Search </button> -->
+  <button type="submit" class="button_primary" ng-click="search()"> Search </button>
 </form>
+<hr>
 
-<hr />
+<h2 class="type_heading">Results : {{searchDocs.time}} ms</h2>
 
-<h2>
-  Results <small id="searchtime" ng-show="!searching">{{searchDocs.time}} ms</small><span ng-show="searching" class="glyphicon glyphicon-refresh glyphicon-spinner"></span>
-</h2>
+<section class="tabbed-panel">
+  <ul class="tabbed-panel_tab-group">
+    <li class="tabbed-panel_tab" ng-class="{'current': currentSearchPanel === 'html'}" ng-click="currentSearchPanel = 'html'">HTML</li>
+    <li class="tabbed-panel_tab" ng-class="{'current': currentSearchPanel === 'json'}" ng-click="currentSearchPanel = 'json'">JSON Preview</li>
+    <li class="tabbed-panel_tab" ng-class="{'current': currentSearchPanel === 'rawjson'}" ng-click="currentSearchPanel = 'rawjson'">Raw JSON</li>
+  </ul>
 
-<ul class="nav nav-tabs preview-search-nav-tabs" role="tablist">
-  <li role="presentation" class="active"><a data-target="#viewashtml" aria-controls="viewashtml" role="tab" data-toggle="tab">HTML</a></li>
-  <li role="presentation"><a data-target="#viewasjson" aria-controls="viewasjson" role="tab" data-toggle="tab">JSON Preview</a></li>
-  <li role="presentation"><a data-target="#viewAsRawJSON" aria-controls="viewAsRawJSON" role="tab" data-toggle="tab">Raw JSON</a></li>
-</ul>
-
-<div class="tab-content preview-search-tab-content">
-
-  <div role="tabpanel" class="tab-pane api-examples active" id="viewashtml">
+  <div id="viewashtml" class="tabbed-panel_panel theme_light" ng-if="currentSearchPanel == 'html'">
     <div preview-search-html></div>
   </div>
 
-  <div role="tabpanel" class="tab-pane" id="viewasjson">
-    <p>
-      The facets and rows you see in the HTML tab are revealed as JSON, below.
-    </p>
+  <div id="viewasjson" class="tabbed-panel_panel" ng-if="currentSearchPanel == 'json'">
 
-    <div class="row" id="searchheadings">
-      <div class="col-md-3">
-        <h4>
-          Facets <small>aka <code>counts</code></small>
-        </h4>
+    <p class="type_copy">The facets and rows you see in the HTML tab are revealed as JSON, below.</p>
+
+    <div class="grid_row five-column">
+      <div class="grid_column two">
+        <h4>Facets <small>aka <code>counts</code></small></h4>
+        <code class="type_codeblock" id="facets">{{ searchDocs.data.counts | json }}</code>
       </div>
-      <div class="col-md-9">
-        <h4>
-          Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : 'Showing ' + searchDocs.data.rows.length + ' of ' + searchDocs.data.total_rows}}</small>
-        </h4>
+      <div class="grid_column three">
+        <h4>Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : 'Showing ' + searchDocs.data.rows.length + ' of ' + searchDocs.data.total_rows}}</small></h4>
+        <code class="type_codeblock" id="documents">{{ searchDocs.data.rows | json }}</code>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-3">
-        <pre id="facets">{{ searchDocs.data.counts | json }}</pre>
-      </div>
-      <div class="col-md-9">
-        <pre id="documents">{{ searchDocs.data.rows | json }}</pre>
-      </div>
-    </div>
   </div>
 
-  <div role="tabpanel" class="tab-pane api-examples" id="viewAsRawJSON">
-    <p>
-      Here's the full JSON object returned from the service.
+  <div id="viewAsRawJSON" class="tabbed-panel_panel" ng-if="currentSearchPanel == 'rawjson'">
+    <p class="type_copy">Here's the full JSON object returned from the service.
     </p>
-    <pre>
-      {{ searchDocs.data | json }}
-    </pre>
+    <code class="type_codeblock">{{ searchDocs.data | json }}</code>
   </div>
 
+</section>
+
+
+<div class="button_group">
+  <button type="button" class="button_primary" ng-click="goToNextPage('api')"> Continue </button>
 </div>
-
-<p>
-  <button type="button" class="btn btn-primary" ng-click="goToNextPage('api')"> Continue </button>
-</p>
+</section>
