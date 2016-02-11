@@ -31,18 +31,18 @@ app.use(compression());
 app.use(proxy());
 
 // home
-app.get('/', function (req, res) {
+app.get('/', isloggedin(), function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 // templates
-app.get('/templates/:name', function(req, res) {
+app.get('/templates/:name',  isloggedin(), function(req, res) {
 	res.sendFile(path.join(__dirname, 'views/templates', req.params.name));
 });
 
 
 // search api 
-app.get('/search', cors(), isloggedin(), function (req, res) {
+app.get('/search', cors(), function (req, res) {
   db.search(req.query, function(err, data) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
