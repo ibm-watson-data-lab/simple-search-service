@@ -2,18 +2,23 @@
 
   <p class="type_copy">Here, we're taking what the API returns -- JSON -- and writing it into the page so you can interact with it.</p>
 
-
-      <h4>Facets <small>aka <code>counts</code></small></h4>
+  <div class="grid_row eight-column">
+    <div class="grid_column two">
+      <h3 class="type_subhead">Facets <small>aka <code class="type_code">counts</code></small></h4>
 
       <div class="api-search-example-sidebar-facet" ng-repeat="(countkey, countvalue) in searchDocs.data.counts">
-        <p class="api-facet-title">{{countkey}}</p>
-        <p class="tag-cloud">
-          <a class="tag-cloud_tag" ng-repeat="(facetkey, facetvalue) in countvalue" role="button" ng-click="apiSearch(countkey, facetkey);">{{facetkey}} <span class="tag-cloud_count">{{facetvalue}}</span></a>
-        </p>
+        <h4 class="type_subhead" class="api-facet-title">{{countkey}}</h4>
+        <ul class="tag-list">
+          <li class="tag-list_tag" ng-repeat="(facetkey, facetvalue) in countvalue">
+            <span class="tag-cloud_name" role="button" ng-click="apiSearch(countkey, facetkey);">{{facetkey}}</span>
+            <span class="tag-cloud_count">({{facetvalue}})</span>
+          </li>
+        </ul>
       </div>
+    </div>
+    <div class="grid_column six">
 
-
-      <h4>Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : 'Showing ' + searchDocs.data.rows.length + ' of ' + searchDocs.data.total_rows}}</small></h4>
+      <h3 class="type_subhead">Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : 'Showing ' + searchDocs.data.rows.length + ' of ' + searchDocs.data.total_rows}}</small></h4>
 
       <div class="table_basic-container">
         <table class="table_basic">
@@ -27,6 +32,11 @@
           </tbody>
         </table>
       </div>
+
+    </div>
+  </div>
+
+
 
 
 
