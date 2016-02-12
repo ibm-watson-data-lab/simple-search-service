@@ -1,0 +1,19 @@
+
+.collapsible {
+    display: none;
+}
+.no_underline {
+	text-decoration: none;
+}
+#searchTipsLink {
+	margin-left: 30px;
+}
+#searchcontrol .input_search {
+	width: 75rem;
+}
+#searchcontrol .search_button {
+	height: 2rem;
+}
+.form_addon-group {
+    /* display: inline-flex; */
+}

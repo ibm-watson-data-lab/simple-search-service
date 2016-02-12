@@ -539,6 +539,24 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		$scope.$root.getPreview(function(data) {
 	    	$scope.$root.$apply();
 	    });
+		
+		$scope.toggle = function(domNodeId) {
+			  if (domNodeId) {
+				  var domNode = $("#" + domNodeId);
+				  //expand
+				  if (domNode && !domNode.is(":visible")) {
+					  domNode.addClass("expanded");
+					  domNode.slideToggle(500);
+				  }
+				  //collapse
+				  else if (domNode && domNode.is(":visible")) {
+					  domNode.slideToggle(500, function() {
+						  domNode.removeClass("expanded");
+					  });
+				  }
+			  }
+		};
+		
 	}]
 );
 
