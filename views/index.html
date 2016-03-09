@@ -47,7 +47,8 @@
                 <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Preview Search</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'api'}" class="tree-nav_link" href="#/api">Preview Content API</a>
+                <a ng-class="{'current': selectedView === 'api'}" class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/api">Preview Content API</a>
+                <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Preview Content API</a>
               </li>
             </ul>
           </li>
