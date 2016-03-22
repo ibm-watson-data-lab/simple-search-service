@@ -55,7 +55,7 @@ app.get('/search', cors(), function (req, res) {
 app.post('/upload', isloggedin(),  multipart, function(req, res){
   var obj = {
     files: req.files,
-    body: req.body,
+    body: req.body
   };
   dbimport.clear();
   cache.put(obj.files.file.name, obj, function(err, data) {
@@ -63,6 +63,18 @@ app.post('/upload', isloggedin(),  multipart, function(req, res){
       data.upload_id = req.files.file.name;
       res.send(data);
     });
+  });
+});
+
+// fetch file from url
+app.post('/fetch', isloggedin(), bodyParser, function(req, res){
+  var obj = req.body;
+  dbimport.clear();
+  cache.put(obj.url, obj, function(err, data) {
+	inference.infer(obj.url, function(err, data) {
+	  data.upload_id = obj.url;
+	  res.send(data);
+	});
   });
 });
 
@@ -82,7 +94,7 @@ app.post('/import', isloggedin(), bodyParser, function(req, res){
     schema.save(theschema, function(err, d) {
       console.log("schema saved",err,d);
       // import the data
-      dbimport.file(currentUpload.files.file.path, theschema, function(err, d) {
+      dbimport.file(currentUpload.url || currentUpload.files.file.path, theschema, function(err, d) {
         console.log("data imported",err,d);
         cache.clearAll();
       });
