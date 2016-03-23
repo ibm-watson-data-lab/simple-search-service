@@ -6,3 +6,4 @@ start.sh
 .settings
 .jshintrc
 .project
+npm-debug.log
