@@ -150,7 +150,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		            var reply = JSON.parse(xhr.responseText);
 		            $scope.$root.currentUpload = reply;
 		            for(var i in reply.fields) {
-		              reply.fields[i].safename=reply.fields[i].name.toLowerCase().replace(/\W/g,"_");
+		              reply.fields[i].safename=reply.fields[i].name.replace(/\W/g,"_");
 		            }
 			        $scope.$root.currentStatus = "uploaded";
 		            $scope.$root.schema = reply;
