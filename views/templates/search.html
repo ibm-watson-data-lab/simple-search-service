@@ -1,32 +1,33 @@
 <section class="layout_section theme_light">
   <h1 class="type_heading"><mark class="type_mark">Preview Search</mark></h1>
-  <p  class="type_copy">
-    Use the text input to search, and use the facets to filter.
+  <p>
+    Results delivered in {{searchDocs.time}} ms | <a class="type_copy type_link no_underline" role="button" ng-click="expandedtips = !expandedtips;toggle('searchTips')"> {{ expandedtips ? '&#9660;' : '&#9658;' }} Search tips</a>
   </p>
+
+  <ul class="type_copy collapsible" id="searchTips">
+    <li>
+      <code class="type_mark">*:*</code> will bring back everything you've indexed
+    </li>
+    <li>
+      <code class="type_mark">[key]:'[value]'</code> will bring back results that match the <code class="type_mark">[key]</code> with the <code class="type_mark">[value]</code>; e.g., <code class="type_mark">town:'ashfield'</code>
+    </li>
+    <li>
+      <code class="type_mark">[key1]:'[value1]' OR [key2]:'[value2]'</code> is the syntax for multiple matches.<br>
+    Combine free text and faceted search like this: <code class="type_mark">willowbank AND [key]:'[value]'</code></li>
+  </ul>
+
+  <form ng-submit="search()">
+    <div class="form_field" id="searchcontrol">
+      <div class="form_addon-group">
+        <!-- <span class="form_text-addon">https://.../search?q=</span> -->
+        <input type="text" class="input_text" id="q" placeholder="" name="searchterm" >
+        <button type="submit" class="button_primary search_button" ng-click="search()"> Search </button>
+      </div>
+    </div>
+  </form>
+
 </section>
 <section class="layout_section theme_dark">
-
-<form ng-submit="search()">
-  <div class="form_field" id="searchcontrol">
-    <div class="form_addon-group">
-      <span class="form_text-addon">https://.../search?q=</span>
-      <input type="text" class="input_text" id="q" placeholder="" name="searchterm" >
-    </div>
-    <!-- <button type="submit" class="button_primary search_button" ng-click="search()"> Search </button> -->
-  </div>
-  
-  <a class="type_copy type_link no_underline" role="button" ng-click="expandedtips = !expandedtips;toggle('searchTips')"> {{ expandedtips ? '&#9660;' : '&#9658;' }} Search tips</a>
-  
-  <p class="type_copy collapsible" id="searchTips">
-    <code class="type_mark">*:*</code> will bring back everything you've indexed <br>
-    <code class="type_mark">[key]:'[value]'</code> will bring back results that match the <code class="type_mark">[key]</code> with the <code class="type_mark">[value]</code>; e.g., <code class="type_mark">town:'ashfield'</code><br>
-    <code class="type_mark">[key1]:'[value1]' OR [key2]:'[value2]'</code> is the syntax for multiple matches.<br>
-    Combine free text and faceted search like this: <code class="type_mark">willowbank AND [key]:'[value]'</code><br> 
-  </p>
-</form>
-<hr>
-
-<h2 class="type_heading">Results : {{searchDocs.time}} ms</h2>
 
 <section class="tabbed-panel">
   <ul class="tabbed-panel_tab-group">
