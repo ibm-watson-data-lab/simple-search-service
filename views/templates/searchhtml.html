@@ -9,7 +9,7 @@
       <div class="api-search-example-sidebar-facet" ng-repeat="(countkey, countvalue) in searchDocs.data.counts">
         <h4 class="type_subhead" class="api-facet-title">{{countkey}}</h4>
         <ul class="tag-list">
-          <li class="tag-list_tag" ng-repeat="(facetkey, facetvalue) in countvalue">
+          <li class="tag-list_tag" ng-repeat="(facetkey, facetvalue) in countvalue" ng-class="{'active': isSelected(countkey,facetkey)}">
             <span class="tag-cloud_name" role="button" ng-click="apiSearch(countkey, facetkey);">{{facetkey}}</span>
             <span class="tag-cloud_count">({{facetvalue}})</span>
           </li>
@@ -28,12 +28,12 @@
           <tbody>
             <tr ng-repeat="row in searchDocs.data.rows">
               <td ng-repeat="docfield in searchDocs.fields">
-                <ul ng-show="isArray(row[docfield.name])">
+                <ul ng-if="isArray(row[docfield.name])">
                   <li ng-repeat="field in row[docfield.name]">
                     {{field == "null" ? '' : field | ellipsize:20}}
                   </li>
                 </ul>
-                <span ng-show="!isArray(row[docfield.name])">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</span>
+                <span ng-if="!isArray(row[docfield.name])">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</span>
               </td>
             </tr>
           </tbody>

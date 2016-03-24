@@ -592,6 +592,11 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				  }
 			  }
 		};
+		
+		$scope.clearSearch = function() {
+			$('#q').val('*:*');
+			$scope.search();
+		}
 
 	}]
 );
@@ -711,6 +716,7 @@ seamsApp.directive('previewSearchHtml', function(){
 
 		    	  if ($('#q')) {
 		    		  $('#q').val(query);
+		    		  scope.$root.searchdirty = (query !== "*:*");
 		    	  }
 
 		    	  scope.search();

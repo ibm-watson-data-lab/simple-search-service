@@ -30,3 +30,22 @@
     cursor: not-allowed;
     opacity: 0.5;
 }
+
+.tag-list_tag span {
+	font-weight:normal;
+}
+.tag-list_tag.active span {
+    font-weight:700;
+}
+
+.input_text-clear {
+    color: #323232;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.35rem;
+    height: 2rem;
+    padding: 0 1rem;
+    position: absolute;
+    right: 100px;
+    white-space: nowrap;
+}
