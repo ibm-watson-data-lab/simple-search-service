@@ -573,7 +573,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		$scope.$root.getPreview(function(data) {
 	    	$scope.$root.$apply();
 	    });
-		
+
+		$scope.isArray = angular.isArray;
+
 		$scope.toggle = function(domNodeId) {
 			  if (domNodeId) {
 				  var domNode = $("#" + domNodeId);
@@ -590,7 +592,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				  }
 			  }
 		};
-		
+
 	}]
 );
 
