@@ -14,6 +14,7 @@
   </div>
 
   <div ng-show="!currentStatus || currentStatus == 'new'">
+    <!--
     <form id="uploadform" action="/upload" method="post" enctype="multipart/form-data">
       <fieldset class="form_field">
         <input class="input_file" id="file" type="file" name="file" />
@@ -21,6 +22,43 @@
       </fieldset>
     </form>
     <p class="type_copy">Once you select your file, we'll automatically move to the next step, where you'll create the index for your search service. So choose wisely.</p>
+    -->
+    
+    
+    <div class="tabbed-panel">
+      <ul class="tabbed-panel_tab-group">
+        <li class="tabbed-panel_tab" ng-class="{'current': currentUploadPanel === 'fileupload'}" ng-click="currentUploadPanel = 'fileupload'">Local File</li>
+        <li class="tabbed-panel_tab" ng-class="{'current': currentUploadPanel === 'fileurl'}" ng-click="currentUploadPanel = 'fileurl'">Remote File</li>
+      </ul>
+    
+      <div id="viewasfileupload" class="tabbed-panel_panel theme_light" ng-show="currentUploadPanel == 'fileupload'">
+        <form id="uploadform" action="/upload" method="post" enctype="multipart/form-data">
+          <fieldset class="form_field">
+            <input class="input_file" id="file" type="file" name="file" />
+            <label class="input_file-handle" for="file"></label>
+          </fieldset>
+        </form>
+        <p class="type_copy">Once you select your file, we'll automatically move to the next step, where you'll create the index for your search service. So choose wisely.</p>
+      </div>
+    
+      <div id="viewasfileurl" class="tabbed-panel_panel" ng-show="currentUploadPanel == 'fileurl'">
+        <form name="fileurlform" class="form_standard" novalidate>
+          <fieldset class="form_field">
+            <input type="url" class="input_text" name="fileurl" id="fileurl" required ng-model="fileurl" placeholder="Enter File Url">
+          </fieldset>
+          <p class="type_copy">Once you have entered your file url, continue to the next step, where you'll create the index for your search service. So choose wisely.</p>
+          <button id="remotefileurl" type="button" class="button_primary" ng-click="fetchRemoteFile(fileurl);"
+                ng-class="{'disabled':fileurlform.$invalid || fetchingRemoteFile}" ng-disabled="fileurlform.$invalid || fetchingRemoteFile"> {{fetchingRemoteFile ? 'Fetching...' : 'Continue'}} </button>
+        </form>
+        
+        <div tabindex="-1" role="dialog">
+          <p class="type_mark" id="remoteFileError"></p>
+        </div>
+      </div>
+    </div>
+    
+    
+    
   </div>
 
   <div class="button_group" ng-show="currentStatus && currentStatus != 'new'">

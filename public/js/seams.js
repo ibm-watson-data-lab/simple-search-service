@@ -30,6 +30,7 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 				}
 				break;
 			case 'upload':
+				$('#remoteFileError').html("");
 				$('#file').change(function () {
 					$scope.$root.fileUploaded();
 	        	});
@@ -130,6 +131,35 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    		}
 	    	});
 	    };
+	    
+	    $scope.$root.fetchRemoteFile = function(fileUrl) {
+	    	if (fileUrl) {
+				$('#remoteFileError').html("");
+			    $scope.$root.fetchingRemoteFile = true;
+				$http.post("/fetch", {"url":fileUrl}, {json: true})
+				  .success(function(data) {
+					  if (data && data.fields && data.fields.length > 0) {
+						  $('#fileuploadcontrol').hide();
+				          $scope.$root.currentUpload = data;
+				          for(var i in data.fields) {
+				            data.fields[i].safename=data.fields[i].name.toLowerCase().replace(/\W/g,"_");
+				          }
+					      $scope.$root.currentStatus = "uploaded";
+				          $scope.$root.schema = data;
+				          $scope.$root.goToNextPage("import");
+					  }
+					  else {
+						  $('#remoteFileError').html("No data was returned. Please check the URL and try again");
+						    $scope.$root.fetchingRemoteFile = false;
+					  }
+				  })
+				  .error(function(data, status, headers, config) {
+					  console.log("/fetch failed:", data, status);
+					  $('#remoteFileError').html("Failed to retreive the file. Please check the URL and try again");
+					    $scope.$root.fetchingRemoteFile = false;
+				  });
+	    	}
+	    };
 
 	    $scope.$root.fileUploaded = function() {
 	         $('#fileuploadcontrol').hide();
@@ -228,9 +258,13 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	  });
 	    }
 
-    // Holding which panel in the "Preview Search" view
-    // is selected. Initially set to the HTML panel
+	    // Holding which panel in the "Preview Search" view
+	    // is selected. Initially set to the HTML panel
     	$scope.currentSearchPanel = "html";
+
+        // Holding which panel in the "Upload Data" view
+        // is selected. Initially set to the File Upload panel
+        $scope.currentUploadPanel = "fileupload";
 
 		// given a schema object (x.fields) - this function returns the html
 		// which displays a table of each field in the schema, its data type
