@@ -27,7 +27,14 @@
           </thead>
           <tbody>
             <tr ng-repeat="row in searchDocs.data.rows">
-              <td ng-repeat="docfield in searchDocs.fields">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</td>
+              <td ng-repeat="docfield in searchDocs.fields">
+                <ul ng-show="isArray(row[docfield.name])">
+                  <li ng-repeat="field in row[docfield.name]">
+                    {{field == "null" ? '' : field | ellipsize:20}}
+                  </li>
+                </ul>
+                <span ng-show="!isArray(row[docfield.name])">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</span>
+              </td>
             </tr>
           </tbody>
         </table>
