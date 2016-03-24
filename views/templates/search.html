@@ -42,7 +42,7 @@
 
   <div id="viewasjson" class="tabbed-panel_panel" ng-if="currentSearchPanel == 'json'">
 
-    <p class="type_copy">The facets and rows you see in the HTML tab are revealed as JSON, below.</p>
+    <p class="type_copy">The <code>counts</code> and <code>rows</code> presented as JSON.</p>
 
     <div class="grid_row five-column">
       <div class="grid_column two">
@@ -58,7 +58,7 @@
   </div>
 
   <div id="viewAsRawJSON" class="tabbed-panel_panel" ng-if="currentSearchPanel == 'rawjson'">
-    <p class="type_copy">Here's the full JSON object returned from the service.
+    <p class="type_copy">The full JSON object returned by the service.
     </p>
     <code class="type_codeblock">{{ searchDocs.data | json }}</code>
   </div>
