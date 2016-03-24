@@ -9,7 +9,7 @@
       <div class="api-search-example-sidebar-facet" ng-repeat="(countkey, countvalue) in searchDocs.data.counts">
         <h4 class="type_subhead" class="api-facet-title">{{countkey}}</h4>
         <ul class="tag-list">
-          <li class="tag-list_tag" ng-repeat="(facetkey, facetvalue) in countvalue">
+          <li class="tag-list_tag" ng-repeat="(facetkey, facetvalue) in countvalue" ng-class="{'active': isSelected(countkey,facetkey)}">
             <span class="tag-cloud_name" role="button" ng-click="apiSearch(countkey, facetkey);">{{facetkey}}</span>
             <span class="tag-cloud_count">({{facetvalue}})</span>
           </li>
