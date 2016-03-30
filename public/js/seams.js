@@ -202,7 +202,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	      for(var i in $scope.$root.currentUpload.fields) {
 	        var d = $('select[name=' + $scope.$root.currentUpload.fields[i].safename + ']');
 	        var obj = {}
-	        obj.name = d.attr('name');
+	        obj.name = d.attr('data-original-name');
 	        obj.type = d.val();
 	        obj.facet = ($('#' + d.attr('name')).is(':checked') && !$('#' + d.attr('name')).prop("disabled"));
 	        fields.push(obj);
@@ -280,8 +280,8 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		     html += "<tr>";
 		     var f = x.fields[i];
 		     html += "<td>" + f.name + "</td>\n";
-		     html += "<td>" + $scope.$root.typeWidget(f.safename,f.type) + "</td>\n";
-		     html += "<td>" + $scope.$root.facetWidget(f.safename,f.type,f.facet.toString()) + "</td>\n";
+		     html += "<td>" + $scope.$root.typeWidget(f) + "</td>\n";
+		     html += "<td>" + $scope.$root.facetWidget(f) + "</td>\n";
 		     for(var j in x.data) {
 		       var obj = x.data[j];
 		       var val = obj[f.name];
@@ -307,16 +307,17 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 		// returns the HTML to render a data type pull-down list
 		// for field 'n' which has data type 't'
-		$scope.$root.typeWidget = function(n,t) {
-		  var html = '<select name="' + n + '" + class="input_select" onchange="datatypechange(\'' + n +'\')">\n';
-		  var opts = [ "string", "number", "boolean", "arrayofstrings"];
+		$scope.$root.typeWidget = function(f) {
+		  var n = f.safename;
+		  var t = f.type;
+		  var html = '<select name="' + n + '" class="input_select" onchange="datatypechange(\'' + n +'\')" data-original-name="' + f.name + '">\n';
+		  var opts = { "string":"String", "number":"Number", "boolean":"Boolean", "arrayofstrings":"Array of Strings" };
 		  for(var i in opts) {
-		    var j = opts[i];
-		    html += '<option value="' + j + '"';
-		    if (j == t) {
+		    html += '<option value="' + i + '"';
+		    if (i == t) {
 		      html += ' selected="selected"';
 		    }
-		    html += '>' + j + '</option>\n';
+		    html += '>' + opts[i] + '</option>\n';
 		  }
 		  html += '</select>\n';
 		  return html;
@@ -324,7 +325,10 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 		// returns the HTML to render a checkbox for field 'n'
 		// which is faceted or not (t)
-		$scope.$root.facetWidget = function(n,t,v) {
+		$scope.$root.facetWidget = function(f) {
+		  var n = f.safename;
+		  var t = f.type;
+		  var v = f.facet.toString();
 		  var html = '<input class="input_checkbox" type="checkbox" value="true" name="' + n + '" id="' + n + '"';
 		  if (t == "number" || t == "boolean") {
 		    html += ' disabled="disabled"';
@@ -413,7 +417,12 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 						randomrow = Math.floor(Math.random() * previewData.rows.length);
 						var text = previewData.rows[randomrow].doc[fieldname];
 						if (text != null && typeof text !== 'undefined') {
-							facet = fieldname + ":" + "\"" + text + "\"";
+							if (fieldname.indexOf(' ') == -1) {
+								facet = fieldname + ":" + "\"" + text + "\"";
+							}
+							else {
+								facet = "\"" + fieldname + "\":" + "\"" + text + "\"";
+							}
 							params = {
 								field: fieldname,
 								value: text
@@ -680,13 +689,17 @@ seamsApp.directive('previewSearchHtml', function(){
 
 	      scope.apiSearch = function(key, value) {
 	    	  if (typeof key != "undefined") {
-		    	  var query = key;
+		    	  var query = key.indexOf(' ') == -1 ? key : ('"' + key + '"');
 		    	  if (value) {
 		    		  query += ":\""+value+"\"";
 		    		  var search = scope.searchString();
+		    		  var spaceEncodedQ = query.replace(/\s/g, "\+");
 
 		    		  if (search.indexOf(query) > -1) {
 		    	    	  query = search.replace(query, "").replace(" AND  AND ", " AND ");
+		    		  }
+		    		  else if (search.indexOf(spaceEncodedQ) > -1) {
+		    	    	  query = search.replace(spaceEncodedQ, "").replace(" AND  AND ", " AND ");
 		    		  }
 		    		  else {
 		    			  var regex = new RegExp(key+":\".*?\"", "i");
@@ -715,7 +728,7 @@ seamsApp.directive('previewSearchHtml', function(){
 		    	  }
 
 		    	  if ($('#q')) {
-		    		  $('#q').val(query);
+		    		  $('#q').val(query.replace(/\+/g, ' '));
 		    		  scope.$root.searchdirty = (query !== "*:*");
 		    	  }
 
@@ -735,8 +748,10 @@ seamsApp.directive('previewSearchHtml', function(){
 		  };
 
 		  scope.isSelected = function(facet, value) {
-			  var q = facet + ":\"" + value + '\"';
-	    	  return scope.searchDocs.rest_uri.indexOf(q) > -1;
+			  var q = (facet + ':"' + value + '"').replace(/\s/g, "\+");
+			  var quoted = ('"' + facet + '":"' + value + '"').replace(/\s/g, "\+");
+	    	  return scope.searchDocs.rest_uri.indexOf(q) > -1
+	    	  	|| scope.searchDocs.rest_uri.indexOf(quoted) > -1;
 		  };
 	  }
 	};

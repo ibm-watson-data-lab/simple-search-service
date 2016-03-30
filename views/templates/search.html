@@ -20,8 +20,8 @@
     <div class="form_field" id="searchcontrol">
       <div class="form_addon-group">
         <!-- <span class="form_text-addon">https://.../search?q=</span> -->
-        <input type="text" class="input_text" id="q" placeholder="" name="searchterm" ng-model="querystring" ng-change="searchdirty = querystring !== '*:*'">
-        <span class="input_text-clear" ng-click="searchdirty = false;clearSearch();" ng-show="searchdirty">&times;</span>
+        <input type="text" class="input_text" id="q" placeholder="" name="searchterm" ng-model="querystring" ng-change="$root.searchdirty = querystring !== '*:*'">
+        <span class="input_text-clear" ng-click="$root.searchdirty = false;clearSearch();" ng-show="$root.searchdirty">&times;</span>
         <button type="submit" class="button_primary search_button" ng-click="search()"> Search </button>
       </div>
     </div>
