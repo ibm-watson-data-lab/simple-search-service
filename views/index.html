@@ -43,17 +43,17 @@
                 <a class="tree-nav_link disabled" ng-if="!currentStatus || currentStatus == 'new'">Create Index</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'search'}" class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/search">Preview Search</a>
-                <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Preview Search</a>
+                <a ng-class="{'current': selectedView === 'search'}" class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/search">Search</a>
+                <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Search</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'api'}" class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/api">Preview Content API</a>
-                <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Preview Content API</a>
+                <a ng-class="{'current': selectedView === 'api'}" class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/api">Content API</a>
+                <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Content API</a>
+              </li>
+              <li class="tree-nav_item" ng-class="{'active':selectedView === 'settings'}">
+                <a ng-class="{'current': selectedView === 'settings'}" class="tree-nav_link" href="#/settings">Settings</a>
               </li>
             </ul>
-          </li>
-          <li class="tree-nav_item" ng-class="{'active':selectedView === 'settings'}">
-            <a ng-class="{'current': selectedView === 'settings'}" class="tree-nav_link" href="#/settings">Settings</a>
           </li>
         </ul>
       </nav>
