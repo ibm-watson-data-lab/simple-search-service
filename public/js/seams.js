@@ -466,7 +466,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 					var unfacetedfields = [];
 					var facetedfields = [];
 			        for(var i in data.fields) {
-			        	if (data.fields[i].type === "string") {
+			        	if (data.fields[i].type === "string" || data.fields[i].type === "arrayofstrings") {
 			        		if (data.fields[i].facet == true) {
 				                facetedfields.push(data.fields[i].name);
 				            }
