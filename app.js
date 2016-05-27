@@ -12,6 +12,7 @@ var express = require('express'),
   cache = require('./lib/cache.js'),
   schema = require('./lib/schema.js'),
   isloggedin = require('./lib/isloggedin.js'),
+  sssenv = require('./lib/sssenv.js'),
   inference = require('./lib/inference.js');
 
 
@@ -134,12 +135,17 @@ app.get('/settings', isloggedin(), function (req, res) {
 	 if (err) {
 	   return res.status(err.statusCode).send({error: err.error, reason: err.reason});
 	 }
+   data["appenv"] = sssenv;
 	 res.send(data);
 	});
 });
 
 app.post('/settings', isloggedin(), bodyParser, function(req, res) {
-	db.settings(req.body, function(err, data) {
+  var settings = req.body;
+  if (settings.hasOwnProperty("appenv")) {
+    delete settings.appenv;
+  }
+	db.settings(settings, function(err, data) {
 		 if (err) {
 		   return res.status(err.statusCode).send({error: err.error, reason: err.reason});
 		 }

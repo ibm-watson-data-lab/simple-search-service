@@ -498,10 +498,12 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			var restapi = '/settings';
 			$http.get(restapi)
 			  .success(function(data) {
+					$scope.$root.appenv = data ? data.appenv : {};
 				  $scope.$root.settings = data;
 			  })
 			  .error(function(data, status, headers, config) {
 			      console.log("Error retrieving settings:", data, status);
+						$scope.$root.appenv = $scope.$root.appenv || {};
 			      $scope.$root.settings = {};
 			  });
 		};
