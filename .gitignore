@@ -7,3 +7,4 @@ start.sh
 .jshintrc
 .project
 npm-debug.log
+.vscode
