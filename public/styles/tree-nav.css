@@ -29,7 +29,7 @@
 .tree-nav_link.disabled {
 	opacity: .5;
 	cursor: not-allowed;
-} 
+}
 
 .tree-nav .tree-nav .tree-nav_link {
 	padding-left: 4.5rem;
@@ -45,11 +45,11 @@
 	}
 
 	& .tree-nav_link.current {
-		background-color: var(--ibm-color-blue-80); 
+		background-color: var(--ibm-color-blue-80);
 		box-shadow: inset 8px 0 0 0 var(--ibm-color-blue-30);
 	}
 
-} 
+}
 
 /*Light Themes*/
 
@@ -61,8 +61,8 @@
 	}
 
 	& .tree-nav_link.current {
-		background-color: var(--ibm-color-coolwhite-30); 
+		background-color: var(--ibm-color-coolwhite-30);
 		box-shadow: inset 8px 0 0 0 var(--ibm-color-blue-30);
 	}
 
-} 
+}
