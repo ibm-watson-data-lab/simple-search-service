@@ -131,7 +131,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    		}
 	    	});
 	    };
-	    
+
 	    $scope.$root.fetchRemoteFile = function(fileUrl) {
 	    	if (fileUrl) {
 				$('#remoteFileError').html("");
@@ -575,9 +575,11 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			  });
 		};
 
-	    $scope.$root.goToNextPage = function(page) {
-	    	$location.path(page);
-	    };
+	  $scope.$root.goToNextPage = function(page) {
+	    $scope.$root.$applyAsync(function() {
+	      $location.path(page);
+      });
+	  };
 
 	    $scope.$root.getSettings();
 
@@ -603,7 +605,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				  }
 			  }
 		};
-		
+
 		$scope.clearSearch = function() {
 			$('#q').val('*:*');
 			$scope.search();
