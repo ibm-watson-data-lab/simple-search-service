@@ -33,27 +33,27 @@
             <a ng-class="{'current': !selectedView || selectedView === 'about'}" class="tree-nav_link" href="#/about">Simple Search Service</a>
             <ul class="tree-nav">
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'get'}"  class="tree-nav_link" href="#/get">Get data</a>
+                <a ng-class="{'current': selectedView === 'get', 'disabled': currentStatus == 'imported'}"  class="tree-nav_link" href="#/get">Get data</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'upload'}" class="tree-nav_link" href="#/upload">Upload data</a>
+                <a ng-class="{'current': selectedView === 'upload', 'disabled': currentStatus == 'imported'}" class="tree-nav_link" href="#/upload">Upload data</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'import'}" class="tree-nav_link" ng-if="currentStatus && currentStatus != 'new'" href="#/import">Create Index</a>
-                <a class="tree-nav_link disabled" ng-if="!currentStatus || currentStatus == 'new'">Create Index</a>
+                <a ng-class="{'current': selectedView === 'import', 'disabled': !currentStatus || currentStatus == 'new' || currentStatus == 'imported'}" class="tree-nav_link" href="#/import">Create Index</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'search'}" class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/search">Search</a>
-                <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Search</a>
+                <a ng-class="{'current': selectedView === 'search', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/search">Search</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'api'}" class="tree-nav_link" ng-if="currentStatus == 'imported'" href="#/api">Content API</a>
-                <a class="tree-nav_link disabled" ng-if="currentStatus != 'imported'">Content API</a>
+                <a ng-class="{'current': selectedView === 'api', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/api">Content API</a>
               </li>
-              <li class="tree-nav_item" ng-class="{'active':selectedView === 'settings'}">
-                <a ng-class="{'current': selectedView === 'settings'}" class="tree-nav_link" href="#/settings">Settings</a>
+
+              <hr />
+
+              <li class="tree-nav_item">
+                <a ng-class="{'current': selectedView === 'settings', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/settings">Settings</a>
               </li>
-              <li class="tree-nav_item" ng-class="{'active':selectedView === 'ingredients'}">
+              <li class="tree-nav_item">
                 <a ng-class="{'current': selectedView === 'ingredients'}" class="tree-nav_link" href="#/ingredients">Ingredients</a>
               </li>
             </ul>
