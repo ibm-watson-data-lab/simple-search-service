@@ -16,13 +16,13 @@
       <mark class="type_mark">Runtime</mark>
     </dt>
     <dd>
-      Node.js app running on IBM Bluemix. {link to the application for the signed in user on Bluemix}
+      <a href="{{ appenv.application.host }}" target="_blank" class="type_link">Node.js app</a> running on IBM Bluemix.
     </dd>
     <dt>
       <mark class="type_mark">Data</mark>
     </dt>
     <dd>
-      IBM Cloudant, running on IBM Bluemix. {link to the Cloudant dashboard and database }
+      <a href="{{ appenv.storage.url }}" target="_blank" class="type_link">IBM Cloudant</a>, running on IBM Bluemix. (If you don't know your Cloudant password, <a href="{{ appenv.application.host }}" target="_blank" class="type_link">access Cloudant through the app</a> on Bluemix instead.)
     </dd>
     <dt>
       <mark class="type_mark">Cache (optional)</mark>
@@ -39,30 +39,7 @@
   </dl>
 
   <p>
-    To learn more about how these things go together, check out the tutorial and the README.
+    To learn more about how these things go together, <a href="https://developer.ibm.com/clouddataservices/simple-search-service/" target="_blank" class="type_link">check out the tutorial</a> and <a href="https://github.com/ibm-cds-labs/simple-search-service/" target="_blank" class="type_link">the README</a>.
   </p>
 
 </section>
-
-
-<!--
-
-===
-rename file ingredients
-===
-
-Cloudant is the service.
- - link to cloudant database in bluemix
-
-the application runs on bluemix
- - link to application in bluemix
-
-couchimport is the data ingest.
- - link to github repo
-
-we automatically build search indexes based on what you choose to facet
- - link to code in github repo
-
-
-
--->
