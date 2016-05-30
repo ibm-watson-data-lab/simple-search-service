@@ -1,6 +1,7 @@
 
 .tree-nav_link.disabled {
     text-decoration: line-through;
+    cursor: pointer;
 }
 .tree-nav .tree-nav hr {
     border-top: 1px solid #ccc;
