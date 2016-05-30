@@ -1,10 +1,10 @@
 <section class="layout_section theme_light">
   <h1 class="type_heading"><mark class="type_mark">Upload Data</mark></h1>
-  <p class="type_copy">Upload a comma separated values (CSV) or tab separated values (TSV) file.</p>
+  <p>Upload a comma separated values (CSV) or tab separated values (TSV) file.</p>
 </section>
 
 <section class="layout_section theme_dark">
-  
+
   <div ng-show="currentStatus == 'imported'" class="alert alert-success">
     <p class="type_copy">Your data was uploaded and imported successfully.</p>
   </div>
@@ -23,14 +23,14 @@
     </form>
     <p class="type_copy">Once you select your file, we'll automatically move to the next step, where you'll create the index for your search service. So choose wisely.</p>
     -->
-    
-    
+
+
     <div class="tabbed-panel">
       <ul class="tabbed-panel_tab-group">
         <li class="tabbed-panel_tab" ng-class="{'current': currentUploadPanel === 'fileupload'}" ng-click="currentUploadPanel = 'fileupload'">Local File</li>
         <li class="tabbed-panel_tab" ng-class="{'current': currentUploadPanel === 'fileurl'}" ng-click="currentUploadPanel = 'fileurl'">Remote File</li>
       </ul>
-    
+
       <div id="viewasfileupload" class="tabbed-panel_panel theme_light" ng-show="currentUploadPanel == 'fileupload'">
         <form id="uploadform" action="/upload" method="post" enctype="multipart/form-data">
           <fieldset class="form_field">
@@ -38,9 +38,9 @@
             <label class="input_file-handle" for="file"></label>
           </fieldset>
         </form>
-        <p class="type_copy">Once you select your file, we'll automatically move to the next step, where you'll create the index for your search service. So choose wisely.</p>
+        <p class="type_copy">Once you select your file, we'll automatically move to the next step, where you'll create the index for your search service.</p>
       </div>
-    
+
       <div id="viewasfileurl" class="tabbed-panel_panel" ng-show="currentUploadPanel == 'fileurl'">
         <form name="fileurlform" class="form_standard" novalidate>
           <fieldset class="form_field">
@@ -50,15 +50,12 @@
           <button id="remotefileurl" type="button" class="button_primary" ng-click="fetchRemoteFile(fileurl);"
                 ng-class="{'disabled':fileurlform.$invalid || fetchingRemoteFile}" ng-disabled="fileurlform.$invalid || fetchingRemoteFile"> {{fetchingRemoteFile ? 'Fetching...' : 'Continue'}} </button>
         </form>
-        
+
         <div tabindex="-1" role="dialog">
           <p class="type_mark" id="remoteFileError"></p>
         </div>
       </div>
     </div>
-    
-    
-    
   </div>
 
   <div class="button_group" ng-show="currentStatus && currentStatus != 'new'">
