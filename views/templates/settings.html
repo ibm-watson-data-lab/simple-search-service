@@ -4,25 +4,34 @@
 
 <section class="layout_section theme_dark">
 
-<div class="form_field">
-  <label for="querylimit" class="form_label">Query limit</label>
-  <input name="querylimit" type="number" class="input_text" min=1 ng-model="settings.querylimit" ng-change="dirty = true" required>
-  <p id="helpBlock" class="type_copy">Sets the <code>limit</code> parameter on API calls.</p>
-</div>
+  <div ng-show="!currentStatus || currentStatus != 'imported'">
+    <p class="type_copy">
+      No data indexed.
+    </p>
+    <button type="button" class="button_primary" ng-click="goToNextPage('upload')">Back</button>
+  </div>
 
-<button id="savesettings" type="button" class="button_primary" ng-click="dirty = false;saveSettings();" ng-disabled="dirty != true || saving">{{ saving ? 'Saving...' : 'Save' }}</button>
+  <div ng-show="currentStatus && currentStatus == 'imported'">
+    <div class="form_field">
+      <label for="querylimit" class="form_label">Query limit</label>
+      <input name="querylimit" type="number" class="input_text" min=1 ng-model="settings.querylimit" ng-change="dirty = true" required>
+      <p id="helpBlock" class="type_copy">Sets the <code>limit</code> parameter on API calls.</p>
+    </div>
+
+    <button id="savesettings" type="button" class="button_primary" ng-click="dirty = false;saveSettings();" ng-disabled="dirty != true || saving">{{ saving ? 'Saving...' : 'Save' }}</button>
 
 
-<hr>
+    <hr>
 
-<h2 class="type_heading"><mark class="type_mark">Delete data</mark></h2>
-<p class="type_copy">If you want to use this service to index different data, or to re-index the same data with different facets or data types, you can blow away your database, and the indexes, and start over again.</p>
-<button name="deletedata" class="button_primary" ng-click="showDeleteDialog()">Delete data</button>
+    <h2 class="type_heading"><mark class="type_mark">Delete data</mark></h2>
+    <p class="type_copy">If you want to use this service to index different data, or to re-index the same data with different facets or data types, you can blow away your database, and the indexes, and start over again.</p>
+    <button name="deletedata" class="button_primary" ng-click="showDeleteDialog()">Delete data</button>
 
-<div id="deleteData" tabindex="-1" role="dialog" ng-if="deleteDialogShown">
-  <p class="type_copy" id="deleteDataBody">Are you sure you want to delete all of your data?</p>
-  <button type="button" class="button_secondary" data-dismiss="modal">Cancel</button>
-  <button id="deletebutton" type="button" class="button_primary" ng-click="deleteEverything()">Delete All</button>
-</div>
+    <div id="deleteData" tabindex="-1" role="dialog" ng-if="deleteDialogShown">
+      <p class="type_copy" id="deleteDataBody">Are you sure you want to delete all of your data?</p>
+      <button type="button" class="button_secondary" data-dismiss="modal">Cancel</button>
+      <button id="deletebutton" type="button" class="button_primary" ng-click="deleteEverything()">Delete All</button>
+    </div>
+  </div>
 
 </section>

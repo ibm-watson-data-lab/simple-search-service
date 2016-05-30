@@ -1,6 +1,8 @@
 <section class="layout_section theme_light">
   <h1 class="type_heading"><mark class="type_mark">Create the Search Index</mark></h1>
 
+  <p>Preview your data, and pick fields to facet.</p>
+
   <div ng-show="currentStatus == 'uploaded'">
     <p class="type_copy">Here's a preview of your data. Make sure the data types are correct. (E.g., if you want to <code>facet</code> by a number, you'll need to change the data type from <code>number</code> to <code>string</code>.)</p>
     <p class="type_copy"><strong>Pay extra attention to the Facet column.</strong> Check the checkbox next to those values you want to search by, and we'll automatically index those values as <code>counts</code> (i.e., <em>facets</em>).</p>
@@ -11,15 +13,22 @@
 
 <section class="layout_section">
 
+  <div ng-show="!currentStatus">
+    <p class="type_copy">
+      No data uploaded.
+    </p>
+    <button type="button" class="button_primary" ng-click="goToNextPage('upload')">Back</button>
+  </div>
+
+  <div ng-show="currentStatus == 'new'">
+    <p class="type_copy">Upload a comma separated values (CSV) or tab separated values (TSV) file.</p>
+  </div>
+
   <div ng-show="currentStatus == 'imported'" class="alert alert-success">
     <p class="type_copy">Your data was indexed successfully.</p>
     <div class="button_group">
       <button type="button" class="button_primary" ng-click="goToNextPage('search')"> Continue </button>
     </div>
-  </div>
-
-  <div ng-show="!currentStatus || currentStatus == 'new'">
-    <p class="type_copy">Upload a comma separated values (CSV) or tab separated values (TSV) file.</p>
   </div>
 
   <div ng-show="currentStatus == 'uploaded'">
