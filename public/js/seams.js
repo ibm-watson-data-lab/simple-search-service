@@ -42,6 +42,21 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 				if ($scope.$root.schema) {
 					var html = $scope.$root.renderSchema($scope.$root.schema);
 					$('#schemacontent').html(html);
+					var checked = 0;
+					$('.facet_checkbox', '#schemacontent').each(function() {
+						$(this).change(function() {
+							if($(this).is(":checked")) {
+								checked++;
+							}
+							else {
+								checked--;
+							}
+							$('#importbutton').attr('disabled',checked == 0);
+							$('#facetstatus').css('visibility', checked == 0 ? 'visible' : 'hidden');
+						});
+					});
+					$('#importbutton').attr('disabled',checked == 0);
+					$('#facetstatus').css('visibility', checked == 0 ? 'visible' : 'hidden');
 				}
 				break;
 			case 'search':
@@ -329,7 +344,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		  var n = f.safename;
 		  var t = f.type;
 		  var v = f.facet.toString();
-		  var html = '<input class="input_checkbox" type="checkbox" value="true" name="' + n + '" id="' + n + '"';
+		  var html = '<input class="input_checkbox facet_checkbox" type="checkbox" value="true" name="' + n + '" id="' + n + '"';
 		  if (t == "number" || t == "boolean") {
 		    html += ' disabled="disabled"';
 		  }
