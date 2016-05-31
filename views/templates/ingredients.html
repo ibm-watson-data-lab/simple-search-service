@@ -16,25 +16,37 @@
       <mark class="type_mark">Runtime</mark>
     </dt>
     <dd>
-      <a href="{{ appenv.application.host }}" target="_blank" class="type_link">Node.js app</a> running on IBM Bluemix.
+      This is a <a href="{{ appenv.application.host }}" target="_blank" class="type_link">Node.js app</a> running on IBM Bluemix. <a href="https://nodejs.org/en/" class="type_link" target="_blank">Node.js</a> code is JavaScript running on the server side. Node.js has a rich collection of add-on libraries that can be baked into your applications using the <a href="https://npmjs.org/" class="type_link">npm</a> package manager. This application uses the <a href="http://expressjs.com/" class="type_link" target="_blank">Express</a> web framework, the <a href="https://www.npmjs.com/package/couchimport" class="type_link" target="_blank" class="type_link">couchimport</a> CSV library and the <a href="https://www.npmjs.com/package/cloudant" class="type_link" target="_blank">Cloudant Node.js library</a>, amongst others, to power this web app.
     </dd>
     <dt>
       <mark class="type_mark">Data</mark>
     </dt>
     <dd>
-      <a href="{{ appenv.storage.url }}" target="_blank" class="type_link">IBM Cloudant</a>, running on IBM Bluemix. (If you don't know your Cloudant password, <a href="{{ appenv.application.host }}" target="_blank" class="type_link">access Cloudant through the app</a> on Bluemix instead.)
+      The Simple Search Service converts structured CSV/TSV data files into <a href="https://en.wikipedia.org/wiki/JSON" class="type_link" target="_blank">JSON</a> before storing it in <a href="{{ appenv.storage.url }}" target="_blank" class="type_link">IBM Cloudant</a>, running on IBM Bluemix. (If you don't know your Cloudant password, <a href="{{ appenv.application.host }}" target="_blank" class="type_link">access Cloudant through the app</a> on Bluemix instead.). <a href="https://docs.cloudant.com/search.html" class="type_link" target="_blank">Cloudant Search</a>, built using <a href="https://lucene.apache.org/core/" class="type_link" target="_blank">Apache Lucene</a>, indexes the data and provides a query language that allows free-text and fielded searches to be performed to provide paginated, faceted search results.
     </dd>
     <dt>
-      <mark class="type_mark">Cache (optional)</mark>
+      <mark class="type_mark">Cache</mark>
     </dt>
     <dd>
-      IBM Compose Redis.
+      By default, searches are cached using an in-memory store within the app. By attaching a <a href="https://www.compose.io/redis/" class="type_link" target="_blank">Redis by Compose</a> database to Simple Search Service, search data is cached in Redis instead. This allows cache data to be shared between multiple Simple Search Service instances, such as deployments made using the <a href="http://www.ibm.com/developerworks/cloud/library/cl-autoscale-app/" class="type_link" target="_blank">Bluemix auto-scaling service</a>. 
     </dd>
     <dt>
       <mark class="type_mark">Code</mark>
     </dt>
     <dd>
-      <a href="https://github.com/ibm-cds-labs/simple-search-service/" target="_blank" class="type_link">View the app on Github</a>. Of particular note, check out the <a href="https://www.npmjs.com/package/csv-parse" target="_blank" class="type_link">csv-parse</a> and <a href="https://www.npmjs.com/package/couchimport" target="_blank" class="type_link">couchimport</a> npm modules.
+      Simple Search Service is an open-source project published under the Apache-2.0 license. This means that it is free for you to use, copy or modify in any way. Feel free to download the <a href="https://github.com/ibm-cds-labs/simple-search-service/" target="_blank" class="type_link">code on Github</a> and alter it to suit your own purposes before deploying it from your local own machine using the <a href="https://console.ng.bluemix.net/docs/starters/upload_app.html" class="type_link" target="_blank">cf push</a> command. Contributions to this project are welcome: either raise an <a href="https://github.com/ibm-cds-labs/simple-search-service/issues" class="type_link" target="_blank">Issue on Github</a> or if you fix or improve something, <a href="https://github.com/ibm-cds-labs/simple-search-service#fork-destination-box" class="type_link" target="_blank">Fork the code</a>, alter it and send us a pull request. 
+    </dd>
+    <dt>
+      <mark class="type_mark">CORS</mark>
+    </dt>
+    <dd>
+      <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS" class="type_link" target="_blank">CORS</a> stands for <i>Cross Origin Resource Sharing</i>. It describes the process of a web application making a request for data after the page has load (sometimes known as AJAX or XHR requests) from another domain name. If my web page (<a href="http://www.glynnbird.com/" class="type_link" target="_blank">www.glynnbird.com</a>) wanted to fetch JSON data from another domain (e.g. <a href="https://sss-got.mybluemix.net/search?q=jon+snow" class="type_link" target="_blank">sss-got.mybluemix.net/search?q=jon+snow</a>) then browser rules would prevent this because the two domain names differ: this is a <i>Cross-origin</i> request. Fortunately, the Simple Search Service circumvents these restrictions by sending special HTTP headers with each API response to tell the browser that CORS requests are allowed. This makes it very simple for applications on any domain to use the Simple Search Service as a service for client-side API requests.
+    </dd>
+    <dt>
+      <mark class="type_mark">Compression</mark>
+    </dt>
+    <dd>
+      By compressing or "zipping up" the search results within the Simple Search Service before sending the data to the browser, we can make savings on the volume of data being transferred between server and client. The smaller the amount of data being transferred, the faster the service - especially in cirumstances where bandwidth is low, such as mobile applications. For instance, <a href="https://sss-got.mybluemix.net/search?q=Lannister&limit=100" class="type_link" target="_blank">this request</a> takes 39k to transfer uncompressed but less than 7k compressed - nearly a 6x saving. Compression is achieved using the <a href="https://www.npmjs.com/package/compression" class="type_link" target="_blank">Compression Express module</a>.
     </dd>
   </dl>
 
