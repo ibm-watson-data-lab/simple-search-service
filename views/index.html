@@ -33,13 +33,13 @@
             <a ng-class="{'current': !selectedView || selectedView === 'about'}" class="tree-nav_link" href="#/about">Simple Search Service</a>
             <ul class="tree-nav">
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'get', 'disabled': currentStatus == 'imported'}"  class="tree-nav_link" href="#/get">Get data</a>
+                <a ng-class="{'current': selectedView === 'get', 'done': currentStatus == 'imported'}"  class="tree-nav_link" href="#/get">Get data</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'upload', 'disabled': currentStatus == 'imported'}" class="tree-nav_link" href="#/upload">Upload data</a>
+                <a ng-class="{'current': selectedView === 'upload', 'done': currentStatus == 'imported'}" class="tree-nav_link" href="#/upload">Upload data</a>
               </li>
               <li class="tree-nav_item">
-                <a ng-class="{'current': selectedView === 'import', 'disabled': !currentStatus || currentStatus == 'new' || currentStatus == 'imported'}" class="tree-nav_link" href="#/import">Create Index</a>
+                <a ng-class="{'current': selectedView === 'import', 'disabled': !currentStatus || currentStatus == 'new', 'done': currentStatus == 'imported'}" class="tree-nav_link" href="#/import">Create Index</a>
               </li>
               <li class="tree-nav_item">
                 <a ng-class="{'current': selectedView === 'search', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/search">Search</a>
