@@ -1,7 +1,13 @@
 
+.tree-nav_link.done {
+    opacity: .5;
+}
 .tree-nav_link.disabled {
     text-decoration: line-through;
     cursor: pointer;
+}
+.tree-nav_link.done:after {
+    content: '\00a0 \2713';
 }
 .tree-nav .tree-nav hr {
     border-top: 1px solid #ccc;
@@ -12,16 +18,16 @@
     display: none;
 }
 .no_underline {
-	text-decoration: none;
+    text-decoration: none;
 }
 #searchTipsLink {
-	margin-left: 30px;
+    margin-left: 30px;
 }
 #searchcontrol .input_search {
-	width: 75rem;
+    width: 75rem;
 }
 #searchcontrol .search_button {
-	height: 2rem;
+    height: 2rem;
 }
 .form_addon-group {
     /* display: inline-flex; */
@@ -41,7 +47,7 @@
 }
 
 .tag-list_tag span {
-	font-weight:normal;
+    font-weight:normal;
 }
 .tag-list_tag.active span {
     font-weight:700;
