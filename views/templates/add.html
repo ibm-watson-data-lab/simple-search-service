@@ -1,8 +1,10 @@
 <section class="layout_section theme_light">
   <div>
-    <input type="text" data-simple-search="http://localhost:6001"
+    <input type="text"
           data-search-list=".resultsListWrapper"
-          data-search-facets="#facetsWrapper">
+          data-search-facets="#facetsWrapper"
+          value="*:*"
+    />
   </div>
 
   <div>
@@ -10,3 +12,7 @@
     <div class="resultsListWrapper"></div>
   </div>
 </section>
+<script src="/js/simplesearch.js"></script>
+<script type="text/javascript">
+  var s = new SimpleSearch();
+</script>
