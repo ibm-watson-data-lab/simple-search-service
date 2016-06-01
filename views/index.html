@@ -15,6 +15,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="/js/jquery.form.js"></script>
   <script src="/js/seams.js"></script>
+  <script src="/js/simplesearch.js"></script>
 </head>
 <body ng-app="seamsApp" class="capped-layout">
 <!-- start header -->
@@ -46,6 +47,9 @@
               </li>
               <li class="tree-nav_item">
                 <a ng-class="{'current': selectedView === 'api', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/api">Content API</a>
+              </li>
+              <li class="tree-nav_item">
+                <a ng-class="{'current': selectedView === 'add', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/add">Add to your app</a>
               </li>
 
               <hr />
