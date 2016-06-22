@@ -42,10 +42,10 @@ The fastest way to deploy this application to Bluemix is to click the **Deploy t
 
 Clone this repository then run `npm install` to add the Node.js libraries required to run the app.
 
-Then create an environment variable that mimics Cloud Foundry e.g.
+Then create an environment variable that store your Cloudant URL:
 
 ```sh
-export VCAP_SERVICES='{"cloudantNoSQLDB":[{"name":"simple-search-service-cloudant-service","label":"cloudantNoSQLDB","plan":"Shared","credentials":{"username":"USERNAME","password":"PASSWORD","host":"HOSTNAME","port":443,"url":"https://USERNAME:PASSWORD@HOSTNAME"}}]}'
+export SSS_URL='https://USERNAME:PASSWORD@HOSTNAME'
 ```
 
 replacing the `USERNAME`, `PASSWORD` and `HOSTNAME` placeholders for your own Cloudant account's details.
