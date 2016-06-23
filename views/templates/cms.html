@@ -1,0 +1,59 @@
+<section class="layout_section theme_light">
+  <h1 class="type_heading"><mark class="type_mark">CMS</mark></h1>
+  <p>Manage your data on a row-by-row basis.</p>
+</section>
+
+<section class="layout_section theme_dark">
+
+  <div ng-show="!currentStatus || currentStatus != 'imported'">
+    <p class="type_copy">
+      No data indexed.
+    </p>
+    <button type="button" class="button_primary" ng-click="goToNextPage('upload')">Back</button>
+  </div>
+
+  <div ng-show="currentStatus && currentStatus == 'imported'">
+
+  	<form ng-submit="search()">
+      <div class="form_field" id="searchcontrol">
+        
+        <div class="form_addon-group">
+          <!-- <span class="form_text-addon">https://.../search?q=</span> -->
+          <input type="text" class="input_text" id="q" placeholder="" name="searchterm" ng-model="querystring" ng-change="$root.searchdirty = querystring !== '*:*'">
+          <span class="input_text-clear" ng-click="$root.searchdirty = false;clearSearch();" ng-show="$root.searchdirty">&times;</span>
+          <button type="submit" class="button_primary search_button" ng-click="search()"> Search </button>
+        </div>
+          
+      </div>
+    </form>
+
+    <div class="grid_column eight">
+
+      <h3 class="type_subhead">Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : searchDocs.data.total_rows}}</small></h4>
+
+      <div class="table_basic-container">
+        <table class="table_basic">
+          <thead>
+            <th ng-repeat="docfield in searchDocs.fields">{{docfield.name}}</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in searchDocs.data.rows">
+              <td ng-repeat="docfield in searchDocs.fields">
+                <ul ng-if="isArray(row[docfield.name])">
+                  <li ng-repeat="field in row[docfield.name]">
+                    {{field == "null" ? '' : field | ellipsize:20}}
+                  </li>
+                </ul>
+                <span ng-if="!isArray(row[docfield.name])">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

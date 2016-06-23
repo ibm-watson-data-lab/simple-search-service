@@ -72,6 +72,19 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 					$scope.$root.search();
 				}
 				break;
+			case 'cms':
+				if (!$scope.$root.dbschema) {
+					$scope.$root.getCurrentSchema(function(err, data) {
+						if (err) {
+						    $scope.$root.dbschema = { fields: [] };
+						}
+						$scope.$root.search();
+					});
+				}
+				else {
+					$scope.$root.search();
+				}
+				break;
 			default:
 				break;
 		}
@@ -94,18 +107,25 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	    $scope.$root.search = function() {
 	    	var q = $('#q').val();
+	    	var bookmark = $('#bookmark').val();
+	    	
 	    	if (!q || q.length == 0) {
 	    		$('#q').val("*:*");
 	    		$('#q').val("*:*");
 	    		q = "*:*";
 	    	}
-			$scope.$root.performSearch({
-				q: q
-			}, function(err, response) {
-				$scope.$root.searchDocs = response;
-			});
 
-			return false;
+	    	var searchOpts = {
+	    		q: q
+	    	}
+
+	    	console.log("BM", $scope.$root.bookmark)
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					$scope.$root.searchDocs = response;
+				});
+
+				return false;
 	    }
 
 	    $scope.$root.showDeleteDialog = function() {
@@ -567,6 +587,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				      }
 			      }
 
+			      $scope.$root.bookmark = results.data.bookmark
 			      $scope.$root.searching = false;
 			      callback(null, results);
 			  })
