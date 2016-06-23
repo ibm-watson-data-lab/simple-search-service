@@ -107,7 +107,6 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	    $scope.$root.search = function() {
 	    	var q = $('#q').val();
-	    	var bookmark = $('#bookmark').val();
 	    	
 	    	if (!q || q.length == 0) {
 	    		$('#q').val("*:*");
@@ -118,8 +117,6 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    	var searchOpts = {
 	    		q: q
 	    	}
-
-	    	console.log("BM", $scope.$root.bookmark)
 
 				$scope.$root.performSearch(searchOpts, function(err, response) {
 					$scope.$root.searchDocs = response;
@@ -617,11 +614,39 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
       });
 	  };
 
-	    $scope.$root.getSettings();
+	  $scope.$root.deleteDoc = function(callback) {
+	  	
+	  	// get this row
+	  	var row = this.row;
+	  	var id = row._id;
+
+	  	// verify we want to delete it
+	  	if (confirm("Are you sure you want to delete this row?")) {
+				
+				var restapi = '/row/'+id
+				
+				$http.delete(restapi)
+				  .success(function(data) {
+
+				  	// remove this row from the collection
+				  	var rows = $scope.$root.searchDocs.data.rows;
+				  	$scope.$root.searchDocs.data.rows = rows.filter(function(x) {
+				  		return !(x._id === id)
+				  	})
+
+				  })
+				  .error( function(data, status, headers, config) {
+				    console.log("Error performing search:", data, status);
+				  });
+	  	}
+
+	  }
+
+	  $scope.$root.getSettings();
 
 		$scope.$root.getPreview(function(data) {
-	    	$scope.$root.$apply();
-	    });
+    	$scope.$root.$apply();
+    });
 
 		$scope.isArray = angular.isArray;
 

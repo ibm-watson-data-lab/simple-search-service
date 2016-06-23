@@ -21,7 +21,7 @@
           <!-- <span class="form_text-addon">https://.../search?q=</span> -->
           <input type="text" class="input_text" id="q" placeholder="" name="searchterm" ng-model="querystring" ng-change="$root.searchdirty = querystring !== '*:*'">
           <span class="input_text-clear" ng-click="$root.searchdirty = false;clearSearch();" ng-show="$root.searchdirty">&times;</span>
-          <button type="submit" class="button_primary search_button" ng-click="search()"> Search </button>
+          <button type="submit" class="button_primary search_button"> Search </button>
         </div>
           
       </div>
@@ -34,10 +34,15 @@
       <div class="table_basic-container">
         <table class="table_basic">
           <thead>
+          	<th>Actions</th>
             <th ng-repeat="docfield in searchDocs.fields">{{docfield.name}}</th>
           </thead>
           <tbody>
             <tr ng-repeat="row in searchDocs.data.rows">
+            	<td>
+            		<a href='#'>Edit</a><br />
+            		<button ng-click='deleteDoc()'>Delete</button>
+            	</td>
               <td ng-repeat="docfield in searchDocs.fields">
                 <ul ng-if="isArray(row[docfield.name])">
                   <li ng-repeat="field in row[docfield.name]">

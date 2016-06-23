@@ -153,6 +153,17 @@ app.post('/settings', isloggedin(), bodyParser, function(req, res) {
 	});
 });
 
+// delete API
+app.delete('/row/:id', isloggedin(), bodyParser, function(req, res) {
+
+  db.deleteRow(req.params.id, function(err, data) {
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+    res.send(data);
+  });
+});
+
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, appEnv.bind, function() {
