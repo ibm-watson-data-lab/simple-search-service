@@ -153,7 +153,18 @@ app.post('/settings', isloggedin(), bodyParser, function(req, res) {
 	});
 });
 
-// delete API
+// get row API
+app.get('/row/:id', isloggedin(), bodyParser, function(req, res) {
+
+  db.getRow(req.params.id, function(err, data) {
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+    res.send(data);
+  });
+});
+
+// delete row API
 app.delete('/row/:id', isloggedin(), bodyParser, function(req, res) {
 
   db.deleteRow(req.params.id, function(err, data) {
@@ -162,6 +173,34 @@ app.delete('/row/:id', isloggedin(), bodyParser, function(req, res) {
     }
     res.send(data);
   });
+});
+
+// edit row API
+app.put('/row/:id', isloggedin(), bodyParser, function(req, res) {
+
+  db.editRow(req.params.id, req.body, function(err, data) {
+    
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+    res.send(data);
+
+  });
+
+});
+
+// add row API
+app.post('/row', isloggedin(), bodyParser, function(req, res) {
+
+  db.addRow(req.body, function(err, data) {
+
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+    res.send(data);
+
+  });
+
 });
 
 

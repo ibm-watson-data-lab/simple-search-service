@@ -1,0 +1,77 @@
+<section class="layout_section theme_light">
+  <h1 class="type_heading"><mark class="type_mark">Edit Document</mark></h1>
+  <p>Edit this document</p>
+</section>
+
+<section class="layout_section theme_dark">
+
+  <div ng-show="!currentStatus || currentStatus != 'imported'">
+    <p class="type_copy">
+      No data indexed.
+    </p>
+    <button type="button" class="button_primary" ng-click="goToNextPage('upload')">Back</button>
+  </div>
+
+  <div ng-show="currentStatus && currentStatus == 'imported'">
+    <div class="table_container">
+      <form ng-submit="edit()" id="edit">
+        <table class="table_basic">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="field in dbschema.fields">
+              <td>{{field.name}}</td>
+              <td ng-if="field.type == 'string'">
+                <input type="text" name="{{field.name}}" class="input_text" value="{{row[field.name]}}">
+              </td>
+              <td ng-if="field.type == 'number'">
+                <input type="number" name="{{field.name}}" class="input_text" value="{{row[field.name]}}">
+              </td>
+              <td ng-if="field.type == 'boolean'">
+                
+                <select name="{{field.name}}" class="input_select" ng-if="row[field.name] == true">
+                  <option value="true" selected>True</option>
+                  <option value="false">False</option>
+                </select>
+
+                <select name="{{field.name}}" class="input_select" ng-if="row[field.name] == false">
+                  <option value="true">True</option>
+                  <option value="false" selected>False</option>
+                </select>
+
+              </td>
+              <td ng-if="field.type == 'arrayofstrings'">
+                <input type="text" data-tags="true" name="{{field.name}}" id="{{field.name}}" class="input_text" value="{{row[field.name].join(',')}}">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <script>
+          $(document).ready(function() {
+            setTimeout(function() {
+              $('input[data-tags="true"]').tagsInput({
+                defaultText: ""
+              });
+            }, 500)
+          });
+        </script>
+        <input type="hidden" id="_id" name="_id" value="{{row._id}}">
+        <button type="submit" class="button_primary search_button mt5"> Save </button>
+      </form>
+
+      <div id="editDataSuccess" role="dialog" ng-if="editRowSuccess">
+        <p class="type_copy">This document has been successfully updated</p>
+        <a class="button_primary" href="#/cms">CMS</a>
+      </div>
+
+      <div id="editDataSuccess" role="dialog" ng-if="editRowFail">
+        <p class="type_copy">This document failed to update successfully</p>
+      </div>
+    </div>
+  </div>
+
+</section>

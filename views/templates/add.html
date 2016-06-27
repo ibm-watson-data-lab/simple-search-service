@@ -1,0 +1,70 @@
+<section class="layout_section theme_light">
+  <h1 class="type_heading"><mark class="type_mark">Add Document</mark></h1>
+  <p>Add a new document</p>
+</section>
+
+<section class="layout_section theme_dark">
+
+  <div ng-show="!currentStatus || currentStatus != 'imported'">
+    <p class="type_copy">
+      No data indexed.
+    </p>
+    <button type="button" class="button_primary" ng-click="goToNextPage('upload')">Back</button>
+  </div>
+
+  <div ng-show="currentStatus && currentStatus == 'imported'">
+    <div class="table_container">
+      <form ng-submit="add()" id="add">
+        <table class="table_basic">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="field in dbschema.fields">
+              <td>{{field.name}}</td>
+              <td ng-if="field.type == 'string'">
+                <input type="text" name="{{field.name}}" class="input_text" value="">
+              </td>
+              <td ng-if="field.type == 'number'">
+                <input type="number" name="{{field.name}}" class="input_text" value="">
+              </td>
+              <td ng-if="field.type == 'boolean'">
+                <select name="{{field.name}}" class="input_select">
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
+              </td>
+              <td ng-if="field.type == 'arrayofstrings'">
+                <input type="text" data-tags="true" name="{{field.name}}" id="{{field.name}}" class="input_text" value="">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <script>
+          $(document).ready(function() {
+            setTimeout(function() {
+              $('input[data-tags="true"]').tagsInput({
+                defaultText: ""
+              });
+            }, 500)
+          });
+        </script>
+        
+        <button type="submit" class="button_primary search_button mt5"> Save </button>
+      </form>
+
+      <div id="editDataSuccess" role="dialog" ng-if="addRowSuccess">
+        <p class="type_copy">This document has been added successfully</p>
+        <a class="button_primary" href="#/cms">CMS</a>
+      </div>
+
+      <div id="editDataSuccess" role="dialog" ng-if="addRowFail">
+        <p class="type_copy">This document failed to add successfully</p>
+      </div>
+    </div>
+  </div>
+
+</section>

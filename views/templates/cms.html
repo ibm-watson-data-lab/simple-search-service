@@ -14,13 +14,14 @@
 
   <div ng-show="currentStatus && currentStatus == 'imported'">
 
-  	<form ng-submit="search()">
+  	<form ng-submit="search(false)">
       <div class="form_field" id="searchcontrol">
         
         <div class="form_addon-group">
           <!-- <span class="form_text-addon">https://.../search?q=</span> -->
           <input type="text" class="input_text" id="q" placeholder="" name="searchterm" ng-model="querystring" ng-change="$root.searchdirty = querystring !== '*:*'">
           <span class="input_text-clear" ng-click="$root.searchdirty = false;clearSearch();" ng-show="$root.searchdirty">&times;</span>
+          <input type="hidden" id="bookmark" name="bookmark" ng-model="bookmark" value='{{searchDocs.data.bookmark}}'>
           <button type="submit" class="button_primary search_button"> Search </button>
         </div>
           
@@ -31,7 +32,10 @@
 
       <h3 class="type_subhead">Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : searchDocs.data.total_rows}}</small></h4>
 
+      <a class="button_primary mb5" href="#/add">Add new row</a>
+
       <div class="table_basic-container">
+
         <table class="table_basic">
           <thead>
           	<th>Actions</th>
@@ -40,8 +44,8 @@
           <tbody>
             <tr ng-repeat="row in searchDocs.data.rows">
             	<td>
-            		<a href='#'>Edit</a><br />
-            		<button ng-click='deleteDoc()'>Delete</button>
+            		<a class="button_primary button_small mb5" href="#/edit/{{row._id}}">Edit</a><br />
+            		<button class="button_primary button_small" ng-click='deleteDoc()'>Delete</button>
             	</td>
               <td ng-repeat="docfield in searchDocs.fields">
                 <ul ng-if="isArray(row[docfield.name])">
@@ -54,6 +58,9 @@
             </tr>
           </tbody>
         </table>
+
+        <br />
+        <button type="submit" class="button_primary search_button" ng-click='moreResults()' id="more-results"> More Results... </button>
         
       </div>
 

@@ -142,6 +142,11 @@ hr {
 
 }
 
+.button_small {
+	height: 1.5rem;
+	padding: 0 0.5em;
+}
+
 /*Dark Themes*/
 
 .theme_dark,
@@ -1398,4 +1403,13 @@ input::-webkit-inner-spin-button {
 	    -ms-flex: 1 1 calc(100% / 8 * 7 - 2em);
 	        flex: 1 1 calc(100% / 8 * 7 - 2em);
 	max-width: calc(100% / 8 * 7 - 2em);
+}
+
+/*** positional helper classes ***/
+.mt5 {
+	margin-top: 5px;
+}
+
+.mb5 {
+	margin-bottom: 5px;
 }
