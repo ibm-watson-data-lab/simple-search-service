@@ -38,6 +38,13 @@ It is possible to alter the amount of results returned using the `limit` paramet
 GET /search?q=black&bookmark=<...>&limit=10
 ```
 
+It is possible to alter whether or not to use the cache via the `cache` parameter (defaults to true).
+
+```bash
+# Return the next set of docs where 'black' is mentioned, don't use the cache
+GET /search?q=black&bookmark=<...>&cache=false
+```
+
 ### Example Response
 
 All searches will respond in the same way.
