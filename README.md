@@ -12,13 +12,15 @@ The application uses these Bluemix services:
 * a Cloudant database
 * a Redis in-memory database from Compose.io (Optional)
 
-Once the data is uploaded, a CORS-enabled, cached API endpoint is available at `<your domain name>/search`. The endpoint takes advantage of Cloudant's built-in integration for Lucene full-text indexing. Here's what you get:
+Once the data is uploaded, you can use the UI to browse and manage your data via the integrated CMS. Additionally, a CORS-enabled, cached API endpoint is available at `<your domain name>/search`. The endpoint takes advantage of Cloudant's built-in integration for Lucene full-text indexing. Here's what you get:
 
 * fielded search - `?q=colour:black+AND+brand:fender`
 * free-text search - `?q=black+fender+strat`
 * pagination - `?q=black+fender+strat&bookmark=<xxx>`
 * faceting
 * caching of popular searches
+
+You can use this along with the rest of the API to integrate the Simple Search Service into your apps. For a full API reference, [click here](API+Reference.md).
 
 While this app is a demo to showcase how easily you can build an app on Bluemix using Node.js and Cloudant, it also provides a mature search API that scales with the addition of multiple Simple Search Service nodes and a centralized cache using Redis by Compose.io. In fact, a similar architecture powers the search experience in the Bluemix services catalog.
 

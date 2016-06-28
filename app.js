@@ -154,7 +154,7 @@ app.post('/settings', isloggedin(), bodyParser, function(req, res) {
 });
 
 // get row API
-app.get('/row/:id', isloggedin(), bodyParser, function(req, res) {
+app.get('/row/:id', cors(), isloggedin(), bodyParser, function(req, res) {
 
   db.getRow(req.params.id, function(err, data) {
     if (err) {
@@ -165,7 +165,7 @@ app.get('/row/:id', isloggedin(), bodyParser, function(req, res) {
 });
 
 // delete row API
-app.delete('/row/:id', isloggedin(), bodyParser, function(req, res) {
+app.delete('/row/:id', cors(), isloggedin(), bodyParser, function(req, res) {
 
   db.deleteRow(req.params.id, function(err, data) {
     if (err) {
@@ -176,7 +176,7 @@ app.delete('/row/:id', isloggedin(), bodyParser, function(req, res) {
 });
 
 // edit row API
-app.put('/row/:id', isloggedin(), bodyParser, function(req, res) {
+app.put('/row/:id', cors(), isloggedin(), bodyParser, function(req, res) {
 
   db.editRow(req.params.id, req.body, function(err, data) {
     
@@ -190,7 +190,7 @@ app.put('/row/:id', isloggedin(), bodyParser, function(req, res) {
 });
 
 // add row API
-app.post('/row', isloggedin(), bodyParser, function(req, res) {
+app.post('/row', cors(), isloggedin(), bodyParser, function(req, res) {
 
   db.addRow(req.body, function(err, data) {
 
