@@ -5,8 +5,6 @@ The Simple Search Service has an API that allows you to manage your data outside
 
 Search is provided by the `GET /search` endpoint.
 
-* pagination - `?q=black+fender+strat&bookmark=<xxx>`
-
 ### Fielded Search
 Search on any of the indexed fields in your dataset using fielded search.
 
@@ -44,7 +42,7 @@ GET /search?q=black&bookmark=<...>&limit=10
 
 All searches will respond in the same way.
 
-```json
+```
 {
   "total_rows": 19, // The total number of rows in the dataset
   "bookmark": "g1AAAA...JjFkA0kLVvg", // bookmark, for pagination
@@ -93,7 +91,7 @@ This will return the JSON representation of this specific row.
 
 New data can be added a row at a time using the `POST /row` endpoint.
 
-Call this endpoint passing in key/value pairs that match the fields in the existing data. There are _NO_ required fields, and all field types will be enforced. The request will fail if any fields are passed in that do not already exist in the dataset.
+Call this endpoint passing in key/value pairs that match the fields in the existing data. There are __NO__ required fields, and all field types will be enforced. The request will fail if any fields are passed in that do not already exist in the dataset.
 
 ```bash
 POST /row -d'field_1=value_1&field_n=value_n'
@@ -115,7 +113,7 @@ Exiting data can be updated using the `PUT /row/:id` endpoint.
 
 Call this endpoint passing in key/value pairs that match the fields in the existing data - you must also include the `_id` parameter in the key/value pairs. There are _NO_ required fields, and all field types will be enforced. The request will fail if any fields are passed in that do not already exist in the dataset.
 
-> *Note:* Any fields which are not provided at the time of an update will be removed. Even if a value is not changing, it must always be provided.
+> *Note:* Any fields which are not provided at the time of an update will be removed. Even if a field is not changing, it must always be provided to preserve its value.
 
 The response is similar to that of adding a row, although note that the revision number of the document has increased.
 
