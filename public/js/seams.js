@@ -212,6 +212,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    $scope.$root.importClicked = function() {
 	      console.log("IMPORT");
 	      $('#importbutton').attr('disabled',true);
+	      $('#backbutton').attr('disabled',true);
 	      $('.import-spinner').css('display','inline-block');
 	      var fields = [ ];
 	      for(var i in $scope.$root.currentUpload.fields) {
