@@ -78,14 +78,14 @@ or set a custom environment variable in Bluemix.
 
 When lockdown mode is detected, all web requests will be get a `403` response except the `/search` endpoint which will continue to work. This prevents your data being modified until lockdown mode is switched off again, by removing the environment variable.
 
-# API Reference
+## API Reference
 The Simple Search Service has an API that allows you to manage your data outside of the provided UI. Use this to integrate the SImple Search Service with your applications.
 
-## Search
+### Search
 
 Search is provided by the `GET /search` endpoint.
 
-### Fielded Search
+#### Fielded Search
 Search on any of the indexed fields in your dataset using fielded search.
 
 ```bash
@@ -95,7 +95,7 @@ GET /search?q=colour:black
 
 Fielded search uses [Cloudant Search](https://cloudant.com/for-developers/search/).
 
-### Free-text Search
+#### Free-text Search
 Search across all fields in your dataset using free-text search.
 
 ```bash
@@ -103,7 +103,7 @@ Search across all fields in your dataset using free-text search.
 GET /search?q=black
 ```
 
-### Pagination
+#### Pagination
 Get the next page of results using the `bookmark` parameter. This is provided in all results from the `/search` endpoint (see example responses below). Pass this in to the next search (with the same query parameters) to return the next set of results.
 
 ```bash
@@ -125,7 +125,7 @@ It is possible to alter whether or not to use the cache via the `cache` paramete
 GET /search?q=black&bookmark=<...>&cache=false
 ```
 
-### Example Response
+#### Example Response
 
 All searches will respond in the same way.
 
@@ -164,7 +164,7 @@ All searches will respond in the same way.
 }
 ```
 
-## Get a specific row
+### Get a specific row
 
 A specific row can be returned using it's unique ID, found in the `_id` field of each row. This is done by using the `GET /row/:id` endpoint.
 
@@ -174,7 +174,7 @@ GET /row/44d2a49201625252a51d252824932580
 
 This will return the JSON representation of this specific row.
 
-## Add a new row
+### Add a new row
 
 New data can be added a row at a time using the `POST /row` endpoint.
 
@@ -194,7 +194,7 @@ The `_id` of the new row will be auto generated and returned in the `id` field o
 }
 ```
 
-## Update an existing row
+### Update an existing row
 
 Exiting data can be updated using the `PUT /row/:id` endpoint.
 
@@ -212,7 +212,7 @@ The response is similar to that of adding a row, although note that the revision
 }
 ```
 
-## Deleting a row
+### Deleting a row
 
 A specific row can be deleting using it's unique ID, found in the `_id` field of each row. This is done by using the `DELETE /row/:id` endpoint.
 
@@ -230,7 +230,7 @@ The response is similar to that of editing a row, although again note that the r
 }
 ```
 
-### Privacy Notice
+## Privacy Notice
 
 The Simple Search Service web application includes code to track deployments to Bluemix and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/IBM-Bluemix/cf-deployment-tracker-service) service on each deployment:
 
@@ -245,7 +245,7 @@ This data is collected from the `VCAP_APPLICATION` environment variable in IBM B
 
 For manual deploys, deployment tracking can be disabled by removing `require("cf-deployment-tracker-client").track();` from the end of the `app.js` main server file.
 
-#### License 
+### License 
 
 Copyright 2016 IBM Cloud Data Services
 
