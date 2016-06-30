@@ -5,7 +5,7 @@
 
 <section class="layout_section theme_dark">
 
-  <div ng-show="!currentStatus || currentStatus == 'new' || reUpload">
+  <div ng-show="!currentStatus || currentStatus == 'new' || $root.reUpload">
     <!--
     <form id="uploadform" action="/upload" method="post" enctype="multipart/form-data">
       <fieldset class="form_field">
@@ -55,14 +55,11 @@
   </div>
 
   <div ng-show="currentStatus == 'uploaded'" class="alert alert-success">
-    <p class="type_copy">Your{{ reUpload ? ' previous ' : ' ' }}data was uploaded successfully.</p>
+    <p class="type_copy">Your{{ $root.reUpload ? ' previous ' : ' ' }}data was uploaded successfully.</p>
   </div>
 
   <div class="button_group" ng-show="currentStatus && currentStatus != 'new'">
     <button type="button" class="button_primary" ng-click="goToNextPage('import')"> Continue </button>
-    <button ng-show="currentStatus == 'uploaded' && !reUpload" class="button_secondary"
-      type="button" ng-click="reUpload = true;">
-      Re-upload </button>
   </div>
 
 </section>
