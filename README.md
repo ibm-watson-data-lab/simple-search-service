@@ -44,13 +44,18 @@ The fastest way to deploy this application to Bluemix is to click the **Deploy t
 
 Clone this repository then run `npm install` to add the Node.js libraries required to run the app.
 
-Then create an environment variable that mimics Cloud Foundry e.g.
+Then create some environment variables that contain your Cloudant URL, and optionally, your Redis details:
 
 ```sh
-export VCAP_SERVICES='{"cloudantNoSQLDB":[{"name":"simple-search-service-cloudant-service","label":"cloudantNoSQLDB","plan":"Shared","credentials":{"username":"USERNAME","password":"PASSWORD","host":"HOSTNAME","port":443,"url":"https://USERNAME:PASSWORD@HOSTNAME"}}]}'
+# Cloudant URL
+export SSS_CLOUDANT_URL='https://<USERNAME>:<PASSWORD>@<HOSTNAME>'
+
+# Redis Host and password
+export SSS_REDIS_HOST='127.0.0.1:6379'
+export SSS_REDIS_PASSWORD='redispassword'
 ```
 
-replacing the `USERNAME`, `PASSWORD` and `HOSTNAME` placeholders for your own Cloudant account's details.
+replacing the `USERNAME`, `PASSWORD` and `HOSTNAME` placeholders for your own Cloudant account's details. If your Redis server does not require a password, do not set the `SSS_REDIS_PASSWORD` environment variable.
 
 Then run:
 
