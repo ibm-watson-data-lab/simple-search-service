@@ -65,7 +65,7 @@ node app.js
 
 ## Lockdown mode
 
-If you have uploaded your content into the Simple Search Service but now want only the `/search` endpoint to continue working, then you can enable "Lockdown mode".
+If you have uploaded your content into the Simple Search Service but now want only the `/search` endpoint to be available publicly, you can enable "Lockdown mode".
 
 Simply set an environment variable called `LOCKDOWN` to `true` before running the Simple Search Service:
 
@@ -76,7 +76,18 @@ node app.js
 
 or set a custom environment variable in Bluemix.
 
-When lockdown mode is detected, all web requests will be get a `403` response except the `/search` endpoint which will continue to work. This prevents your data being modified until lockdown mode is switched off again, by removing the environment variable.
+When lockdown mode is detected, all web requests will be get a `401 Unauthorised` response, except for the `/search` endpoint which will continue to work. This prevents your data being modified until lockdown mode is switched off again, by removing the environment variable.
+
+If you wish to get access to the Simple Search Service whilst in lockdown mode, you can enable basic HTTP authentication by setting two more environment variables:
+
+* SSS_LOCKDOWN_USERNAME
+* SSS_LOCKDOWN_PASSWORD
+
+When these are set, you are able to bypass lockdown mode by providing a matching username and password. If you access the UI, your browser will prompt you for these details. If you want to access the API you can provide the username and password as part of your request:
+
+```sh
+curl -X GET 'http://<yourdomain>/row/4dac2df712704b397f1b64a1c8e25033' --user <username>:<password>
+```
 
 ## API Reference
 The Simple Search Service has an API that allows you to manage your data outside of the provided UI. Use this to integrate the SImple Search Service with your applications.
