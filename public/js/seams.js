@@ -157,6 +157,47 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				return false;
 	    }
 
+	    $scope.$root.clickSearch = function(field, $event) {
+
+	    	var value = '"'+this.field+'"';
+	    	var q = field + ":" + value;
+	    	var oldQ = $('#q').val();
+
+	    	if (oldQ && oldQ !== "*:*") {
+	    		q += " AND " + oldQ;
+	    	}
+
+	    	if (!q || q.length == 0 || q == ":") {
+	    		$('#q').val("*:*");
+	    		$('#q').val("*:*");
+	    		q = "*:*";
+	    	}
+
+	    	else {
+	    		$('#q').val(q)
+	    	}
+
+	    	$scope.$root.searchdirty = true;
+
+	    	var searchOpts = {
+	    		q: q,
+	    		cache: false
+	    	}
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					$scope.$root.searchDocs = response;
+				});
+
+				return false;
+	    }
+
+	    $scope.$root.toggleDeleteConfirm = function(id) {
+
+	    	$('#confirm'+id).toggleClass('invisible');
+	    	//$('#actions'+id).toggleClass('invisible');
+
+	    }
+
 	    $scope.$root.moreResults = function() {
 	    	
 	    	var bookmark = $('#bookmark').val();
@@ -310,6 +351,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	        var obj = {}
 	        obj.name = d.attr('data-original-name');
 	        obj.type = d.val();
+	        obj.example = d.attr('data-example');
 	        obj.facet = ($('#' + d.attr('name')).is(':checked') && !$('#' + d.attr('name')).prop("disabled"));
 	        fields.push(obj);
 	      }
@@ -385,6 +427,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		   for(var i in x.fields) {
 		     html += "<tr>";
 		     var f = x.fields[i];
+		     f.example = x.data[0][f.name];
 		     html += "<td>" + f.name + "</td>\n";
 		     html += "<td>" + $scope.$root.typeWidget(f) + "</td>\n";
 		     html += "<td>" + $scope.$root.facetWidget(f) + "</td>\n";
@@ -416,7 +459,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		$scope.$root.typeWidget = function(f) {
 		  var n = f.safename;
 		  var t = f.type;
-		  var html = '<select name="' + n + '" class="input_select" onchange="datatypechange(\'' + n +'\')" data-original-name="' + f.name + '">\n';
+		  var html = '<select name="' + n + '" class="input_select" onchange="datatypechange(\'' + n +'\')" data-original-name="' + f.name + '" data-example="' + f.example + '">\n';
 		  var opts = { "string":"String", "number":"Number", "boolean":"Boolean", "arrayofstrings":"Array of Strings" };
 		  for(var i in opts) {
 		    html += '<option value="' + i + '"';
@@ -649,13 +692,15 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			      if (first) {
 				      for(var field in first) {
 					      if (field != "_id" && field != "_rev" && field != "_order") {
-					        results.fields.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string") });
+					        var ff = ( typeof data.counts[field] !== 'undefined' ? true : false )
+					        results.fields.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string"), facet: ff });
 					      }
-					  }
+					  	}
 
 				      for(var field in data.counts) {
 					      results.facets.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string") });
 				      }
+			      
 			      }
 
 			      $scope.$root.bookmark = results.data.bookmark
@@ -693,26 +738,22 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	  	// get this row
 	  	var row = this.row;
 	  	var id = row._id;
+			
+			var restapi = '/row/'+id
+			
+			$http.delete(restapi)
+			  .success(function(data) {
 
-	  	// verify we want to delete it
-	  	if (confirm("Are you sure you want to delete this row?")) {
-				
-				var restapi = '/row/'+id
-				
-				$http.delete(restapi)
-				  .success(function(data) {
+			  	// remove this row from the collection
+			  	var rows = $scope.$root.searchDocs.data.rows;
+			  	$scope.$root.searchDocs.data.rows = rows.filter(function(x) {
+			  		return !(x._id === id)
+			  	})
 
-				  	// remove this row from the collection
-				  	var rows = $scope.$root.searchDocs.data.rows;
-				  	$scope.$root.searchDocs.data.rows = rows.filter(function(x) {
-				  		return !(x._id === id)
-				  	})
-
-				  })
-				  .error( function(data, status, headers, config) {
-				    console.log("Error deleting doc:", data, status);
-				  });
-	  	}
+			  })
+			  .error( function(data, status, headers, config) {
+			    console.log("Error deleting doc:", data, status);
+			  });
 
 	  }
 

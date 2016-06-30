@@ -295,6 +295,18 @@ hr {
 	border-left: 1px solid #1d3649;
 }
 
+.theme_dark .table_basic tbody tr:nth-child(odd) a {
+	color: #5aaafa;
+	cursor: pointer;
+}
+
+.theme_dark .table_basic tbody tr:nth-child(even) a {
+	color: #5aaafa;
+	cursor: pointer;
+}
+
+
+
 /*Light Themes*/
 
 .theme_light,
@@ -1412,4 +1424,12 @@ input::-webkit-inner-spin-button {
 
 .mb5 {
 	margin-bottom: 5px;
+}
+
+.hidden, .toggle {
+	display: none;
+}
+
+.invisible {
+	visibility: hidden;
 }

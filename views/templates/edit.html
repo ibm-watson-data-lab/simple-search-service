@@ -1,6 +1,6 @@
 <section class="layout_section theme_light">
-  <h1 class="type_heading"><mark class="type_mark">Edit Document</mark></h1>
-  <p>Edit this document</p>
+  <h1 class="type_heading"><mark class="type_mark">Edit Row</mark></h1>
+  <p>Edit this row</p>
 </section>
 
 <section class="layout_section theme_dark">
@@ -26,10 +26,10 @@
             <tr ng-repeat="field in dbschema.fields">
               <td>{{field.name}}</td>
               <td ng-if="field.type == 'string'">
-                <input type="text" name="{{field.name}}" class="input_text" value="{{row[field.name]}}">
+                <input type="text" name="{{field.name}}" class="input_text" value="{{row[field.name]}}" placeholder="e.g. {{field.example}}">
               </td>
               <td ng-if="field.type == 'number'">
-                <input type="number" name="{{field.name}}" class="input_text" value="{{row[field.name]}}">
+                <input type="number" name="{{field.name}}" class="input_text" value="{{row[field.name]}}" placeholder="e.g. {{field.example}}">
               </td>
               <td ng-if="field.type == 'boolean'">
                 
@@ -45,7 +45,7 @@
 
               </td>
               <td ng-if="field.type == 'arrayofstrings'">
-                <input type="text" data-tags="true" name="{{field.name}}" id="{{field.name}}" class="input_text" value="{{row[field.name].join(',')}}">
+                <input type="text" data-tags="true" data-example="{{field.example}}" name="{{field.name}}" id="{{field.name}}" class="input_text" value="{{row[field.name].join(',')}}">
               </td>
             </tr>
           </tbody>
@@ -53,10 +53,15 @@
         <script>
           $(document).ready(function() {
             setTimeout(function() {
-              $('input[data-tags="true"]').tagsInput({
-                defaultText: ""
-              });
-            }, 500)
+
+              $('input[data-tags="true"]').each(function(key, e) {
+                var example = "e.g. " + $(e).attr("data-example");
+                $(e).tagsInput({
+                  defaultText: example
+                });
+              })
+              
+            }, 1500)
           });
         </script>
         <input type="hidden" id="_id" name="_id" value="{{row._id}}">

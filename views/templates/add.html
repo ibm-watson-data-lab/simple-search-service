@@ -1,6 +1,6 @@
 <section class="layout_section theme_light">
-  <h1 class="type_heading"><mark class="type_mark">Add Document</mark></h1>
-  <p>Add a new document</p>
+  <h1 class="type_heading"><mark class="type_mark">Add row</mark></h1>
+  <p>Add a new row</p>
 </section>
 
 <section class="layout_section theme_dark">
@@ -26,10 +26,10 @@
             <tr ng-repeat="field in dbschema.fields">
               <td>{{field.name}}</td>
               <td ng-if="field.type == 'string'">
-                <input type="text" name="{{field.name}}" class="input_text" value="">
+                <input type="text" name="{{field.name}}" class="input_text" value="" placeholder="e.g. {{field.example}}">
               </td>
               <td ng-if="field.type == 'number'">
-                <input type="number" name="{{field.name}}" class="input_text" value="">
+                <input type="number" name="{{field.name}}" class="input_text" value="" placeholder="e.g. {{field.example}}">
               </td>
               <td ng-if="field.type == 'boolean'">
                 <select name="{{field.name}}" class="input_select">
@@ -38,7 +38,7 @@
                 </select>
               </td>
               <td ng-if="field.type == 'arrayofstrings'">
-                <input type="text" data-tags="true" name="{{field.name}}" id="{{field.name}}" class="input_text" value="">
+                <input type="text" data-tags="true" data-example="{{field.example}}" name="{{field.name}}" id="{{field.name}}" class="input_text" value="">
               </td>
             </tr>
           </tbody>
@@ -46,10 +46,15 @@
         <script>
           $(document).ready(function() {
             setTimeout(function() {
-              $('input[data-tags="true"]').tagsInput({
-                defaultText: ""
-              });
-            }, 500)
+
+              $('input[data-tags="true"]').each(function(key, e) {
+                var example = "e.g. " + $(e).attr("data-example");
+                $(e).tagsInput({
+                  defaultText: example
+                });
+              })
+              
+            }, 1500)
           });
         </script>
         

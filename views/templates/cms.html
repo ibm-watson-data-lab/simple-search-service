@@ -1,5 +1,5 @@
 <section class="layout_section theme_light">
-  <h1 class="type_heading"><mark class="type_mark">CMS</mark></h1>
+  <h1 class="type_heading"><mark class="type_mark">Edit Data</mark></h1>
   <p>Manage your data on a row-by-row basis.</p>
 </section>
 
@@ -30,30 +30,49 @@
 
     <div class="grid_column eight">
 
-      <h3 class="type_subhead">Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : searchDocs.data.total_rows}}</small></h4>
-
-      <a class="button_primary mb5" href="#/add">Add new row</a>
+      <h3 class="type_subhead">Rows <small ng-class="{'api-summary-message':message}" ng-show="searchDocs.data.total_rows >= 0">{{message ? message : searchDocs.data.total_rows}} <a class="button_primary button_small mb5" href="#/add">Add new row</a></small></h4>
 
       <div class="table_basic-container">
 
         <table class="table_basic">
           <thead>
-          	<th>Actions</th>
+          	<th class="table_actions">Actions</th>
             <th ng-repeat="docfield in searchDocs.fields">{{docfield.name}}</th>
           </thead>
           <tbody>
             <tr ng-repeat="row in searchDocs.data.rows">
-            	<td>
-            		<a class="button_primary button_small mb5" href="#/edit/{{row._id}}">Edit</a><br />
-            		<button class="button_primary button_small" ng-click='deleteDoc()'>Delete</button>
+            	<td class="table_actions">
+            		<div id="actions{{row._id}}">
+                  <a href="#/edit/{{row._id}}">Edit</a> | <a ng-click='toggleDeleteConfirm(row._id)'>Delete</a>
+                </div>
+                <div id="confirm{{row._id}}" class="invisible">
+                  Are you sure? <a ng-click='deleteDoc(row._id)'>Yes</a> | <a ng-click='toggleDeleteConfirm(row._id)'>No</a>
+                </div>
             	</td>
               <td ng-repeat="docfield in searchDocs.fields">
-                <ul ng-if="isArray(row[docfield.name])">
-                  <li ng-repeat="field in row[docfield.name]">
-                    {{field == "null" ? '' : field | ellipsize:20}}
-                  </li>
-                </ul>
-                <span ng-if="!isArray(row[docfield.name])">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</span>
+
+                <!--- not a faceted field -->
+                <span ng-if="!docfield.facet">
+                  <ul ng-if="isArray(row[docfield.name])">
+                    <li ng-repeat="field in row[docfield.name]">
+                      {{field == "null" ? '' : field | ellipsize:20}}
+                    </li>
+                  </ul>
+                  <span ng-if="!isArray(row[docfield.name])">{{row[docfield.name] == "null" ? '' : row[docfield.name] | ellipsize:20}}</span>
+                </span>
+
+                <!--- faceted field -->
+                <span ng-if="docfield.facet">
+                  <ul ng-if="isArray(row[docfield.name])">
+                    <li ng-repeat="field in row[docfield.name]">
+                      <a ng-click="clickSearch(docfield.name)">{{field == "null" ? '' : field | ellipsize:20}}</a>
+                    </li>
+                  </ul>
+                  <span ng-if="!isArray(row[docfield.name])">
+                    <a ng-click="clickSearch(docfield.name)">{{field = row[docfield.name]; row[docfield.name] == "null" ? '' : field | ellipsize:20}}
+                  </span>
+                </span>
+                
               </td>
             </tr>
           </tbody>
