@@ -5,15 +5,7 @@
 
 <section class="layout_section theme_dark">
 
-  <div ng-show="currentStatus == 'imported'" class="alert alert-success">
-    <p class="type_copy">Your data was uploaded and imported successfully.</p>
-  </div>
-
-  <div ng-show="currentStatus == 'uploaded'" class="alert alert-success">
-    <p class="type_copy">Your data was uploaded successfully.</p>
-  </div>
-
-  <div ng-show="!currentStatus || currentStatus == 'new'">
+  <div ng-show="!currentStatus || currentStatus == 'new' || $root.reUpload">
     <!--
     <form id="uploadform" action="/upload" method="post" enctype="multipart/form-data">
       <fieldset class="form_field">
@@ -56,6 +48,14 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div ng-show="currentStatus == 'imported'" class="alert alert-success">
+    <p class="type_copy">Your data was uploaded and imported successfully.</p>
+  </div>
+
+  <div ng-show="currentStatus == 'uploaded'" class="alert alert-success">
+    <p class="type_copy">Your{{ $root.reUpload ? ' previous ' : ' ' }}data was uploaded successfully.</p>
   </div>
 
   <div class="button_group" ng-show="currentStatus && currentStatus != 'new'">

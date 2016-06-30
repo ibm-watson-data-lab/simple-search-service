@@ -149,6 +149,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	    $scope.$root.fetchRemoteFile = function(fileUrl) {
 	    	if (fileUrl) {
+			    $scope.$root.reUpload = true;
 				$('#remoteFileError').html("");
 			    $scope.$root.fetchingRemoteFile = true;
 				$http.post("/fetch", {"url":fileUrl}, {json: true})
@@ -159,8 +160,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				          for(var i in data.fields) {
 				            data.fields[i].safename=data.fields[i].name.toLowerCase().replace(/\W/g,"_");
 				          }
-					      $scope.$root.currentStatus = "uploaded";
+				          $scope.$root.currentStatus = "uploaded";
 				          $scope.$root.schema = data;
+				          $scope.$root.fetchingRemoteFile = false;
 				          $scope.$root.goToNextPage("import");
 					  }
 					  else {
@@ -177,6 +179,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    };
 
 	    $scope.$root.fileUploaded = function() {
+	         $scope.$root.reUpload = true;
 	         $('#fileuploadcontrol').hide();
 	         $('#uploadform').ajaxForm({
 	             beforeSend: function() {
@@ -211,7 +214,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    // the actual import process
 	    $scope.$root.importClicked = function() {
 	      console.log("IMPORT");
+	      $scope.$root.reUpload = false;
 	      $('#importbutton').attr('disabled',true);
+	      $('#backbutton').attr('disabled',true);
 	      $('.import-spinner').css('display','inline-block');
 	      var fields = [ ];
 	      for(var i in $scope.$root.currentUpload.fields) {
