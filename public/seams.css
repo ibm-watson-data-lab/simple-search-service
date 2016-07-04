@@ -64,3 +64,23 @@
     right: 100px;
     white-space: nowrap;
 }
+
+td.error {
+    color: #ff0000;
+}
+
+.alert-container.error {
+    background: rgba(0, 0, 0, 0) repeating-linear-gradient(-55deg, #bb4444, #bb4444 1px, #bb1122 1px, #bb1122 3px) repeat scroll 0 0 !important;
+    border-left: 2px solid #ad1625;
+    color: #ffffff;
+}
+
+.type_copy.alert-container {
+    max-width: 100%;
+}
+
+.input_select:disabled,
+.input_select.disabled {
+    background-color: #92a4af;
+    border-color: #000000;
+}
