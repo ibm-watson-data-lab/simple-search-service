@@ -32,11 +32,17 @@
   </div>
 
   <div ng-show="currentStatus == 'uploaded'">
+      <div  class="type_copy alert-container error"
+        ng-show="schemaError">
+          An error was detected with one or more fields. Verify the file and re-upload
+      </div>
 
       <div id="schemacontent" class="table_container"></div>
 
       <div class="button_group">
-        <div  class="type_copy" id="facetstatus">Select a field to facet before importing</div>
+        <div  class="type_copy" id="facetstatus">
+          {{ schemaError ? 'An error was detected with one or more fields. Verify the file and re-upload' : 'Select a field to facet before importing' }}
+        </div>
         <button id="backbutton" type="button" class="button_secondary" ng-click="goToNextPage('upload')">Back</button>
         <button id="importbutton" type="submit" class="button_primary" ng-click="importClicked()"> Import </button>
         <!-- <span class="glyphicon glyphicon-refresh glyphicon-spinner import-spinner"></span> -->
