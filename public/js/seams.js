@@ -302,6 +302,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		   for(var i in x.fields) {
 		     var f = x.fields[i];
 		     if (!f.name) {
+					 f.hasError = true;
 					 $scope.$root.schemaError = true;
 					 html += "<tr class='error'>";
 		     }
@@ -341,7 +342,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		  var n = f.safename;
 		  var t = f.type;
 		  var html = '<select name="' + n + '" class="input_select" onchange="datatypechange(\'' + n +'\')" data-original-name="' + f.name;
-		  html += ($scope.$root.schemaError) ? '" disabled="disabled">\n' : '">\n';
+		  html += (f.hasError) ? '" disabled="disabled">\n' : '">\n';
 		  var opts = { "string":"String", "number":"Number", "boolean":"Boolean", "arrayofstrings":"Array of Strings" };
 		  for(var i in opts) {
 		    html += '<option value="' + i + '"';
@@ -361,7 +362,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		  var t = f.type;
 		  var v = f.facet.toString();
 		  var html = '<input class="input_checkbox facet_checkbox" type="checkbox" value="true" name="' + n + '" id="' + n + '"';
-		  if (t == "number" || t == "boolean" || $scope.$root.schemaError) {
+		  if (t == "number" || t == "boolean" || f.hasError) {
 		    html += ' disabled="disabled"';
 		  }
 		  if (v == "true") {
