@@ -796,9 +796,13 @@ seamsApp.directive('previewSearchHtml', function(){
 var datatypechange = function(e) {
   var d = $('select[name=' + e + ']');
   var v = d.val();
-  if(v == "string" || v == "arrayofstrings") {
-    $('input#' + e).prop("disabled", false);
+	var i = $('input#' + e);
+  if (v == "string" || v == "arrayofstrings") {
+    i.prop("disabled", false);
   } else {
-    $('input#' + e).prop("disabled", true);
+    if (i.is(':checked')) {
+			i.prop("checked", false).trigger('change');
+		}		
+    i.prop("disabled", true);
   }
 }
