@@ -49,20 +49,22 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 					var html = $scope.$root.renderSchema($scope.$root.schema);
 					$('#schemacontent').html(html);
 					var checked = 0;
-					$('.facet_checkbox', '#schemacontent').each(function() {
-						$(this).change(function() {
-							if($(this).is(":checked")) {
-								checked++;
-							}
-							else {
-								checked--;
-							}
-							$('#importbutton').attr('disabled',checked == 0);
-							$('#facetstatus').css('visibility', checked == 0 ? 'visible' : 'hidden');
+					if (!$scope.$root.schemaError) {
+						$('.facet_checkbox', '#schemacontent').each(function() {
+							$(this).change(function() {
+								if($(this).is(":checked")) {
+									checked++;
+								}
+								else {
+									checked--;
+								}
+								$('#importbutton').attr('disabled',checked == 0);
+								$('#facetstatus').css('visibility', checked == 0 ? 'visible' : 'hidden');
+							});
 						});
-					});
-					$('#importbutton').attr('disabled',checked == 0);
-					$('#facetstatus').css('visibility', checked == 0 ? 'visible' : 'hidden');
+					}
+					$('#importbutton').attr('disabled', checked == 0 || $scope.$root.schemaError);
+					$('#facetstatus').css('visibility', (checked == 0 || $scope.$root.schemaError) ? 'visible' : 'hidden');
 				}
 				break;
 			case 'search':
@@ -281,6 +283,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	    $scope.$root.fetchRemoteFile = function(fileUrl) {
 	    	if (fileUrl) {
+			    $scope.$root.reUpload = true;
 				$('#remoteFileError').html("");
 			    $scope.$root.fetchingRemoteFile = true;
 				$http.post("/fetch", {"url":fileUrl}, {json: true})
@@ -291,8 +294,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 				          for(var i in data.fields) {
 				            data.fields[i].safename=data.fields[i].name.toLowerCase().replace(/\W/g,"_");
 				          }
-					      $scope.$root.currentStatus = "uploaded";
+				          $scope.$root.currentStatus = "uploaded";
 				          $scope.$root.schema = data;
+				          $scope.$root.fetchingRemoteFile = false;
 				          $scope.$root.goToNextPage("import");
 					  }
 					  else {
@@ -309,6 +313,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    };
 
 	    $scope.$root.fileUploaded = function() {
+	         $scope.$root.reUpload = true;
 	         $('#fileuploadcontrol').hide();
 	         $('#uploadform').ajaxForm({
 	             beforeSend: function() {
@@ -343,7 +348,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    // the actual import process
 	    $scope.$root.importClicked = function() {
 	      console.log("IMPORT");
+	      $scope.$root.reUpload = false;
 	      $('#importbutton').attr('disabled',true);
+	      $('#backbutton').attr('disabled',true);
 	      $('.import-spinner').css('display','inline-block');
 	      var fields = [ ];
 	      for(var i in $scope.$root.currentUpload.fields) {
@@ -419,16 +426,28 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	    // and whether its faceted or not, together with an example value from the
 		// uploaded file (x.data)
 	    $scope.$root.renderSchema = function(x) {
+		   $scope.$root.schemaError = false;
 		   var html = '<table class="table_basic">\n';
 		   html += '<input type="hidden" name="upload_id" id="upload_id" value="' + x.upload_id + '"/>\n';
 		   html += "<thead>\n";
 		   html += "  <th>name</th><th>type</th><th>facet</th><th>e.g</th>\n";
 		   html += "</thead>\n"
 		   for(var i in x.fields) {
-		     html += "<tr>";
 		     var f = x.fields[i];
+
 		     f.example = x.data[0][f.name];
-		     html += "<td>" + f.name + "</td>\n";
+
+		     if (!f.name) {
+					 f.hasError = true;
+					 $scope.$root.schemaError = true;
+					 html += "<tr class='error'>";
+		     }
+		     else {
+					 html += "<tr>";
+		     }
+		     html += '<td class="' + (f.name ? '' : 'error') + '">';
+		     html += (f.name || '&#10007; Missing field name') + '</td>\n';
+
 		     html += "<td>" + $scope.$root.typeWidget(f) + "</td>\n";
 		     html += "<td>" + $scope.$root.facetWidget(f) + "</td>\n";
 		     for(var j in x.data) {
@@ -459,7 +478,10 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		$scope.$root.typeWidget = function(f) {
 		  var n = f.safename;
 		  var t = f.type;
-		  var html = '<select name="' + n + '" class="input_select" onchange="datatypechange(\'' + n +'\')" data-original-name="' + f.name + '" data-example="' + f.example + '">\n';
+
+		  var html = '<select name="' + n + '" class="input_select" onchange="datatypechange(\'' + n +'\')" data-original-name="' + f.name + '" data-example="' + f.example;
+			html += (f.hasError) ? '" disabled="disabled">\n' : '">\n';
+
 		  var opts = { "string":"String", "number":"Number", "boolean":"Boolean", "arrayofstrings":"Array of Strings" };
 		  for(var i in opts) {
 		    html += '<option value="' + i + '"';
@@ -479,7 +501,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		  var t = f.type;
 		  var v = f.facet.toString();
 		  var html = '<input class="input_checkbox facet_checkbox" type="checkbox" value="true" name="' + n + '" id="' + n + '"';
-		  if (t == "number" || t == "boolean") {
+		  if (t == "number" || t == "boolean" || f.hasError) {
 		    html += ' disabled="disabled"';
 		  }
 		  if (v == "true") {
@@ -1030,9 +1052,13 @@ seamsApp.directive('previewSearchHtml', function(){
 var datatypechange = function(e) {
   var d = $('select[name=' + e + ']');
   var v = d.val();
-  if(v == "string" || v == "arrayofstrings") {
-    $('input#' + e).prop("disabled", false);
+	var i = $('input#' + e);
+  if (v == "string" || v == "arrayofstrings") {
+    i.prop("disabled", false);
   } else {
-    $('input#' + e).prop("disabled", true);
+    if (i.is(':checked')) {
+			i.prop("checked", false).trigger('change');
+		}		
+    i.prop("disabled", true);
   }
 }
