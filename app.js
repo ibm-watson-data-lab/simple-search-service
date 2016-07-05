@@ -206,6 +206,48 @@ app.post('/row', cors(), bodyParser, isloggedin.auth, function(req, res) {
 
 });
 
+// get a list of URLs for autocompleting facets
+app.get('/autocompletes', cors(), isloggedin.auth, function(req, res) {
+
+  db.search({}, function(err, data) {
+    
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+
+    var facets = {};
+
+    Object.keys(data.counts).forEach(k => {
+      facets[k] = `http://${req.headers.host}/autocompletes/${k}`;
+    })
+
+    res.send(facets);
+
+  });
+
+});
+
+// get a list of URLs for autocompleting facets
+app.get('/autocompletes/:facet', cors(), isloggedin.auth, function(req, res) {
+
+  db.search({}, function(err, data) {
+    
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+
+    var values = [];
+
+    Object.keys(data.counts[req.params.facet]).forEach(v => {
+      values.push(v);
+    })
+
+    res.set('Content-Type', 'text/plain');
+    res.send(values.join("\n"));
+
+  });
+
+});
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, appEnv.bind, function() {
