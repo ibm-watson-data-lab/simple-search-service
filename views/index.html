@@ -9,11 +9,13 @@
 
   <link href="master.css" rel="stylesheet">
   <link href="seams.css" rel="stylesheet">
+  <link href="jquery.tagsinput.css" rel="stylesheet">
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="/js/jquery.form.js"></script>
+  <script src="/js/jquery.tagsinput.js"></script>
   <script src="/js/seams.js"></script>
 </head>
 <body ng-app="seamsApp" class="capped-layout">
@@ -50,6 +52,9 @@
 
               <hr />
 
+              <li class="tree-nav_item">
+                <a ng-class="{'current': selectedView === 'cms', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/cms">Edit Data</a>
+              </li>
               <li class="tree-nav_item">
                 <a ng-class="{'current': selectedView === 'settings', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/settings">Settings</a>
               </li>

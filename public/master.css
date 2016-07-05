@@ -142,6 +142,11 @@ hr {
 
 }
 
+.button_small {
+	height: 1.5rem;
+	padding: 0 0.5em;
+}
+
 /*Dark Themes*/
 
 .theme_dark,
@@ -289,6 +294,18 @@ hr {
 .theme_dark .table_basic tbody td + td, .theme_light .theme_dark .table_basic tbody td + td {
 	border-left: 1px solid #1d3649;
 }
+
+.theme_dark .table_basic tbody tr:nth-child(odd) a {
+	color: #5aaafa;
+	cursor: pointer;
+}
+
+.theme_dark .table_basic tbody tr:nth-child(even) a {
+	color: #5aaafa;
+	cursor: pointer;
+}
+
+
 
 /*Light Themes*/
 
@@ -1398,4 +1415,21 @@ input::-webkit-inner-spin-button {
 	    -ms-flex: 1 1 calc(100% / 8 * 7 - 2em);
 	        flex: 1 1 calc(100% / 8 * 7 - 2em);
 	max-width: calc(100% / 8 * 7 - 2em);
+}
+
+/*** positional helper classes ***/
+.mt5 {
+	margin-top: 5px;
+}
+
+.mb5 {
+	margin-bottom: 5px;
+}
+
+.hidden, .toggle {
+	display: none;
+}
+
+.invisible {
+	visibility: hidden;
 }

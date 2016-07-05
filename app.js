@@ -15,6 +15,9 @@ var express = require('express'),
   sssenv = require('./lib/sssenv.js'),
   inference = require('./lib/inference.js');
 
+// Use Passport to provide basic HTTP auth when locked down
+var passport = require('passport');
+passport.use(isloggedin.passportStrategy());
 
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
@@ -32,12 +35,12 @@ app.use(compression());
 app.use(proxy());
 
 // home
-app.get('/', isloggedin(), function (req, res) {
+app.get('/', isloggedin.auth, function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 // templates
-app.get('/templates/:name',  isloggedin(), function(req, res) {
+app.get('/templates/:name', isloggedin.auth, function(req, res) {
 	res.sendFile(path.join(__dirname, 'views/templates', req.params.name));
 });
 
@@ -53,7 +56,7 @@ app.get('/search', cors(), function (req, res) {
 });
 
 // upload  CSV
-app.post('/upload', isloggedin(),  multipart, function(req, res){
+app.post('/upload', multipart, isloggedin.auth, function(req, res){
   var obj = {
     files: req.files,
     body: req.body
@@ -68,7 +71,7 @@ app.post('/upload', isloggedin(),  multipart, function(req, res){
 });
 
 // fetch file from url
-app.post('/fetch', isloggedin(), bodyParser, function(req, res){
+app.post('/fetch', bodyParser, isloggedin.auth, function(req, res){
   var obj = req.body;
   dbimport.clear();
   cache.put(obj.url, obj, function(err, data) {
@@ -80,7 +83,7 @@ app.post('/fetch', isloggedin(), bodyParser, function(req, res){
 });
 
 // import previously uploaded CSV
-app.post('/import', isloggedin(), bodyParser, function(req, res){
+app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   console.log("****",req.body.schema);
   console.log("****");
   cache.get(req.body.upload_id, function(err, d) {
@@ -105,32 +108,32 @@ app.post('/import', isloggedin(), bodyParser, function(req, res){
   });
 });
 
-app.get('/import/status', isloggedin(), function(req, res) {
+app.get('/import/status', isloggedin.auth, function(req, res) {
   var status = dbimport.status();
   res.send(status);
 });
 
-app.post('/deleteeverything', isloggedin(), function(req, res) {
+app.post('/deleteeverything', isloggedin.auth, function(req, res) {
   cache.clearAll();
   db.deleteAndCreate(function(err, data) {
     res.send(data);
   });
 });
 
-app.get('/preview', isloggedin(), function(req, res) {
+app.get('/preview', isloggedin.auth, function(req, res) {
   db.preview(function(err, data) {
     res.send(data);
   });
 });
 
-app.get('/schema', isloggedin(), function(req, res) {
+app.get('/schema', isloggedin.auth, function(req, res) {
   db.dbSchema(function(err, data) {
     res.send(data);
   });
 });
 
 //settings api 
-app.get('/settings', isloggedin(), function (req, res) {
+app.get('/settings', isloggedin.auth, function (req, res) {
 	db.settings(function(err, data) {
 	 if (err) {
 	   return res.status(err.statusCode).send({error: err.error, reason: err.reason});
@@ -140,7 +143,7 @@ app.get('/settings', isloggedin(), function (req, res) {
 	});
 });
 
-app.post('/settings', isloggedin(), bodyParser, function(req, res) {
+app.post('/settings', bodyParser, isloggedin.auth, function(req, res) {
   var settings = req.body;
   if (settings.hasOwnProperty("appenv")) {
     delete settings.appenv;
@@ -151,6 +154,56 @@ app.post('/settings', isloggedin(), bodyParser, function(req, res) {
 		 }
 		 res.send(data);
 	});
+});
+
+// get row API
+app.get('/row/:id', cors(), bodyParser, isloggedin.auth, function(req, res) {
+
+  db.getRow(req.params.id, function(err, data) {
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+    res.send(data);
+  });
+});
+
+// delete row API
+app.delete('/row/:id', cors(), bodyParser, isloggedin.auth, function(req, res) {
+
+  db.deleteRow(req.params.id, function(err, data) {
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+    res.send(data);
+  });
+});
+
+// edit row API
+app.put('/row/:id', cors(), bodyParser, isloggedin.auth, function(req, res) {
+
+  db.editRow(req.params.id, req.body, function(err, data) {
+    
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+    res.send(data);
+
+  });
+
+});
+
+// add row API
+app.post('/row', cors(), bodyParser, isloggedin.auth, function(req, res) {
+
+  db.addRow(req.body, function(err, data) {
+
+    if (err) {
+      return res.status(err.statusCode).send({error: err.error, reason: err.reason});
+    }
+    res.send(data);
+
+  });
+
 });
 
 

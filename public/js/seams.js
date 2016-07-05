@@ -9,6 +9,12 @@ seamsApp.config(['$routeProvider', function ($routeProvider) {
     		return 'templates/' + stateParams.pathname + '.html';
     	}
     })
+    .when('/:action/:id', {
+    	controller: 'actionController',
+    	templateUrl: function(stateParams) {
+    		return 'templates/' + stateParams.action + '.html';
+    	}
+    })
   	.otherwise({
     	controller: 'navController',
   		templateUrl: 'templates/about.html'
@@ -74,6 +80,31 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 					$scope.$root.search();
 				}
 				break;
+			case 'cms':
+				if (!$scope.$root.dbschema) {
+					$scope.$root.getCurrentSchema(function(err, data) {
+						if (err) {
+						    $scope.$root.dbschema = { fields: [] };
+						}
+						$scope.$root.search(false);
+					});
+				}
+				else {
+					$scope.$root.search(false);
+				}
+				break;
+			case 'add':
+				$scope.$root.addRowSuccess = false;
+	  		$scope.$root.addRowFail		= false;
+	  		$scope.$root.selectedFields = {};
+				if (!$scope.$root.dbschema) {
+					$scope.$root.getCurrentSchema(function(err, data) {
+						if (err) {
+						  $scope.$root.dbschema = { fields: [] };
+						}
+					});
+				}
+				break;
 			default:
 				break;
 		}
@@ -94,20 +125,121 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	      return d.getTime();
 	    };
 
-	    $scope.$root.search = function() {
+	    $scope.$root.search = function(useCache) {
+	    	
+	    	// sensible defaults for cache
+	    	if (typeof useCache === 'undefined') {
+	    		useCache = true;
+	    	}
+
+	    	if (useCache !== false) {
+	    		useCache = true;
+	    	}
+
+	    	// always re-show the "more" button
+	    	$('button#more-results').show();
+
 	    	var q = $('#q').val();
+	    	
 	    	if (!q || q.length == 0) {
 	    		$('#q').val("*:*");
 	    		$('#q').val("*:*");
 	    		q = "*:*";
 	    	}
-			$scope.$root.performSearch({
-				q: q
-			}, function(err, response) {
-				$scope.$root.searchDocs = response;
-			});
 
-			return false;
+	    	var searchOpts = {
+	    		q: q,
+	    		cache: useCache
+	    	}
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					$scope.$root.searchDocs = response;
+				});
+
+				return false;
+	    }
+
+	    $scope.$root.clickSearch = function(field, $event) {
+
+	    	var value = '"'+this.field+'"';
+	    	var q = field + ":" + value;
+	    	var oldQ = $('#q').val();
+
+	    	if (oldQ && oldQ !== "*:*") {
+	    		q += " AND " + oldQ;
+	    	}
+
+	    	if (!q || q.length == 0 || q == ":") {
+	    		$('#q').val("*:*");
+	    		$('#q').val("*:*");
+	    		q = "*:*";
+	    	}
+
+	    	else {
+	    		$('#q').val(q)
+	    	}
+
+	    	$scope.$root.searchdirty = true;
+
+	    	var searchOpts = {
+	    		q: q,
+	    		cache: false
+	    	}
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					$scope.$root.searchDocs = response;
+				});
+
+				return false;
+	    }
+
+	    $scope.$root.toggleDeleteConfirm = function(id) {
+
+	    	$('#confirm'+id).toggleClass('invisible');
+	    	//$('#actions'+id).toggleClass('invisible');
+
+	    }
+
+	    $scope.$root.moreResults = function() {
+	    	
+	    	var bookmark = $('#bookmark').val();
+
+	    	var q = $('#q').val();
+	    	
+	    	if (!q || q.length == 0) {
+	    		$('#q').val("*:*");
+	    		$('#q').val("*:*");
+	    		q = "*:*";
+	    	}
+
+	    	var searchOpts = {
+	    		q: q,
+	    		cache: false,
+	    		bookmark: bookmark
+	    	}
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					
+					// update the rows
+					var rows = $scope.$root.searchDocs.data.rows;
+					$scope.$root.searchDocs.data.rows = rows.concat(response.data.rows);
+
+					// show/hide the more button if the bookmark is the same
+					if (response.data.bookmark === bookmark) {
+						$('button#more-results').hide();
+					}
+
+					else {
+						$('button#more-results').show();
+					}
+
+					// update the bookmark
+					$('#bookmark').val(response.data.bookmark);
+
+				});
+
+				return false;
+
 	    }
 
 	    $scope.$root.showDeleteDialog = function() {
@@ -226,6 +358,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 	        var obj = {}
 	        obj.name = d.attr('data-original-name');
 	        obj.type = d.val();
+	        obj.example = d.attr('data-example');
 	        obj.facet = ($('#' + d.attr('name')).is(':checked') && !$('#' + d.attr('name')).prop("disabled"));
 	        fields.push(obj);
 	      }
@@ -301,6 +434,9 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		   html += "</thead>\n"
 		   for(var i in x.fields) {
 		     var f = x.fields[i];
+
+		     f.example = x.data[0][f.name];
+
 		     if (!f.name) {
 					 f.hasError = true;
 					 $scope.$root.schemaError = true;
@@ -311,6 +447,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		     }
 		     html += '<td class="' + (f.name ? '' : 'error') + '">';
 		     html += (f.name || '&#10007; Missing field name') + '</td>\n';
+
 		     html += "<td>" + $scope.$root.typeWidget(f) + "</td>\n";
 		     html += "<td>" + $scope.$root.facetWidget(f) + "</td>\n";
 		     for(var j in x.data) {
@@ -341,8 +478,10 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 		$scope.$root.typeWidget = function(f) {
 		  var n = f.safename;
 		  var t = f.type;
-		  var html = '<select name="' + n + '" class="input_select" onchange="datatypechange(\'' + n +'\')" data-original-name="' + f.name;
-		  html += (f.hasError) ? '" disabled="disabled">\n' : '">\n';
+
+		  var html = '<select name="' + n + '" class="input_select" onchange="datatypechange(\'' + n +'\')" data-original-name="' + f.name + '" data-example="' + f.example;
+			html += (f.hasError) ? '" disabled="disabled">\n' : '">\n';
+
 		  var opts = { "string":"String", "number":"Number", "boolean":"Boolean", "arrayofstrings":"Array of Strings" };
 		  for(var i in opts) {
 		    html += '<option value="' + i + '"';
@@ -575,15 +714,18 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			      if (first) {
 				      for(var field in first) {
 					      if (field != "_id" && field != "_rev" && field != "_order") {
-					        results.fields.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string") });
+					        var ff = ( typeof data.counts[field] !== 'undefined' ? true : false )
+					        results.fields.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string"), facet: ff });
 					      }
-					  }
+					  	}
 
 				      for(var field in data.counts) {
 					      results.facets.push({ name: field, type: (typeof first[field] === "number" ? "number" : "string") });
 				      }
+			      
 			      }
 
+			      $scope.$root.bookmark = results.data.bookmark
 			      $scope.$root.searching = false;
 			      callback(null, results);
 			  })
@@ -613,11 +755,95 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
       });
 	  };
 
-	    $scope.$root.getSettings();
+	  $scope.$root.deleteDoc = function(callback) {
+	  	
+	  	// get this row
+	  	var row = this.row;
+	  	var id = row._id;
+			
+			var restapi = '/row/'+id
+			
+			$http.delete(restapi)
+			  .success(function(data) {
+
+			  	// remove this row from the collection
+			  	var rows = $scope.$root.searchDocs.data.rows;
+			  	$scope.$root.searchDocs.data.rows = rows.filter(function(x) {
+			  		return !(x._id === id)
+			  	})
+
+			  })
+			  .error( function(data, status, headers, config) {
+			    console.log("Error deleting doc:", data, status);
+			  });
+
+	  }
+
+	  $scope.$root.edit = function() {
+	  	
+	  	$scope.$root.editRowSuccess = false;
+	  	$scope.$root.editRowFail		= false;
+
+	  	var data = {};
+	  	$('form#edit').serializeArray().forEach(function(input) {
+	  		data[input.name] = input.value;
+	  	})
+
+	  	var id = location.hash.split("/")[2];
+
+	  	var restapi = '/row/'+id
+			
+			$http.put(restapi, data)
+			  .success(function(data) {
+					$scope.$root.editRowSuccess = true;
+			  })
+			  .error( function(data, status, headers, config) {
+			    $scope.$root.editRowFail = true;
+			  });
+
+	  }
+
+	  $scope.$root.add = function() {
+	  	
+	  	$scope.$root.addRowSuccess = false;
+	  	$scope.$root.addRowFail		= false;
+
+	  	var data = {};
+	  	$('form#add').serializeArray().forEach(function(input) {
+	  		data[input.name] = input.value;
+	  	})
+
+	  	var restapi = '/row'
+			
+			$http.post(restapi, data)
+			  .success(function(data) {
+					$scope.$root.addRowSuccess = true;
+			  })
+			  .error( function(data, status, headers, config) {
+			    $scope.$root.addRowFail = true;
+			  });
+
+	  }
+
+	  $scope.$root.getById = function(id) {
+
+  		var restapi = '/row/'+id
+			
+			$http.get(restapi)
+			  .success(function(data) {
+					$scope.$root.row = data;
+			  })
+			  .error( function(data, status, headers, config) {
+			    console.log("Error pulling doc "+id+":", data, status);
+			  });
+
+	  }
+
+	  $scope.$root.getSettings();
 
 		$scope.$root.getPreview(function(data) {
-	    	$scope.$root.$apply();
-	    });
+    	$scope.$root.$apply();
+    });
 
 		$scope.isArray = angular.isArray;
 
@@ -640,7 +866,7 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 		$scope.clearSearch = function() {
 			$('#q').val('*:*');
-			$scope.search();
+			$scope.search(false);
 		}
 
 	}]
@@ -712,6 +938,36 @@ seamsApp.directive('apiExample', function(){
 	  }
 	};
 });
+
+seamsApp.controller('actionController', ['$scope', '$route', '$routeParams',
+    function($scope, $route, $routeParams) {
+		
+		$scope.$root.selectedView = "cms";
+
+		switch($routeParams.action) {
+			case 'edit':
+				$scope.$root.editRowSuccess = false;
+	  		$scope.$root.editRowFail		= false;
+
+				if (!$scope.$root.dbschema) {
+					$scope.$root.getCurrentSchema(function(err, data) {
+						if (err) {
+						  $scope.$root.dbschema = { fields: [] };
+						}
+						$scope.$root.getById($routeParams.id);
+					});
+				}
+
+				else {
+					$scope.$root.getById($routeParams.id);
+				}
+				
+				break;
+			default:
+				break;
+		}
+	}
+]);
 
 seamsApp.directive('previewSearchHtml', function(){
 	return {
