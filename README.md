@@ -80,8 +80,8 @@ When lockdown mode is detected, all web requests will be get a `401 Unauthorised
 
 If you wish to get access to the Simple Search Service whilst in lockdown mode, you can enable basic HTTP authentication by setting two more environment variables:
 
-* SSS_LOCKDOWN_USERNAME
-* SSS_LOCKDOWN_PASSWORD
+* `SSS_LOCKDOWN_USERNAME`
+* `SSS_LOCKDOWN_PASSWORD`
 
 When these are set, you are able to bypass lockdown mode by providing a matching username and password. If you access the UI, your browser will prompt you for these details. If you want to access the API you can provide the username and password as part of your request:
 
