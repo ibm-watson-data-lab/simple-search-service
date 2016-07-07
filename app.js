@@ -13,7 +13,18 @@ var express = require('express'),
   schema = require('./lib/schema.js'),
   isloggedin = require('./lib/isloggedin.js'),
   sssenv = require('./lib/sssenv.js'),
-  inference = require('./lib/inference.js');
+  inference = require('./lib/inference.js'),
+  autocomplete = require('./lib/autocomplete.js');
+
+// Start of SAS usage
+app.locals = {
+  autocomplete: {
+    enabled: ( (typeof process.env.SAS_HOST == 'string') ? true : false ),
+    host: ( (typeof process.env.SAS_HOST == 'string') ? process.env.SAS_HOST : null ),
+    username: null,
+    password: null
+  }
+};
 
 // Use Passport to provide basic HTTP auth when locked down
 var passport = require('passport');
@@ -100,6 +111,7 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
       // import the data
       dbimport.file(currentUpload.url || currentUpload.files.file.path, theschema, function(err, d) {
         console.log("data imported",err,d);
+        autocomplete.populate(app.locals.autocomplete);
         cache.clearAll();
       });
     });
@@ -128,6 +140,7 @@ app.get('/preview', isloggedin.auth, function(req, res) {
 
 app.get('/schema', isloggedin.auth, function(req, res) {
   db.dbSchema(function(err, data) {
+    data.autocomplete = app.locals.autocomplete;
     res.send(data);
   });
 });
@@ -186,6 +199,7 @@ app.put('/row/:id', cors(), bodyParser, isloggedin.auth, function(req, res) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
     }
+    autocomplete.append(req.body, app.locals.autocomplete);
     res.send(data);
 
   });
@@ -200,6 +214,7 @@ app.post('/row', cors(), bodyParser, isloggedin.auth, function(req, res) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
     }
+    autocomplete.append(req.body, app.locals.autocomplete);
     res.send(data);
 
   });

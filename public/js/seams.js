@@ -21,8 +21,8 @@ seamsApp.config(['$routeProvider', function ($routeProvider) {
   	});
 }]);
 
-seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
-    function($scope, $route, $routeParams) {
+seamsApp.controller('navController', ['$scope', '$route', '$routeParams', '$window',
+    function($scope, $route, $routeParams, $window) {
 		$scope.$root.selectedView = $routeParams.pathname;
 
 		switch($routeParams.pathname) {
@@ -99,14 +99,20 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
 	  		$scope.$root.selectedFields = {};
 				if (!$scope.$root.dbschema) {
 					$scope.$root.getCurrentSchema(function(err, data) {
+						$window._autocomplete = $scope.$root.dbschema.autocomplete;
 						if (err) {
 						  $scope.$root.dbschema = { fields: [] };
+						  $window._autocomplete = { enabled: false }
 						}
 					});
 				}
 				break;
 			default:
 				break;
+		}
+
+		if ($scope.$root.dbschema && $scope.$root.dbschema.autocomplete) {
+			$window._autocomplete = $scope.$root.dbschema.autocomplete;
 		}
 	}
 ]);
@@ -633,7 +639,6 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			$http.get("/schema")
 				.success(function(data) {
 					$scope.$root.dbschema = data;
-
 					var unfacetedfields = [];
 					var facetedfields = [];
 			        for(var i in data.fields) {
@@ -939,8 +944,8 @@ seamsApp.directive('apiExample', function(){
 	};
 });
 
-seamsApp.controller('actionController', ['$scope', '$route', '$routeParams',
-    function($scope, $route, $routeParams) {
+seamsApp.controller('actionController', ['$scope', '$route', '$routeParams', '$window',
+    function($scope, $route, $routeParams, $window) {
 		
 		$scope.$root.selectedView = "cms";
 
@@ -951,8 +956,10 @@ seamsApp.controller('actionController', ['$scope', '$route', '$routeParams',
 
 				if (!$scope.$root.dbschema) {
 					$scope.$root.getCurrentSchema(function(err, data) {
+						$window._autocomplete = $scope.$root.dbschema.autocomplete;
 						if (err) {
 						  $scope.$root.dbschema = { fields: [] };
+						  $window._autocomplete = { enabled: false }
 						}
 						$scope.$root.getById($routeParams.id);
 					});
@@ -965,6 +972,10 @@ seamsApp.controller('actionController', ['$scope', '$route', '$routeParams',
 				break;
 			default:
 				break;
+		}
+		
+		if ($scope.$root.dbschema && $scope.$root.dbschema.autocomplete) {
+			$window._autocomplete = $scope.$root.dbschema.autocomplete;
 		}
 	}
 ]);

@@ -26,7 +26,7 @@
             <tr ng-repeat="field in dbschema.fields">
               <td>{{field.name}}</td>
               <td ng-if="field.type == 'string'">
-                <input type="text" name="{{field.name}}" class="input_text" value="{{row[field.name]}}" placeholder="e.g. {{field.example}}">
+                <input type="text" name="{{field.name}}" data-autocomplete="{{ field.facet ? field.name : false }}" class="input_text" value="{{row[field.name]}}" placeholder="e.g. {{field.example}}">
               </td>
               <td ng-if="field.type == 'number'">
                 <input type="number" name="{{field.name}}" class="input_text" value="{{row[field.name]}}" placeholder="e.g. {{field.example}}">
@@ -59,7 +59,22 @@
                 $(e).tagsInput({
                   defaultText: example
                 });
-              })
+              });
+
+              if (_autocomplete.enabled) {
+                
+                $("input[data-autocomplete!='false']").each(function(key, e) {
+
+                  var autocomplete = $(e).attr("data-autocomplete");
+                  if (autocomplete) {
+                    $(e).autocomplete({
+                      source: _autocomplete.host + "/api/" + encodeURIComponent(autocomplete)
+                    });
+                  }
+
+                });
+
+              }
               
             }, 500)
           });
