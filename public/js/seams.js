@@ -97,15 +97,17 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams', '$wind
 				$scope.$root.addRowSuccess = false;
 	  		$scope.$root.addRowFail		= false;
 	  		$scope.$root.selectedFields = {};
-				if (!$scope.$root.dbschema) {
-					$scope.$root.getCurrentSchema(function(err, data) {
-						$window._autocomplete = $scope.$root.dbschema.autocomplete;
-						if (err) {
-						  $scope.$root.dbschema = { fields: [] };
-						  $window._autocomplete = { enabled: false }
-						}
-					});
-				}
+	  		$scope.$root.getCurrentConfig(function(data) {
+	  			$window._autocomplete = data.autocomplete;
+	  			if (!$scope.$root.dbschema) {
+						$scope.$root.getCurrentSchema(function(err, data) {
+							if (err) {
+							  $scope.$root.dbschema = { fields: [] };
+							}
+						});
+					}
+	  		})
+					
 				break;
 			default:
 				break;
@@ -634,6 +636,13 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			}
 		};
 
+		$scope.$root.getCurrentConfig = function(callback) {
+			$http.get("/config").success(function(data) {
+				$scope.$root.config = data;
+				callback(data);
+			})
+		}
+
 		$scope.$root.getCurrentSchema = function(callback) {
 			$scope.$root.searching = true;
 			$http.get("/schema")
@@ -954,21 +963,23 @@ seamsApp.controller('actionController', ['$scope', '$route', '$routeParams', '$w
 				$scope.$root.editRowSuccess = false;
 	  		$scope.$root.editRowFail		= false;
 
-				if (!$scope.$root.dbschema) {
-					$scope.$root.getCurrentSchema(function(err, data) {
-						$window._autocomplete = $scope.$root.dbschema.autocomplete;
-						if (err) {
-						  $scope.$root.dbschema = { fields: [] };
-						  $window._autocomplete = { enabled: false }
-						}
-						$scope.$root.getById($routeParams.id);
-					});
-				}
+	  		$scope.$root.getCurrentConfig(function(data) {
+	  			
+	  			$window._autocomplete = data.autocomplete;
 
-				else {
-					$scope.$root.getById($routeParams.id);
-				}
-				
+					if (!$scope.$root.dbschema) {
+						$scope.$root.getCurrentSchema(function(err, data) {
+							if (err) {
+							  $scope.$root.dbschema = { fields: [] };
+							}
+							$scope.$root.getById($routeParams.id);
+						});
+					}
+					else {
+						$scope.$root.getById($routeParams.id);
+					}
+
+				});
 				break;
 			default:
 				break;

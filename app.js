@@ -1,30 +1,54 @@
 var express = require('express'),
-  cors = require('cors'),
-  multer = require('multer'),
-  compression = require('compression'),
-  cfenv = require('cfenv'),
-  appEnv = cfenv.getAppEnv(),
-  app = express(),
-  dbimport = require('./lib/import.js'),
-  db = require('./lib/db.js'),
-  proxy = require('./lib/proxy.js'),
-  path = require('path'),
-  cache = require('./lib/cache.js'),
-  schema = require('./lib/schema.js'),
-  isloggedin = require('./lib/isloggedin.js'),
-  sssenv = require('./lib/sssenv.js'),
-  inference = require('./lib/inference.js'),
-  autocomplete = require('./lib/autocomplete.js');
+    cors = require('cors'),
+    multer = require('multer'),
+    compression = require('compression'),
+    cfenv = require('cfenv'),
+    appEnv = cfenv.getAppEnv(),
+    app = express(),
+    dbimport = require('./lib/import.js'),
+    db = require('./lib/db.js'),
+    proxy = require('./lib/proxy.js'),
+    path = require('path'),
+    cache = require('./lib/cache.js'),
+    schema = require('./lib/schema.js'),
+    isloggedin = require('./lib/isloggedin.js'),
+    sssenv = require('./lib/sssenv.js'),
+    inference = require('./lib/inference.js'),
+    autocomplete = require('./lib/autocomplete.js');
 
-// Start of SAS usage
+// App Globals
 app.locals = {
   autocomplete: {
-    enabled: ( (typeof process.env.SAS_HOST == 'string') ? true : false ),
-    host: ( (typeof process.env.SAS_HOST == 'string') ? process.env.SAS_HOST : null ),
+    enabled: false,
+    host: null,
     username: null,
     password: null
   }
 };
+
+//simple orchestration
+const sos = new require('simple-orchestration-js')({ 
+  url: process.env.ETCD_URL,
+  cert: "cert.ca"
+});
+
+const w = sos.discover("cds", "s-a-s");
+
+w.on("set", function(data) {
+  
+  if (typeof data == "object" && typeof data.url == "string" && data.url != app.locals.autocomplete.host) {
+    app.locals.autocomplete.enabled = true;
+    app.locals.autocomplete.host = data.url
+    console.log(`Autocomplete URL set to ${data.url}`)
+  }
+  
+});
+
+w.on("expire", function(data) {
+  console.log("autocomplete turned off");
+  app.locals.autocomplete.enabled = false;
+  app.locals.autocomplete.host = null;
+});
 
 // Use Passport to provide basic HTTP auth when locked down
 var passport = require('passport');
@@ -140,10 +164,13 @@ app.get('/preview', isloggedin.auth, function(req, res) {
 
 app.get('/schema', isloggedin.auth, function(req, res) {
   db.dbSchema(function(err, data) {
-    data.autocomplete = app.locals.autocomplete;
     res.send(data);
   });
 });
+
+app.get('/config', isloggedin.auth, function(req, res) {
+  res.send(app.locals)
+})
 
 //settings api 
 app.get('/settings', isloggedin.auth, function (req, res) {
