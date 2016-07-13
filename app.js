@@ -32,9 +32,8 @@ const sos = new require('simple-orchestration-js')({
   cert: "cert.ca"
 });
 
-const w = sos.discover("cds", "s-a-s");
-
-w.on("set", function(data) {
+sos.discover("cds", "s-a-s")
+.on("set", function(data) {
   
   if (typeof data == "object" && typeof data.url == "string" && data.url != app.locals.autocomplete.host) {
     app.locals.autocomplete.enabled = true;
@@ -42,9 +41,8 @@ w.on("set", function(data) {
     console.log(`Autocomplete URL set to ${data.url}`)
   }
   
-});
-
-w.on("expire", function(data) {
+})
+.on("expire", function(data) {
   console.log("autocomplete turned off");
   app.locals.autocomplete.enabled = false;
   app.locals.autocomplete.host = null;
