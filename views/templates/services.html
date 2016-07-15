@@ -1,0 +1,49 @@
+<section class="layout_section theme_light">
+
+  <h1 class="type_heading" id="toc_0"><mark class="type_mark">Discover Services</mark></h1>
+
+  <p>Use the Simple Orchestration Service to discover new services and extend the Simple Search Service</p>
+
+  <div ng-show="!discovery">
+    <p class="type_copy">
+      Discovery is currently disabled.
+    </p>
+  </div>
+
+  <div ng-show="discovery">
+    <p class="type_copy">
+      Discovery is currently enabled.
+    </p>
+
+  </div>
+
+</section>
+
+<section class="layout_section">
+
+  <div ng-show="discovery">
+
+	  <h2 class="type_heading type_mark">Simple Autocomplete Service</h2>
+
+	  <div ng-show="config.autocomplete.host && discovery">
+	  	<p>Autocomplete service detected.</p>
+	  	<ul>
+	  		<li>{{config.autocomplete.name}}</li>
+	  		<li>{{config.autocomplete.host}}</li>
+	  	</ul>
+
+	  	<button ng-show="!config.autocomplete.enabled && discovery" ng-click="enableSAS()" type="button" class="button_primary mt5"> Enable </button>
+
+	  	<button ng-show="config.autocomplete.enabled && discovery" ng-click="disableSAS()" type="button" class="button_primary mt5"> Disable </button>
+
+	  </div>
+
+	  <div ng-show="!config.autocomplete.host && discovery">
+	  	<p>No Autocomplete service detected.</p>
+	  </div>
+
+	  <hr>
+
+	</div>
+
+</section>

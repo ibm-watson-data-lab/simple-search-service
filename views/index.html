@@ -13,13 +13,19 @@
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
   
 
+  
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
+  <script src="/js/socket.min.js"></script>
   <script src="/js/jquery.form.js"></script>
   <script src="/js/jquery.tagsinput.js"></script>
   <script src="/js/seams.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    //var socket = io();
+  </script>
 </head>
 <body ng-app="seamsApp" class="capped-layout">
 <!-- start header -->
@@ -57,6 +63,9 @@
 
               <li class="tree-nav_item">
                 <a ng-class="{'current': selectedView === 'cms', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/cms">Edit Data</a>
+              </li>
+              <li class="tree-nav_item">
+                <a ng-class="{'current': selectedView === 'services', 'disabled': !discovery}" class="tree-nav_link" href="#/services">Services</a>
               </li>
               <li class="tree-nav_item">
                 <a ng-class="{'current': selectedView === 'settings', 'disabled': currentStatus != 'imported'}" class="tree-nav_link" href="#/settings">Settings</a>

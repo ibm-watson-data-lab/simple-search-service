@@ -14,39 +14,54 @@ var express = require('express'),
     isloggedin = require('./lib/isloggedin.js'),
     sssenv = require('./lib/sssenv.js'),
     inference = require('./lib/inference.js'),
-    autocomplete = require('./lib/autocomplete.js');
+    autocomplete = require('./lib/autocomplete.js')
+
+// socket.io and express config
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 // App Globals
 app.locals = {
+  discovery: ( process.env.ETCD_URL ? true : false ),
   autocomplete: {
     enabled: false,
+    name: null,
     host: null,
     username: null,
     password: null
+  },
+  env: {
+    cloudant_url: null
   }
 };
 
-//simple orchestration
-const sos = new require('simple-orchestration-js')({ 
-  url: process.env.ETCD_URL,
-  cert: "cert.ca"
-});
+if (app.locals.discovery) {
+  //simple orchestration
+  var sos = new require('simple-orchestration-js')({ 
+    url: process.env.ETCD_URL,
+    cert: "cert.ca"
+  });
 
-sos.discover("cds", "s-a-s")
-.on("set", function(data) {
+  sos.service("cds", "s-a-s")
+  .on("set", function(data) {
+    
+    if (typeof data == "object" && typeof data.url == "string" && data.url != app.locals.autocomplete.host) {
+      console.log(`Autocomplete URL set to ${data.url}`);
+      app.locals.autocomplete.host = data.url;
+      app.locals.autocomplete.name = data.name;
+      io.emit('reload-config');
+    }
+    
+  })
+  .on("expire", function(data) {
+    console.log("autocomplete turned off");
+    app.locals.autocomplete.enabled = false;
+    app.locals.autocomplete.host = null;
+    app.locals.autocomplete.name = null;
+    io.emit('reload-config');
+  });
+}
   
-  if (typeof data == "object" && typeof data.url == "string" && data.url != app.locals.autocomplete.host) {
-    app.locals.autocomplete.enabled = true;
-    app.locals.autocomplete.host = data.url
-    console.log(`Autocomplete URL set to ${data.url}`)
-  }
-  
-})
-.on("expire", function(data) {
-  console.log("autocomplete turned off");
-  app.locals.autocomplete.enabled = false;
-  app.locals.autocomplete.host = null;
-});
 
 // Use Passport to provide basic HTTP auth when locked down
 var passport = require('passport');
@@ -289,8 +304,32 @@ app.get('/autocompletes/:facet', cors(), isloggedin.auth, function(req, res) {
 
 });
 
+// Enable a discovered SAS service
+app.post('/service/enable/sas', isloggedin.auth, function(req, res) {
+
+  if (app.locals.autocomplete.name && app.locals.autocomplete.host) {
+    app.locals.autocomplete.enabled = true;
+    io.emit("reload-config");
+    autocomplete.populate(app.locals.autocomplete);
+    return res.send({ success: true })
+  }
+
+  return res.send({ success: false })
+
+});
+
+// Disable a discovered SAS service
+app.post('/service/disable/sas', isloggedin.auth, function(req, res) {
+
+  app.locals.autocomplete.enabled = false;
+  io.emit("reload-config");
+
+  return res.send({ success: true })
+
+});
+
 // start server on the specified port and binding host
-app.listen(appEnv.port, appEnv.bind, function() {
+http.listen(appEnv.port, appEnv.bind, function() {
 
 	// print a message when the server starts listening
   console.log("server starting on " + appEnv.url);

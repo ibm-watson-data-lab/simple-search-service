@@ -54,14 +54,14 @@
                 });
               });
 
-              if (_autocomplete.enabled) {
+              if (_config.autocomplete.enabled) {
                 
                 $("input[data-autocomplete!='false']").each(function(key, e) {
 
                   var autocomplete = $(e).attr("data-autocomplete");
                   if (autocomplete) {
                     $(e).autocomplete({
-                      source: _autocomplete.host + "/api/" + encodeURIComponent(autocomplete)
+                      source: _config.autocomplete.host + "/api/" + encodeURIComponent(autocomplete)
                     });
                   }
 
