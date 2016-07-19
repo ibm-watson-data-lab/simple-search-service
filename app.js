@@ -9,12 +9,11 @@ var express = require('express'),
     db = require('./lib/db.js'),
     proxy = require('./lib/proxy.js'),
     path = require('path'),
-    cache = require('./lib/cache.js'),
     schema = require('./lib/schema.js'),
     isloggedin = require('./lib/isloggedin.js'),
     sssenv = require('./lib/sssenv.js'),
     inference = require('./lib/inference.js'),
-    autocomplete = require('./lib/autocomplete.js')
+    autocomplete = require('./lib/autocomplete.js');
 
 // socket.io and express config
 var http = require('http').Server(app);
@@ -30,38 +29,17 @@ app.locals = {
     username: null,
     password: null
   },
-  env: {
-    cloudant_url: null
-  }
+  cache: {
+    enabled: false,
+    name: null,
+    host: null,
+    username: null,
+    password: null
+  },
+  env: {}
 };
 
-if (app.locals.discovery) {
-  //simple orchestration
-  var sos = new require('simple-orchestration-js')({ 
-    url: process.env.ETCD_URL,
-    cert: "cert.ca"
-  });
-
-  sos.service("cds", "s-a-s")
-  .on("set", function(data) {
-    
-    if (typeof data == "object" && typeof data.url == "string" && data.url != app.locals.autocomplete.host) {
-      console.log(`Autocomplete URL set to ${data.url}`);
-      app.locals.autocomplete.host = data.url;
-      app.locals.autocomplete.name = data.name;
-      io.emit('reload-config');
-    }
-    
-  })
-  .on("expire", function(data) {
-    console.log("autocomplete turned off");
-    app.locals.autocomplete.enabled = false;
-    app.locals.autocomplete.host = null;
-    app.locals.autocomplete.name = null;
-    io.emit('reload-config');
-  });
-}
-  
+var sos = require('./lib/discovery.js')(app.locals, io)  
 
 // Use Passport to provide basic HTTP auth when locked down
 var passport = require('passport');
@@ -95,7 +73,7 @@ app.get('/templates/:name', isloggedin.auth, function(req, res) {
 
 // search api 
 app.get('/search', cors(), function (req, res) {
-  db.search(req.query, function(err, data) {
+  db.search(req.query, app.locals.cache, function(err, data) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
     }
@@ -109,6 +87,7 @@ app.post('/upload', multipart, isloggedin.auth, function(req, res){
     files: req.files,
     body: req.body
   };
+  var cache = require('./lib/cache.js')(app.locals.cache);
   dbimport.clear();
   cache.put(obj.files.file.name, obj, function(err, data) {
     inference.infer(obj.files.file.path, function(err, data) {
@@ -121,6 +100,7 @@ app.post('/upload', multipart, isloggedin.auth, function(req, res){
 // fetch file from url
 app.post('/fetch', bodyParser, isloggedin.auth, function(req, res){
   var obj = req.body;
+  var cache = require('./lib/cache.js')(app.locals.cache);
   dbimport.clear();
   cache.put(obj.url, obj, function(err, data) {
 	inference.infer(obj.url, function(err, data) {
@@ -134,12 +114,13 @@ app.post('/fetch', bodyParser, isloggedin.auth, function(req, res){
 app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   console.log("****",req.body.schema);
   console.log("****");
+  var cache = require('./lib/cache.js')(app.locals.cache);
   cache.get(req.body.upload_id, function(err, d) {
     console.log(err,d);
     if(err) {
       return res.status(404).end();
     }
-    var currentUpload = d;
+    var currentUpload = JSON.parse(d);
     
     // run this in parallel to save time
     var theschema = JSON.parse(req.body.schema);
@@ -148,8 +129,11 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
       // import the data
       dbimport.file(currentUpload.url || currentUpload.files.file.path, theschema, function(err, d) {
         console.log("data imported",err,d);
+        var cache = require('./lib/cache.js')(app.locals.cache);
         autocomplete.populate(app.locals.autocomplete);
-        cache.clearAll();
+        if (cache) {
+          cache.clearAll();
+        }
       });
     });
     
@@ -163,7 +147,10 @@ app.get('/import/status', isloggedin.auth, function(req, res) {
 });
 
 app.post('/deleteeverything', isloggedin.auth, function(req, res) {
-  cache.clearAll();
+  var cache = require('./lib/cache.js')(app.locals.cache);
+  if (cache) {
+    cache.clearAll();
+  }
   db.deleteAndCreate(function(err, data) {
     res.send(data);
   });
@@ -264,7 +251,7 @@ app.post('/row', cors(), bodyParser, isloggedin.auth, function(req, res) {
 // get a list of URLs for autocompleting facets
 app.get('/autocompletes', cors(), isloggedin.auth, function(req, res) {
 
-  db.search({}, function(err, data) {
+  db.search({}, null, function(err, data) {
     
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
@@ -285,20 +272,16 @@ app.get('/autocompletes', cors(), isloggedin.auth, function(req, res) {
 // get a list of URLs for autocompleting facets
 app.get('/autocompletes/:facet', cors(), isloggedin.auth, function(req, res) {
 
-  db.search({}, function(err, data) {
+  db.search({}, null, function(err, data) {
     
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
     }
 
-    var values = [];
-
-    Object.keys(data.counts[req.params.facet]).forEach(v => {
-      values.push(v);
-    })
+    var keys = Object.keys(data.counts[req.params.facet]);
 
     res.set('Content-Type', 'text/plain');
-    res.send(values.join("\n"));
+    return res.send(keys.join("\n"));
 
   });
 
@@ -308,23 +291,75 @@ app.get('/autocompletes/:facet', cors(), isloggedin.auth, function(req, res) {
 app.post('/service/enable/sas', isloggedin.auth, function(req, res) {
 
   if (app.locals.autocomplete.name && app.locals.autocomplete.host) {
-    app.locals.autocomplete.enabled = true;
-    io.emit("reload-config");
-    autocomplete.populate(app.locals.autocomplete);
-    return res.send({ success: true })
+    
+    sos.setEnv("cds", "autocomplete_enable", true, function(err, data) {
+
+      if (err) {
+        return res.send({ success: false })
+      }
+
+      return res.send({ success: true })
+
+    });
+    
   }
 
-  return res.send({ success: false })
+  else {
+    return res.send({ success: false })
+  }
 
 });
 
 // Disable a discovered SAS service
 app.post('/service/disable/sas', isloggedin.auth, function(req, res) {
 
-  app.locals.autocomplete.enabled = false;
-  io.emit("reload-config");
+  sos.setEnv("cds", "autocomplete_enable", false, function(err, data) {
 
-  return res.send({ success: true })
+    if (err) {
+      return res.send({ success: false })
+    }
+
+    return res.send({ success: true })
+
+  });
+
+});
+
+// Enable a discovered SAS service
+app.post('/service/enable/scs', isloggedin.auth, function(req, res) {
+
+  if (app.locals.cache.name && app.locals.cache.host) {
+    
+    sos.setEnv("cds", "cache_enable", true, function(err, data) {
+
+      if (err) {
+        return res.send({ success: false })
+      }
+
+      return res.send({ success: true })
+
+    });
+    
+  }
+
+  else {
+    return res.send({ success: false })
+  }
+
+});
+
+// Disable a discovered SAS service
+app.post('/service/disable/scs', isloggedin.auth, function(req, res) {
+
+  sos.setEnv("cds", "cache_enable", false, function(err, data) {
+
+    if (err) {
+      return res.send({ success: false })
+    }
+
+    return res.send({ success: true })
+
+  });
 
 });
 

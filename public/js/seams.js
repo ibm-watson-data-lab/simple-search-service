@@ -869,17 +869,17 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	  }
 
-	  $scope.$root.enableSAS = function() {
+	  $scope.$root.enableService = function(service) {
 
-  		var restapi = '/service/enable/sas'
+  		var restapi = '/service/enable/'+service
 			
 			$http.post(restapi);
 
 	  }
 
-	  $scope.$root.disableSAS = function() {
+	  $scope.$root.disableService = function(service) {
 
-  		var restapi = '/service/disable/sas'
+  		var restapi = '/service/disable/'+service
 			
 			$http.post(restapi);
 

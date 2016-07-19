@@ -32,14 +32,35 @@
 	  		<li>{{config.autocomplete.host}}</li>
 	  	</ul>
 
-	  	<button ng-show="!config.autocomplete.enabled && discovery" ng-click="enableSAS()" type="button" class="button_primary mt5"> Enable </button>
+	  	<button ng-show="!config.autocomplete.enabled && discovery" ng-click="enableService('sas')" type="button" class="button_primary mt5"> Enable </button>
 
-	  	<button ng-show="config.autocomplete.enabled && discovery" ng-click="disableSAS()" type="button" class="button_primary mt5"> Disable </button>
+	  	<button ng-show="config.autocomplete.enabled && discovery" ng-click="disableService('sas')" type="button" class="button_primary mt5"> Disable </button>
 
 	  </div>
 
 	  <div ng-show="!config.autocomplete.host && discovery">
 	  	<p>No Autocomplete service detected.</p>
+	  </div>
+
+	  <hr>
+
+	  <h2 class="type_heading type_mark">Simple Caching Service</h2>
+
+	  <div ng-show="config.cache.host && discovery">
+	  	<p>Caching service detected.</p>
+	  	<ul>
+	  		<li>{{config.cache.name}}</li>
+	  		<li>{{config.cache.host}}</li>
+	  	</ul>
+
+	  	<button ng-show="!config.cache.enabled && discovery" ng-click="enableService('scs')" type="button" class="button_primary mt5"> Enable </button>
+
+	  	<button ng-show="config.cache.enabled && discovery" ng-click="disableService('scs')" type="button" class="button_primary mt5"> Disable </button>
+
+	  </div>
+
+	  <div ng-show="!config.cache.host && discovery">
+	  	<p>No Caching service detected.</p>
 	  </div>
 
 	  <hr>

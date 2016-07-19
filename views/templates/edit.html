@@ -68,7 +68,7 @@
                   var autocomplete = $(e).attr("data-autocomplete");
                   if (autocomplete) {
                     $(e).autocomplete({
-                      source: _config.autocomplete.host + "/api/" + encodeURIComponent(autocomplete)
+                      source: _config.autocomplete.host + "/api/sss_" + encodeURIComponent(autocomplete)
                     });
                   }
 
