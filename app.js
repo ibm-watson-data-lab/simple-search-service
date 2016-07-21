@@ -36,10 +36,15 @@ app.locals = {
     username: null,
     password: null
   },
-  env: {}
+  cloudant: require('./lib/credentials.js').cloudantNoSQLDB[0].credentials,
+  import: {}
 };
 
-var sos = require('./lib/discovery.js')(app.locals, io)  
+var sos = require('./lib/discovery.js')(app.locals, io);
+
+// register with SOS
+sos.register("search", "s-s-s", { url: appEnv.url, name: "Simple Search Service" }, { ttl: 10 });
+
 
 // Use Passport to provide basic HTTP auth when locked down
 var passport = require('passport');
@@ -87,58 +92,55 @@ app.post('/upload', multipart, isloggedin.auth, function(req, res){
     files: req.files,
     body: req.body
   };
-  var cache = require('./lib/cache.js')(app.locals.cache);
+
   dbimport.clear();
-  cache.put(obj.files.file.name, obj, function(err, data) {
-    inference.infer(obj.files.file.path, function(err, data) {
-      data.upload_id = req.files.file.name;
-      res.send(data);
-    });
+  app.locals.import[obj.files.file.name] = obj
+  inference.infer(obj.files.file.path, function(err, data) {
+    data.upload_id = req.files.file.name;
+    res.send(data);
   });
 });
 
 // fetch file from url
 app.post('/fetch', bodyParser, isloggedin.auth, function(req, res){
   var obj = req.body;
-  var cache = require('./lib/cache.js')(app.locals.cache);
+
   dbimport.clear();
-  cache.put(obj.url, obj, function(err, data) {
-	inference.infer(obj.url, function(err, data) {
+  app.locals.import[obj.url] = obj
+  
+  inference.infer(obj.url, function(err, data) {
 	  data.upload_id = obj.url;
 	  res.send(data);
 	});
-  });
+
 });
 
 // import previously uploaded CSV
 app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   console.log("****",req.body.schema);
   console.log("****");
-  var cache = require('./lib/cache.js')(app.locals.cache);
-  cache.get(req.body.upload_id, function(err, d) {
-    console.log(err,d);
-    if(err) {
-      return res.status(404).end();
-    }
-    var currentUpload = JSON.parse(d);
-    
-    // run this in parallel to save time
-    var theschema = JSON.parse(req.body.schema);
-    schema.save(theschema, function(err, d) {
-      console.log("schema saved",err,d);
-      // import the data
-      dbimport.file(currentUpload.url || currentUpload.files.file.path, theschema, function(err, d) {
-        console.log("data imported",err,d);
-        var cache = require('./lib/cache.js')(app.locals.cache);
-        autocomplete.populate(app.locals.autocomplete);
-        if (cache) {
-          cache.clearAll();
-        }
-      });
+
+  var currentUpload = app.locals.import[req.body.upload_id]
+  
+  console.log('###########')
+  console.log(currentUpload);
+  console.log('###########')
+  // run this in parallel to save time
+  var theschema = JSON.parse(req.body.schema);
+  schema.save(theschema, function(err, d) {
+    console.log("schema saved",err,d);
+    // import the data
+    dbimport.file(currentUpload.url || currentUpload.files.file.path, theschema, app.locals.cloudant, function(err, d) {
+      console.log("data imported",err,d);
+      var cache = require('./lib/cache.js')(app.locals.cache);
+      autocomplete.populate(app.locals.autocomplete);
+      if (cache) {
+        cache.clearAll();
+      }
     });
-    
-    res.status(204).end();
   });
+  
+  res.status(204).end();
 });
 
 app.get('/import/status', isloggedin.auth, function(req, res) {
@@ -151,6 +153,7 @@ app.post('/deleteeverything', isloggedin.auth, function(req, res) {
   if (cache) {
     cache.clearAll();
   }
+
   db.deleteAndCreate(function(err, data) {
     res.send(data);
   });
@@ -290,9 +293,9 @@ app.get('/autocompletes/:facet', cors(), isloggedin.auth, function(req, res) {
 // Enable a discovered SAS service
 app.post('/service/enable/sas', isloggedin.auth, function(req, res) {
 
-  if (app.locals.autocomplete.name && app.locals.autocomplete.host) {
+  if (app.locals.discovery && app.locals.autocomplete.name && app.locals.autocomplete.host) {
     
-    sos.setEnv("cds", "autocomplete_enable", true, function(err, data) {
+    sos.setEnv("search", "autocomplete_enable", true, function(err, data) {
 
       if (err) {
         return res.send({ success: false })
@@ -313,24 +316,30 @@ app.post('/service/enable/sas', isloggedin.auth, function(req, res) {
 // Disable a discovered SAS service
 app.post('/service/disable/sas', isloggedin.auth, function(req, res) {
 
-  sos.setEnv("cds", "autocomplete_enable", false, function(err, data) {
+  if (app.locals.discovery) {
+    sos.setEnv("search", "autocomplete_enable", false, function(err, data) {
 
-    if (err) {
-      return res.send({ success: false })
-    }
+      if (err) {
+        return res.send({ success: false })
+      }
 
-    return res.send({ success: true })
+      return res.send({ success: true })
 
-  });
+    });
+  }
+  
+  else {
+    return res.send({ success: false })
+  }
 
 });
 
 // Enable a discovered SAS service
 app.post('/service/enable/scs', isloggedin.auth, function(req, res) {
 
-  if (app.locals.cache.name && app.locals.cache.host) {
+  if (app.locals.discovery && app.locals.cache.name && app.locals.cache.host) {
     
-    sos.setEnv("cds", "cache_enable", true, function(err, data) {
+    sos.setEnv("search", "cache_enable", true, function(err, data) {
 
       if (err) {
         return res.send({ success: false })
@@ -351,15 +360,21 @@ app.post('/service/enable/scs', isloggedin.auth, function(req, res) {
 // Disable a discovered SAS service
 app.post('/service/disable/scs', isloggedin.auth, function(req, res) {
 
-  sos.setEnv("cds", "cache_enable", false, function(err, data) {
+  if (app.locals.discovery) {
+    sos.setEnv("search", "cache_enable", false, function(err, data) {
 
-    if (err) {
-      return res.send({ success: false })
-    }
+      if (err) {
+        return res.send({ success: false })
+      }
 
-    return res.send({ success: true })
+      return res.send({ success: true })
 
-  });
+    });
+  }
+  
+  else {
+    return res.send({ success: false })
+  }
 
 });
 
