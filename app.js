@@ -121,10 +121,7 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   console.log("****");
 
   var currentUpload = app.locals.import[req.body.upload_id]
-  
-  console.log('###########')
-  console.log(currentUpload);
-  console.log('###########')
+
   // run this in parallel to save time
   var theschema = JSON.parse(req.body.schema);
   schema.save(theschema, function(err, d) {
