@@ -23,6 +23,7 @@
 
   <div ng-show="discovery">
 
+  	<!--- START AUTOCOMPLETE SERVICE -->
 	  <h2 class="type_heading type_mark">Simple Autocomplete Service</h2>
 
 	  <div ng-show="config.autocomplete.host && discovery">
@@ -43,7 +44,9 @@
 	  </div>
 
 	  <hr>
+	  <!--- END AUTOCOMPLETE SERVICE -->
 
+	  <!--- START CACHING SERVICE -->
 	  <h2 class="type_heading type_mark">Simple Caching Service</h2>
 
 	  <div ng-show="config.cache.host && discovery">
@@ -64,6 +67,30 @@
 	  </div>
 
 	  <hr>
+	  <!--- END CACHING SERVICE -->
+
+	  <!--- START METRICS SERVICE -->
+	  <h2 class="type_heading type_mark">Metrics Collection</h2>
+
+	  <div ng-show="config.metrics.host && discovery">
+	  	<p>Metrics service detected.</p>
+	  	<ul>
+	  		<li>{{config.metrics.name}}</li>
+	  		<li>{{config.metrics.host}}</li>
+	  	</ul>
+
+	  	<button ng-show="!config.metrics.enabled && discovery" ng-click="enableService('metrics')" type="button" class="button_primary mt5"> Enable </button>
+
+	  	<button ng-show="config.metrics.enabled && discovery" ng-click="disableService('metrics')" type="button" class="button_primary mt5"> Disable </button>
+
+	  </div>
+
+	  <div ng-show="!config.metrics.host && discovery">
+	  	<p>No Metrics service detected.</p>
+	  </div>
+
+	  <hr>
+	  <!--- END METRICS SERVICE -->
 
 	</div>
 

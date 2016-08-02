@@ -25,7 +25,8 @@
     "redis": "^0.12.1",
     "request": "^2.58.0",
     "socket.io": "^1.4.8",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "simple-orchestration-js": "https://github.com/mattcollins84/simple-orchestration-js"
   },
   "devDependencies": {
     "autoprefixer": "^6.2.3",

@@ -36,6 +36,13 @@ app.locals = {
     username: null,
     password: null
   },
+  metrics: {
+    enabled: false,
+    name: null,
+    host: null,
+    username: null,
+    password: null
+  },
   cloudant: require('./lib/credentials.js').cloudantNoSQLDB[0].credentials,
   import: {}
 };
@@ -78,7 +85,7 @@ app.get('/templates/:name', isloggedin.auth, function(req, res) {
 
 // search api 
 app.get('/search', cors(), function (req, res) {
-  db.search(req.query, app.locals.cache, function(err, data) {
+  db.search(req.query, app.locals, function(err, data) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
     }
@@ -359,6 +366,50 @@ app.post('/service/disable/scs', isloggedin.auth, function(req, res) {
 
   if (app.locals.discovery) {
     sos.setEnv("search", "cache_enable", false, function(err, data) {
+
+      if (err) {
+        return res.send({ success: false })
+      }
+
+      return res.send({ success: true })
+
+    });
+  }
+  
+  else {
+    return res.send({ success: false })
+  }
+
+});
+
+// Enable a discovered SAS service
+app.post('/service/enable/metrics', isloggedin.auth, function(req, res) {
+
+  if (app.locals.discovery && app.locals.metrics.name && app.locals.metrics.host) {
+    
+    sos.setEnv("search", "metrics_enable", true, function(err, data) {
+
+      if (err) {
+        return res.send({ success: false })
+      }
+
+      return res.send({ success: true })
+
+    });
+    
+  }
+
+  else {
+    return res.send({ success: false })
+  }
+
+});
+
+// Disable a discovered Metrics service
+app.post('/service/disable/metrics', isloggedin.auth, function(req, res) {
+
+  if (app.locals.discovery) {
+    sos.setEnv("search", "metrics_enable", false, function(err, data) {
 
       if (err) {
         return res.send({ success: false })
