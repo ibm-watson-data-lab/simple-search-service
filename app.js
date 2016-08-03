@@ -52,7 +52,6 @@ var sos = require('./lib/discovery.js')(app.locals, io);
 // register with SOS
 sos.register("search", "s-s-s", { url: appEnv.url, name: "Simple Search Service" }, { ttl: 10 });
 
-
 // Use Passport to provide basic HTTP auth when locked down
 var passport = require('passport');
 passport.use(isloggedin.passportStrategy());
@@ -153,6 +152,7 @@ app.get('/import/status', isloggedin.auth, function(req, res) {
 });
 
 app.post('/deleteeverything', isloggedin.auth, function(req, res) {
+
   var cache = require('./lib/cache.js')(app.locals.cache);
   if (cache) {
     cache.clearAll();
@@ -233,7 +233,9 @@ app.put('/row/:id', cors(), bodyParser, isloggedin.auth, function(req, res) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
     }
+
     autocomplete.append(req.body, app.locals.autocomplete);
+
     res.send(data);
 
   });
@@ -248,7 +250,9 @@ app.post('/row', cors(), bodyParser, isloggedin.auth, function(req, res) {
     if (err) {
       return res.status(err.statusCode).send({error: err.error, reason: err.reason});
     }
+
     autocomplete.append(req.body, app.locals.autocomplete);
+
     res.send(data);
 
   });

@@ -237,6 +237,71 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	    	var searchOpts = {
 	    		q: q,
+	    		cache: useCache
+	    	}
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					$scope.$root.searchDocs = response;
+				});
+
+				return false;
+	    }
+
+	    $scope.$root.clickSearch = function(field, $event) {
+
+	    	var value = '"'+this.field+'"';
+	    	var q = field + ":" + value;
+	    	var oldQ = $('#q').val();
+
+	    	if (oldQ && oldQ !== "*:*") {
+	    		q += " AND " + oldQ;
+	    	}
+
+	    	if (!q || q.length == 0 || q == ":") {
+	    		$('#q').val("*:*");
+	    		$('#q').val("*:*");
+	    		q = "*:*";
+	    	}
+
+	    	else {
+	    		$('#q').val(q)
+	    	}
+
+	    	$scope.$root.searchdirty = true;
+
+	    	var searchOpts = {
+	    		q: q,
+	    		cache: false
+	    	}
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					$scope.$root.searchDocs = response;
+				});
+
+				return false;
+	    }
+
+	    $scope.$root.toggleDeleteConfirm = function(id) {
+
+	    	$('#confirm'+id).toggleClass('invisible');
+	    	//$('#actions'+id).toggleClass('invisible');
+
+	    }
+
+	    $scope.$root.moreResults = function() {
+	    	
+	    	var bookmark = $('#bookmark').val();
+
+	    	var q = $('#q').val();
+	    	
+	    	if (!q || q.length == 0) {
+	    		$('#q').val("*:*");
+	    		$('#q').val("*:*");
+	    		q = "*:*";
+	    	}
+
+	    	var searchOpts = {
+	    		q: q,
 	    		cache: false,
 	    		bookmark: bookmark
 	    	}

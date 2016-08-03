@@ -20,7 +20,7 @@ Once the data is uploaded, you can use the UI to browse and manage your data via
 * faceting
 * caching of popular searches
 
-You can use this along with the rest of the API to integrate the Simple Search Service into your apps. For a full API reference, [click here](API Reference.md).
+You can use this along with the rest of the API to integrate the Simple Search Service into your apps. For a full API reference, [click here](https://github.com/ibm-cds-labs/simple-search-service#api-reference).
 
 While this app is a demo to showcase how easily you can build an app on Bluemix using Node.js and Cloudant, it also provides a mature search API that scales with the addition of multiple Simple Search Service nodes and a centralized cache using Redis by Compose.io. In fact, a similar architecture powers the search experience in the Bluemix services catalog.
 
@@ -80,8 +80,9 @@ When lockdown mode is detected, all web requests will be get a `401 Unauthorised
 
 If you wish to get access to the Simple Search Service whilst in lockdown mode, you can enable basic HTTP authentication by setting two more environment variables:
 
-* SSS_LOCKDOWN_USERNAME
-* SSS_LOCKDOWN_PASSWORD
+
+* `SSS_LOCKDOWN_USERNAME`
+* `SSS_LOCKDOWN_PASSWORD`
 
 When these are set, you are able to bypass lockdown mode by providing a matching username and password. If you access the UI, your browser will prompt you for these details. If you want to access the API you can provide the username and password as part of your request:
 
