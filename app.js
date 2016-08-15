@@ -176,7 +176,12 @@ app.get('/schema', isloggedin.auth, function(req, res) {
 });
 
 app.get('/config', isloggedin.auth, function(req, res) {
-  res.send(app.locals)
+  res.send({
+    discovery: app.locals.discovery,
+    autocomplete: app.locals.autocomplete,
+    cache: app.locals.cache,
+    metrics: app.locals.metrics
+  })
 })
 
 //settings api 
