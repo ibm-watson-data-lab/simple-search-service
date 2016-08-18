@@ -47,10 +47,10 @@ app.locals = {
   import: {}
 };
 
-var sos = require('./lib/discovery.js')(app.locals, io);
+var registry = require('./lib/discovery.js')(app.locals, io);
 
 // register with SOS
-sos.register("search", "s-s-s", { url: appEnv.url, name: "Simple Search Service" }, { ttl: 10 });
+registry.register("search", "search-service", { url: appEnv.url, name: "Simple Search Service" }, { ttl: 10 });
 
 // Use Passport to provide basic HTTP auth when locked down
 var passport = require('passport');
@@ -308,7 +308,7 @@ app.post('/service/enable/sas', isloggedin.auth, function(req, res) {
 
   if (app.locals.discovery && app.locals.autocomplete.name && app.locals.autocomplete.host) {
     
-    sos.setEnv("search", "autocomplete_enable", true, function(err, data) {
+    registry.setEnv("search", "autocomplete_enable", true, function(err, data) {
 
       if (err) {
         return res.send({ success: false })
@@ -330,7 +330,7 @@ app.post('/service/enable/sas', isloggedin.auth, function(req, res) {
 app.post('/service/disable/sas', isloggedin.auth, function(req, res) {
 
   if (app.locals.discovery) {
-    sos.setEnv("search", "autocomplete_enable", false, function(err, data) {
+    registry.setEnv("search", "autocomplete_enable", false, function(err, data) {
 
       if (err) {
         return res.send({ success: false })
@@ -352,7 +352,7 @@ app.post('/service/enable/scs', isloggedin.auth, function(req, res) {
 
   if (app.locals.discovery && app.locals.cache.name && app.locals.cache.host) {
     
-    sos.setEnv("search", "cache_enable", true, function(err, data) {
+    registry.setEnv("search", "cache_enable", true, function(err, data) {
 
       if (err) {
         return res.send({ success: false })
@@ -374,7 +374,7 @@ app.post('/service/enable/scs', isloggedin.auth, function(req, res) {
 app.post('/service/disable/scs', isloggedin.auth, function(req, res) {
 
   if (app.locals.discovery) {
-    sos.setEnv("search", "cache_enable", false, function(err, data) {
+    registry.setEnv("search", "cache_enable", false, function(err, data) {
 
       if (err) {
         return res.send({ success: false })
@@ -396,7 +396,7 @@ app.post('/service/enable/metrics', isloggedin.auth, function(req, res) {
 
   if (app.locals.discovery && app.locals.metrics.name && app.locals.metrics.host) {
     
-    sos.setEnv("search", "metrics_enable", true, function(err, data) {
+    registry.setEnv("search", "metrics_enable", true, function(err, data) {
 
       if (err) {
         return res.send({ success: false })
@@ -418,7 +418,7 @@ app.post('/service/enable/metrics', isloggedin.auth, function(req, res) {
 app.post('/service/disable/metrics', isloggedin.auth, function(req, res) {
 
   if (app.locals.discovery) {
-    sos.setEnv("search", "metrics_enable", false, function(err, data) {
+    registry.setEnv("search", "metrics_enable", false, function(err, data) {
 
       if (err) {
         return res.send({ success: false })

@@ -58,7 +58,7 @@ Then run:
 node app.js
 ```
 
-## Discovery Mode
+## Service Registry
 
 The Simple Search Service utilises [Etcd](https://github.com/coreos/etcd) to discover and utilise some of our other Simple Services to extend and improve the service.
 
@@ -68,15 +68,15 @@ Other services that are available to the Simple Search Service are:
 * [The Simple Caching Service](https://github.com/MattCollins84/simple-cache-service) - Enable caching of popular searches
 * [Metrics Collector Microservice](https://github.com/ibm-cds-labs/metrics-collector-microservice) - Enable logging of searches
 
-### Enabling discovery mode
+### Enabling the Service Registry
 
-Enabling discovery mode requires setting an environment variable, `ETCD_URL`. This should be the URL of your Etcd instance including any basic HTTP authentication information
+Enabling the Service Registry requires setting an environment variable, `ETCD_URL`. This should be the URL of your Etcd instance including any basic HTTP authentication information
 
 ```
 export ETCD_URL='http://username:password@etcd.exmple.com'
 ```
 
-If Discovery Mode is enabled, the services tab will become enabled and any discovered services will be displayed with a toggle to enable or disable these services.
+If the Service Registry is enabled, any discovered services will be displayed on the Services page, with a toggle to enable or disable these services.
 
 Once enabled these services will automatically be integrated into the Simple Search Service.
 
