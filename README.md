@@ -12,17 +12,16 @@ The application uses these Bluemix services:
 * a Cloudant database
 * a Redis in-memory database from Compose.io (Optional)
 
-Once the data is uploaded, you can use the UI to browse and manage your data via the integrated CMS. Additionally, a CORS-enabled, cached API endpoint is available at `<your domain name>/search`. The endpoint takes advantage of Cloudant's built-in integration for Lucene full-text indexing. Here's what you get:
+Once the data is uploaded, you can use the UI to browse and manage your data via the integrated CMS. Additionally, a CORS-enabled API endpoint is available at `<your domain name>/search`. The endpoint takes advantage of Cloudant's built-in integration for Lucene full-text indexing. Here's what you get:
 
 * fielded search - `?q=colour:black+AND+brand:fender`
 * free-text search - `?q=black+fender+strat`
 * pagination - `?q=black+fender+strat&bookmark=<xxx>`
 * faceting
-* caching of popular searches
 
 You can use this along with the rest of the API to integrate the Simple Search Service into your apps. For a full API reference, [click here](https://github.com/ibm-cds-labs/simple-search-service#api-reference).
 
-While this app is a demo to showcase how easily you can build an app on Bluemix using Node.js and Cloudant, it also provides a mature search API that scales with the addition of multiple Simple Search Service nodes and a centralized cache using Redis by Compose.io. In fact, a similar architecture powers the search experience in the Bluemix services catalog.
+While this app is a demo to showcase how easily you can build an app on Bluemix using Node.js and Cloudant, it also provides a mature search API that scales with the addition of multiple Simple Search Service nodes. In fact, a similar architecture powers the search experience in the Bluemix services catalog.
 
 A more detailed walkthrough of using Simple Search Service is available [here](https://developer.ibm.com/clouddataservices/2016/01/21/introducing-simple-faceted-search-service/).
 
@@ -44,24 +43,42 @@ The fastest way to deploy this application to Bluemix is to click the **Deploy t
 
 Clone this repository then run `npm install` to add the Node.js libraries required to run the app.
 
-Then create some environment variables that contain your Cloudant URL, and optionally, your Redis details:
+Then create some environment variables that contain your Cloudant URL.
 
 ```sh
 # Cloudant URL
 export SSS_CLOUDANT_URL='https://<USERNAME>:<PASSWORD>@<HOSTNAME>'
-
-# Redis Host and password
-export SSS_REDIS_HOST='127.0.0.1:6379'
-export SSS_REDIS_PASSWORD='redispassword'
 ```
 
-replacing the `USERNAME`, `PASSWORD` and `HOSTNAME` placeholders for your own Cloudant account's details. If your Redis server does not require a password, do not set the `SSS_REDIS_PASSWORD` environment variable.
+replacing the `USERNAME`, `PASSWORD` and `HOSTNAME` placeholders for your own Cloudant account's details.
 
 Then run:
 
 ```sh
 node app.js
 ```
+
+## Service Registry
+
+The Simple Search Service utilises [Etcd](https://github.com/coreos/etcd) to discover and utilise some of our other Simple Services to extend and improve the service.
+
+Other services that are available to the Simple Search Service are:
+
+* [The Simple Autocomplete Service](https://github.com/ibm-cds-labs/simple-autocomplete-service) - Add auto completion to the CMS 
+* [The Simple Caching Service](https://github.com/MattCollins84/simple-cache-service) - Enable caching of popular searches
+* [Metrics Collector Microservice](https://github.com/ibm-cds-labs/metrics-collector-microservice) - Enable logging of searches
+
+### Enabling the Service Registry
+
+Enabling the Service Registry requires setting an environment variable, `ETCD_URL`. This should be the URL of your Etcd instance including any basic HTTP authentication information
+
+```
+export ETCD_URL='http://username:password@etcd.exmple.com'
+```
+
+If the Service Registry is enabled, any discovered services will be displayed on the Services page, with a toggle to enable or disable these services.
+
+Once enabled these services will automatically be integrated into the Simple Search Service.
 
 ## Lockdown mode
 
@@ -79,6 +96,7 @@ or set a custom environment variable in Bluemix.
 When lockdown mode is detected, all web requests will be get a `401 Unauthorised` response, except for the `/search` endpoint which will continue to work. This prevents your data being modified until lockdown mode is switched off again, by removing the environment variable.
 
 If you wish to get access to the Simple Search Service whilst in lockdown mode, you can enable basic HTTP authentication by setting two more environment variables:
+
 
 * `SSS_LOCKDOWN_USERNAME`
 * `SSS_LOCKDOWN_PASSWORD`
@@ -129,13 +147,6 @@ It is possible to alter the amount of results returned using the `limit` paramet
 GET /search?q=black&bookmark=<...>&limit=10
 ```
 
-It is possible to alter whether or not to use the cache via the `cache` parameter (defaults to true).
-
-```bash
-# Return the next set of docs where 'black' is mentioned, don't use the cache
-GET /search?q=black&bookmark=<...>&cache=false
-```
-
 #### Example Response
 
 All searches will respond in the same way.
@@ -170,7 +181,6 @@ All searches will respond in the same way.
       "Black": 19
     }
   },
-  "from_cache": true, // did this response come from the cache?
   "_ts": 1467108849821
 }
 ```

@@ -1,0 +1,97 @@
+<section class="layout_section theme_light">
+
+  <h1 class="type_heading" id="toc_0"><mark class="type_mark">Discover Services</mark></h1>
+
+  <p>Use the Simple Service Registry to discover new services and extend the Simple Search Service</p>
+
+  <div ng-show="!discovery">
+    <p class="type_copy">
+      Registration is currently disabled.
+    </p>
+  </div>
+
+  <div ng-show="discovery">
+    <p class="type_copy">
+      Registration is currently enabled, discover services below.
+    </p>
+
+  </div>
+
+</section>
+
+<section class="layout_section">
+
+  <div ng-show="discovery">
+
+  	<!--- START AUTOCOMPLETE SERVICE -->
+	  <h2 class="type_heading type_mark">Simple Autocomplete Service</h2>
+
+	  <div ng-show="config.autocomplete.host && discovery">
+	  	<p>Autocomplete service detected.</p>
+	  	<ul>
+	  		<li>{{config.autocomplete.name}}</li>
+	  		<li>{{config.autocomplete.host}}</li>
+	  	</ul>
+
+	  	<button ng-show="!config.autocomplete.enabled && discovery" ng-click="enableService('sas')" type="button" class="button_primary mt5"> Enable </button>
+
+	  	<button ng-show="config.autocomplete.enabled && discovery" ng-click="disableService('sas')" type="button" class="button_primary mt5"> Disable </button>
+
+	  </div>
+
+	  <div ng-show="!config.autocomplete.host && discovery">
+	  	<p>No Autocomplete service detected.</p>
+	  </div>
+
+	  <hr>
+	  <!--- END AUTOCOMPLETE SERVICE -->
+
+	  <!--- START CACHING SERVICE -->
+	  <h2 class="type_heading type_mark">Simple Caching Service</h2>
+
+	  <div ng-show="config.cache.host && discovery">
+	  	<p>Caching service detected.</p>
+	  	<ul>
+	  		<li>{{config.cache.name}}</li>
+	  		<li>{{config.cache.host}}</li>
+	  	</ul>
+
+	  	<button ng-show="!config.cache.enabled && discovery" ng-click="enableService('scs')" type="button" class="button_primary mt5"> Enable </button>
+
+	  	<button ng-show="config.cache.enabled && discovery" ng-click="disableService('scs')" type="button" class="button_primary mt5"> Disable </button>
+
+	  </div>
+
+	  <div ng-show="!config.cache.host && discovery">
+	  	<p>No Caching service detected.</p>
+	  </div>
+
+	  <hr>
+	  <!--- END CACHING SERVICE -->
+
+	  <!--- START METRICS SERVICE -->
+	  <h2 class="type_heading type_mark">Simple Logging Service</h2>
+
+	  <div ng-show="config.metrics.host && discovery">
+	  	<p>Logging service detected.</p>
+	  	<ul>
+	  		<li>{{config.metrics.name}}</li>
+	  		<li>{{config.metrics.host}}</li>
+	  	</ul>
+
+	  	<button ng-show="!config.metrics.enabled && discovery" ng-click="enableService('metrics')" type="button" class="button_primary mt5"> Enable </button>
+
+	  	<button ng-show="config.metrics.enabled && discovery" ng-click="disableService('metrics')" type="button" class="button_primary mt5"> Disable </button>
+
+	  </div>
+
+	  <div ng-show="!config.metrics.host && discovery">
+	  	<p>No Logging service detected.</p>
+	  </div>
+
+	  <hr>
+	  <!--- END METRICS SERVICE -->
+
+	</div>
+
+</section>

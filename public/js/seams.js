@@ -1,5 +1,12 @@
 
-var seamsApp = angular.module('seamsApp', ['ngRoute']);
+var seamsApp = angular.module('seamsApp', ['ngRoute', 'btford.socket-io']).
+factory('socket', function (socketFactory) {
+  
+  var mySocket = socketFactory();
+  mySocket.forward('reload-config');
+  return mySocket;
+
+});
 
 seamsApp.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
@@ -21,93 +28,109 @@ seamsApp.config(['$routeProvider', function ($routeProvider) {
   	});
 }]);
 
-seamsApp.controller('navController', ['$scope', '$route', '$routeParams',
-    function($scope, $route, $routeParams) {
-		$scope.$root.selectedView = $routeParams.pathname;
+seamsApp.controller('navController', ['$scope', '$route', '$routeParams', '$window', 'socket',
+    function($scope, $route, $routeParams, $window, socket) {
 
-		switch($routeParams.pathname) {
-			case 'api':
-				if (!$scope.$root.dbschema) {
-					$scope.$root.getCurrentSchema(function(err, data) {
-						if (err) {
-						    $scope.$root.dbschema = { fields: [] };
-						}
-					});
-				}
-				break;
-			case 'upload':
-				$('#remoteFileError').html("");
-				$('#file').change(function () {
-					$scope.$root.fileUploaded();
-	        	});
-				$scope.$root.getPreview(function(data) {
-			    	$scope.$root.$apply();
-			    });
-				break;
-			case 'import':
-				if ($scope.$root.schema) {
-					var html = $scope.$root.renderSchema($scope.$root.schema);
-					$('#schemacontent').html(html);
-					var checked = 0;
-					if (!$scope.$root.schemaError) {
-						$('.facet_checkbox', '#schemacontent').each(function() {
-							$(this).change(function() {
-								if($(this).is(":checked")) {
-									checked++;
-								}
-								else {
-									checked--;
-								}
-								$('#importbutton').attr('disabled',checked == 0);
-								$('#facetstatus').css('visibility', checked == 0 ? 'visible' : 'hidden');
-							});
+		$scope.$root.selectedView = $routeParams.pathname;
+		$scope.$root.discovery = false;
+
+		// update config when required
+		$scope.$on('socket:reload-config', function() {
+			$scope.$root.getCurrentConfig(function(data) {
+				$window._config = data;
+			})
+		});
+		
+		$scope.$root.getCurrentConfig(function(data) {
+
+	  	$window._config = data;
+		
+			switch($routeParams.pathname) {
+				case 'api':
+					if (!$scope.$root.dbschema) {
+						$scope.$root.getCurrentSchema(function(err, data) {
+							if (err) {
+							    $scope.$root.dbschema = { fields: [] };
+							}
 						});
 					}
-					$('#importbutton').attr('disabled', checked == 0 || $scope.$root.schemaError);
-					$('#facetstatus').css('visibility', (checked == 0 || $scope.$root.schemaError) ? 'visible' : 'hidden');
-				}
-				break;
-			case 'search':
-				if (!$scope.$root.dbschema) {
-					$scope.$root.getCurrentSchema(function(err, data) {
-						if (err) {
-						    $scope.$root.dbschema = { fields: [] };
+					break;
+				case 'upload':
+					$('#remoteFileError').html("");
+					$('#file').change(function () {
+						$scope.$root.fileUploaded();
+		        	});
+					$scope.$root.getPreview(function(data) {
+				    	$scope.$root.$apply();
+				    });
+					break;
+				case 'import':
+					if ($scope.$root.schema) {
+						var html = $scope.$root.renderSchema($scope.$root.schema);
+						$('#schemacontent').html(html);
+						var checked = 0;
+						if (!$scope.$root.schemaError) {
+							$('.facet_checkbox', '#schemacontent').each(function() {
+								$(this).change(function() {
+									if($(this).is(":checked")) {
+										checked++;
+									}
+									else {
+										checked--;
+									}
+									$('#importbutton').attr('disabled',checked == 0);
+									$('#facetstatus').css('visibility', checked == 0 ? 'visible' : 'hidden');
+								});
+							});
 						}
+						$('#importbutton').attr('disabled', checked == 0 || $scope.$root.schemaError);
+						$('#facetstatus').css('visibility', (checked == 0 || $scope.$root.schemaError) ? 'visible' : 'hidden');
+					}
+					break;
+				case 'search':
+					if (!$scope.$root.dbschema) {
+						$scope.$root.getCurrentSchema(function(err, data) {
+							if (err) {
+							    $scope.$root.dbschema = { fields: [] };
+							}
+							$scope.$root.search();
+						});
+					}
+					else {
 						$scope.$root.search();
-					});
-				}
-				else {
-					$scope.$root.search();
-				}
-				break;
-			case 'cms':
-				if (!$scope.$root.dbschema) {
-					$scope.$root.getCurrentSchema(function(err, data) {
-						if (err) {
-						    $scope.$root.dbschema = { fields: [] };
-						}
+					}
+					break;
+				case 'cms':
+					if (!$scope.$root.dbschema) {
+						$scope.$root.getCurrentSchema(function(err, data) {
+							if (err) {
+							    $scope.$root.dbschema = { fields: [] };
+							}
+							$scope.$root.search(false);
+						});
+					}
+					else {
 						$scope.$root.search(false);
-					});
-				}
-				else {
-					$scope.$root.search(false);
-				}
-				break;
-			case 'add':
-				$scope.$root.addRowSuccess = false;
-	  		$scope.$root.addRowFail		= false;
-	  		$scope.$root.selectedFields = {};
-				if (!$scope.$root.dbschema) {
-					$scope.$root.getCurrentSchema(function(err, data) {
-						if (err) {
-						  $scope.$root.dbschema = { fields: [] };
+					}
+					break;
+				case 'add':
+					$scope.$root.addRowSuccess = false;
+		  		$scope.$root.addRowFail		= false;
+		  		$scope.$root.selectedFields = {};
+		  		
+		  			if (!$scope.$root.dbschema) {
+							$scope.$root.getCurrentSchema(function(err, data) {
+								if (err) {
+								  $scope.$root.dbschema = { fields: [] };
+								}
+							});
 						}
-					});
-				}
-				break;
-			default:
-				break;
-		}
+						
+					break;
+				default:
+					break;
+			}
+		});
 	}
 ]);
 
@@ -138,6 +161,71 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	    	// always re-show the "more" button
 	    	$('button#more-results').show();
+
+	    	var q = $('#q').val();
+	    	
+	    	if (!q || q.length == 0) {
+	    		$('#q').val("*:*");
+	    		$('#q').val("*:*");
+	    		q = "*:*";
+	    	}
+
+	    	var searchOpts = {
+	    		q: q,
+	    		cache: useCache
+	    	}
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					$scope.$root.searchDocs = response;
+				});
+
+				return false;
+	    }
+
+	    $scope.$root.clickSearch = function(field, $event) {
+
+	    	var value = '"'+this.field+'"';
+	    	var q = field + ":" + value;
+	    	var oldQ = $('#q').val();
+
+	    	if (oldQ && oldQ !== "*:*") {
+	    		q += " AND " + oldQ;
+	    	}
+
+	    	if (!q || q.length == 0 || q == ":") {
+	    		$('#q').val("*:*");
+	    		$('#q').val("*:*");
+	    		q = "*:*";
+	    	}
+
+	    	else {
+	    		$('#q').val(q)
+	    	}
+
+	    	$scope.$root.searchdirty = true;
+
+	    	var searchOpts = {
+	    		q: q,
+	    		cache: false
+	    	}
+
+				$scope.$root.performSearch(searchOpts, function(err, response) {
+					$scope.$root.searchDocs = response;
+				});
+
+				return false;
+	    }
+
+	    $scope.$root.toggleDeleteConfirm = function(id) {
+
+	    	$('#confirm'+id).toggleClass('invisible');
+	    	//$('#actions'+id).toggleClass('invisible');
+
+	    }
+
+	    $scope.$root.moreResults = function() {
+	    	
+	    	var bookmark = $('#bookmark').val();
 
 	    	var q = $('#q').val();
 	    	
@@ -628,12 +716,19 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 			}
 		};
 
+		$scope.$root.getCurrentConfig = function(callback) {
+			$http.get("/config").success(function(data) {
+				$scope.$root.config = data;
+				$scope.$root.discovery = data.discovery;
+				callback(data);
+			})
+		}
+
 		$scope.$root.getCurrentSchema = function(callback) {
 			$scope.$root.searching = true;
 			$http.get("/schema")
 				.success(function(data) {
 					$scope.$root.dbschema = data;
-
 					var unfacetedfields = [];
 					var facetedfields = [];
 			        for(var i in data.fields) {
@@ -839,6 +934,22 @@ seamsApp.controller('seamsController', ['$scope', '$route', '$routeParams', '$lo
 
 	  }
 
+	  $scope.$root.enableService = function(service) {
+
+  		var restapi = '/service/enable/'+service
+			
+			$http.post(restapi);
+
+	  }
+
+	  $scope.$root.disableService = function(service) {
+
+  		var restapi = '/service/disable/'+service
+			
+			$http.post(restapi);
+
+	  }
+
 	  $scope.$root.getSettings();
 
 		$scope.$root.getPreview(function(data) {
@@ -939,33 +1050,37 @@ seamsApp.directive('apiExample', function(){
 	};
 });
 
-seamsApp.controller('actionController', ['$scope', '$route', '$routeParams',
-    function($scope, $route, $routeParams) {
+seamsApp.controller('actionController', ['$scope', '$route', '$routeParams', '$window',
+    function($scope, $route, $routeParams, $window) {
 		
 		$scope.$root.selectedView = "cms";
 
-		switch($routeParams.action) {
-			case 'edit':
-				$scope.$root.editRowSuccess = false;
-	  		$scope.$root.editRowFail		= false;
+		$scope.$root.getCurrentConfig(function(data) {
+	  	
+	  	$window._config = data;
 
-				if (!$scope.$root.dbschema) {
-					$scope.$root.getCurrentSchema(function(err, data) {
-						if (err) {
-						  $scope.$root.dbschema = { fields: [] };
-						}
+			switch($routeParams.action) {
+				case 'edit':
+					$scope.$root.editRowSuccess = false;
+		  		$scope.$root.editRowFail		= false;
+
+					if (!$scope.$root.dbschema) {
+						$scope.$root.getCurrentSchema(function(err, data) {
+							if (err) {
+							  $scope.$root.dbschema = { fields: [] };
+							}
+							$scope.$root.getById($routeParams.id);
+						});
+					}
+					else {
 						$scope.$root.getById($routeParams.id);
-					});
-				}
+					}
+					break;
+				default:
+					break;
+			}
 
-				else {
-					$scope.$root.getById($routeParams.id);
-				}
-				
-				break;
-			default:
-				break;
-		}
+		});
 	}
 ]);
 
