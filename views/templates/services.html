@@ -70,10 +70,10 @@
 	  <!--- END CACHING SERVICE -->
 
 	  <!--- START METRICS SERVICE -->
-	  <h2 class="type_heading type_mark">Metrics Collection</h2>
+	  <h2 class="type_heading type_mark">Simple Logging Service</h2>
 
 	  <div ng-show="config.metrics.host && discovery">
-	  	<p>Metrics service detected.</p>
+	  	<p>Logging service detected.</p>
 	  	<ul>
 	  		<li>{{config.metrics.name}}</li>
 	  		<li>{{config.metrics.host}}</li>
@@ -86,7 +86,7 @@
 	  </div>
 
 	  <div ng-show="!config.metrics.host && discovery">
-	  	<p>No Metrics service detected.</p>
+	  	<p>No Logging service detected.</p>
 	  </div>
 
 	  <hr>
