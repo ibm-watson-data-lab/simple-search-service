@@ -3,7 +3,8 @@
   "version": "0.2.0",
   "description": "A Node app that creates a faceted search engine, powered by IBM Cloudant",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "grunt"
   },
   "license": "Apache-2.0",
   "dependencies": {
