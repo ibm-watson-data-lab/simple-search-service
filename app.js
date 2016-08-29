@@ -63,7 +63,7 @@ app.use(express.static(__dirname + '/public'));
 var multipart = multer({ dest: process.env.TMPDIR, limits: { files: 1, fileSize: 100000000 }});
 
 // posted body parser
-var bodyParser = require('body-parser')({extended:true})
+var bodyParser = require('body-parser')({extended:true});
 
 // compress all requests
 app.use(compression());
@@ -100,7 +100,7 @@ app.post('/upload', multipart, isloggedin.auth, function(req, res){
   };
 
   dbimport.clear();
-  app.locals.import[obj.files.file.name] = obj
+  app.locals.import[obj.files.file.name] = obj;
   inference.infer(obj.files.file.path, function(err, data) {
     data.upload_id = req.files.file.name;
     res.send(data);
@@ -112,7 +112,7 @@ app.post('/fetch', bodyParser, isloggedin.auth, function(req, res){
   var obj = req.body;
 
   dbimport.clear();
-  app.locals.import[obj.url] = obj
+  app.locals.import[obj.url] = obj;
   
   inference.infer(obj.url, function(err, data) {
 	  data.upload_id = obj.url;
@@ -126,7 +126,7 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   console.log("****",req.body.schema);
   console.log("****");
 
-  var currentUpload = app.locals.import[req.body.upload_id]
+  var currentUpload = app.locals.import[req.body.upload_id];
 
   // run this in parallel to save time
   var theschema = JSON.parse(req.body.schema);
@@ -181,8 +181,8 @@ app.get('/config', isloggedin.auth, function(req, res) {
     autocomplete: app.locals.autocomplete,
     cache: app.locals.cache,
     metrics: app.locals.metrics
-  })
-})
+  });
+});
 
 //settings api 
 app.get('/settings', isloggedin.auth, function (req, res) {
@@ -190,7 +190,7 @@ app.get('/settings', isloggedin.auth, function (req, res) {
 	 if (err) {
 	   return res.status(err.statusCode).send({error: err.error, reason: err.reason});
 	 }
-   data["appenv"] = sssenv;
+   data.appenv = sssenv;
 	 res.send(data);
 	});
 });
@@ -277,7 +277,7 @@ app.get('/autocompletes', cors(), isloggedin.auth, function(req, res) {
 
     Object.keys(data.counts).forEach(k => {
       facets[k] = `http://${req.headers.host}/autocompletes/${k}`;
-    })
+    });
 
     res.send(facets);
 
@@ -311,17 +311,19 @@ app.post('/service/enable/sas', isloggedin.auth, function(req, res) {
     registry.setEnv("search", "autocomplete_enable", true, function(err, data) {
 
       if (err) {
-        return res.send({ success: false })
+        return res.send({ success: false });
       }
 
-      return res.send({ success: true })
+      data = null;
+
+      return res.send({ success: true });
 
     });
     
   }
 
   else {
-    return res.send({ success: false })
+    return res.send({ success: false });
   }
 
 });
@@ -333,16 +335,18 @@ app.post('/service/disable/sas', isloggedin.auth, function(req, res) {
     registry.setEnv("search", "autocomplete_enable", false, function(err, data) {
 
       if (err) {
-        return res.send({ success: false })
+        return res.send({ success: false });
       }
 
-      return res.send({ success: true })
+      data = null;
+
+      return res.send({ success: true });
 
     });
   }
   
   else {
-    return res.send({ success: false })
+    return res.send({ success: false });
   }
 
 });
@@ -355,17 +359,19 @@ app.post('/service/enable/scs', isloggedin.auth, function(req, res) {
     registry.setEnv("search", "cache_enable", true, function(err, data) {
 
       if (err) {
-        return res.send({ success: false })
+        return res.send({ success: false });
       }
 
-      return res.send({ success: true })
+      data = null;
+
+      return res.send({ success: true });
 
     });
     
   }
 
   else {
-    return res.send({ success: false })
+    return res.send({ success: false });
   }
 
 });
@@ -377,16 +383,18 @@ app.post('/service/disable/scs', isloggedin.auth, function(req, res) {
     registry.setEnv("search", "cache_enable", false, function(err, data) {
 
       if (err) {
-        return res.send({ success: false })
+        return res.send({ success: false });
       }
 
-      return res.send({ success: true })
+      data = null;
+
+      return res.send({ success: true });
 
     });
   }
   
   else {
-    return res.send({ success: false })
+    return res.send({ success: false });
   }
 
 });
@@ -399,17 +407,19 @@ app.post('/service/enable/metrics', isloggedin.auth, function(req, res) {
     registry.setEnv("search", "metrics_enable", true, function(err, data) {
 
       if (err) {
-        return res.send({ success: false })
+        return res.send({ success: false });
       }
 
-      return res.send({ success: true })
+      data = null;
+
+      return res.send({ success: true });
 
     });
     
   }
 
   else {
-    return res.send({ success: false })
+    return res.send({ success: false });
   }
 
 });
@@ -421,16 +431,18 @@ app.post('/service/disable/metrics', isloggedin.auth, function(req, res) {
     registry.setEnv("search", "metrics_enable", false, function(err, data) {
 
       if (err) {
-        return res.send({ success: false })
+        return res.send({ success: false });
       }
 
-      return res.send({ success: true })
+      data = null;
+
+      return res.send({ success: true });
 
     });
   }
   
   else {
-    return res.send({ success: false })
+    return res.send({ success: false });
   }
 
 });

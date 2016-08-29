@@ -30,9 +30,14 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.2.3",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-jscs": "^3.0.1",
     "gulp": "^3.9.0",
     "gulp-postcss": "^6.0.1",
     "gulp-rename": "^1.2.2",
+    "jshint": "^2.9.3",
     "postcss-cssnext": "^2.4.0",
     "postcss-custom-properties": "^5.0.0",
     "postcss-import": "^7.1.3"
