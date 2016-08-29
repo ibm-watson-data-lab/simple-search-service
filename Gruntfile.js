@@ -6,10 +6,10 @@ module.exports = function (grunt) {
         jshintrc: ".jshintrc",
         ignores : [ "node_modules/**/*.js" ]
       },
-      src: ["Gruntfile.js", "app.js"],
+      src: ["Gruntfile.js", "app.js", "lib/**.js"],
     },
     jscs: {
-      src: ["Gruntfile.js", "app.js"],
+      src: ["Gruntfile.js", "app.js", "lib/**.js"],
       options: {
         config: ".jscsrc",
         requireCurlyBraces: [ "if" ]
