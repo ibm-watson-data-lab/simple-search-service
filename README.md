@@ -1,5 +1,7 @@
 # Overview: Simple Search Service
 
+![build status](https://travis-ci.org/ibm-cds-labs/simple-search-service.svg?branch=master)
+
 Simple Search Service is an IBM Bluemix app that lets you quickly create a faceted search engine, exposing an API you can use to bring search into your own apps. The service also creates a website that lets you preview the API and test it against your own data as well as manage your data via a simple CMS.
 
 Once deployed, use the browser to upload CSV or TSV data. Specify the fields to facet, and the service handles the rest.
