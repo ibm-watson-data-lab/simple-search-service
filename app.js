@@ -13,7 +13,8 @@ var express = require('express'),
     isloggedin = require('./lib/isloggedin.js'),
     sssenv = require('./lib/sssenv.js'),
     inference = require('./lib/inference.js'),
-    autocomplete = require('./lib/autocomplete.js');
+    autocomplete = require('./lib/autocomplete.js'),
+    request = require('request');
 
 // socket.io and express config
 var http = require('http').Server(app);
@@ -444,6 +445,32 @@ app.post('/service/disable/metrics', isloggedin.auth, function(req, res) {
   else {
     return res.send({ success: false });
   }
+
+});
+
+// Get autocomplete from SAS
+app.get('/do/autocomplete/:key', isloggedin.auth, function(req, res) {
+
+  if (app.locals.autocomplete && app.locals.autocomplete.enabled) {
+
+    var url = `${app.locals.autocomplete.host}/api/sss_${req.params.key}?term=${req.query.term}`;
+
+    request(url, function(e, r, b) {
+
+      var terms = [];
+      try {
+        terms = JSON.parse(b);
+      } catch (e) {}
+
+      return res.send(terms);
+
+    });
+
+  }
+
+  else {
+    return res.status(404).send([]);
+  }  
 
 });
 

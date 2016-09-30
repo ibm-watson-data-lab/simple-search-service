@@ -68,14 +68,8 @@
                   var autocomplete = $(e).attr("data-autocomplete");
                   if (autocomplete) {
                     
-                    var host = _config.autocomplete.host;
-                    if (_config.autocomplete.username && _config.autocomplete.password) {
-                      var bits = _config.autocomplete.host.split("//");
-                      host = bits[0] + "//" + _config.autocomplete.username + ":" + _config.autocomplete.password + "@" + bits[1];
-                    }
-
                     $(e).autocomplete({
-                      source: host + "/api/sss_" + encodeURIComponent(autocomplete)
+                      source: "/do/autocomplete/" + encodeURIComponent(autocomplete)
                     });
                   }
 
