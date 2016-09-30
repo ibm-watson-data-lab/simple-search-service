@@ -464,7 +464,7 @@ app.get('/do/autocomplete/:key', isloggedin.auth, function(req, res) {
 
       return res.send(terms);
 
-    })
+    });
 
   }
 
