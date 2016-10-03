@@ -84,3 +84,19 @@ td.error {
     background-color: #92a4af;
     border-color: #000000;
 }
+
+.remote-files {
+    margin-top: 0;
+}
+
+.remote-files.hidden {
+  display: none;
+}
+
+button.type_link {
+  background-color: transparent;
+  border: 0 none;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0;
+}

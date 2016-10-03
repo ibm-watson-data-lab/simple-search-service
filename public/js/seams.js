@@ -59,10 +59,14 @@ seamsApp.controller('navController', ['$scope', '$route', '$routeParams', '$wind
 					$('#remoteFileError').html("");
 					$('#file').change(function () {
 						$scope.$root.fileUploaded();
-		        	});
+		      });
 					$scope.$root.getPreview(function(data) {
-				    	$scope.$root.$apply();
-				    });
+				    $scope.$root.$apply();
+						$('.btn-shortcut').on('click', function() {
+							$('#fileurl').val(this.getAttribute('data-url'));
+							angular.element($('#fileurl')).triggerHandler('input');
+						});
+				  });
 					break;
 				case 'import':
 					if ($scope.$root.schema) {
@@ -1175,5 +1179,11 @@ var datatypechange = function(e) {
 			i.prop("checked", false).trigger('change');
 		}		
     i.prop("disabled", true);
+  }
+}
+
+function toggle(selector) {
+  if (selector) {
+    $(selector).slideToggle(500);
   }
 }
