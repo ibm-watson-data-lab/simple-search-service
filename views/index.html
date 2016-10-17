@@ -22,9 +22,19 @@
   <script src="/js/jquery.tagsinput.js"></script>
   <script src="/js/seams.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+
+  <script src="http://localhost:6011/client.js"></script>
+  <link href="http://localhost:6011/support-chat/support-chat.css" rel="stylesheet">
+  <script src="http://localhost:6011/support-chat/support-chat.js"></script>
   <script>
-    //var socket = io();
+
+    var chat;
+    $(document).ready(function() {
+      chat = new SNSChatSupport();
+    });
+
   </script>
+
 </head>
 <body ng-app="seamsApp" class="capped-layout">
 <!-- start header -->
