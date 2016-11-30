@@ -2,7 +2,7 @@
 declared-services:
   simple-search-service-cloudant-service:
     label: cloudantNoSQLDB
-    plan: Shared
+    plan: Lite
 applications:
 - name: simple-search-service
   path: .

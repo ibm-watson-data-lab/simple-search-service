@@ -12,7 +12,6 @@ The application uses these Bluemix services:
 
 * a Node.js runtime
 * a Cloudant database
-* a Redis in-memory database from Compose.io (Optional)
 
 Once the data is uploaded, you can use the UI to browse and manage your data via the integrated CMS. Additionally, a CORS-enabled API endpoint is available at `<your domain name>/search`. The endpoint takes advantage of Cloudant's built-in integration for Lucene full-text indexing. Here's what you get:
 
