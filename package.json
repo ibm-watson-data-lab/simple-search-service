@@ -1,6 +1,6 @@
 {
   "name": "simple-search-service",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A Node app that creates a faceted search engine, powered by IBM Cloudant",
   "scripts": {
     "start": "node app.js",

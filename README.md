@@ -252,6 +252,50 @@ The response is similar to that of editing a row, although again note that the r
 }
 ```
 
+### Initializing the index
+
+To programatically delete all data and initialize the index
+
+```
+POST /initialize
+```
+
+including the `schema` property in the payload defining the following structure 
+
+```
+{ "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "example": "example_id",
+      "facet": true
+    },
+    {
+      "name": "score",
+      "type": "number",
+      "example": 8,
+      "facet": false
+    },
+    {
+      "name": "tags",
+      "type": "arrayofstrings",
+      "example": "example_tag_1,example_tag_2",
+      "facet": true
+    }
+  ]
+}
+
+> This example defines a schema containing three fields of which two will be enabled for faceted search.
+
+```
+Valid values:
+
+* Property `name`: any string
+* Property `type`: `number`, `boolean`, `string`, `arrayofstrings` (e.g. `val1,val2,val3`)
+* Property `example`: any valid value for this `type`
+* Property `facet`: `true` or `false`
+
+
 ## Privacy Notice
 
 The Simple Search Service web application includes code to track deployments to Bluemix and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/IBM-Bluemix/cf-deployment-tracker-service) service on each deployment:
