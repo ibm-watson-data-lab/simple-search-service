@@ -147,6 +147,46 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   res.status(204).end();
 });
 
+app.post('/initialize', bodyParser, isloggedin.auth, function(req, res){
+
+  if((!req.body) || (! req.body.schema)) {
+    return res.status(400).send('Schema definition missing.');
+  }
+
+  var theschema = null;
+
+  try {
+    // parse schema
+    theschema = JSON.parse(req.body.schema);
+    // validate schema
+    // ...
+  }
+  catch(e) {
+    return res.status(400).send('Schema definition is invalid: ' + e); 
+  }
+
+  var cache = require('./lib/cache.js')(app.locals.cache);
+  if (cache) {
+    cache.clearAll();
+  }
+
+  // re-create index database
+  db.deleteAndCreate(function(err) {
+    if(err) {
+      return res.status(500).send('Index could not be re-initialized: ' + err);
+    }
+    // save schema definition
+    schema.save(theschema, function(err, d) {
+      if(err) {
+        return res.status(500).send('Schema could not be saved: ' + err);
+      }
+      console.log('schema saved',err,d);
+      return res.status(200).end();
+    });
+  });
+});
+
+
 app.get('/import/status', isloggedin.auth, function(req, res) {
   var status = dbimport.status();
   res.send(status);
