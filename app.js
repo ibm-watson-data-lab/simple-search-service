@@ -147,10 +147,12 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   res.status(204).end();
 });
 
+// Initialize the SSS index by deleting all data and loading the schema.
+// Required request payload: a valid schema definition
 app.post('/initialize', bodyParser, isloggedin.auth, function(req, res){
 
   if((!req.body) || (! req.body.schema)) {
-    return res.status(400).send('Schema definition missing.');
+    return res.status(400).json({error: "Request rejected", reason: "Schema definition is missing."});
   }
 
   var theschema = null;
@@ -158,14 +160,20 @@ app.post('/initialize', bodyParser, isloggedin.auth, function(req, res){
   try {
     // parse schema
     theschema = JSON.parse(req.body.schema);
-    // validate schema
-    // ...
   }
-  catch(e) {
-    return res.status(400).send('Schema definition is invalid: ' + e); 
+  catch(err) {
+    console.error("/initialize: payload " + req.body.schema + " caused JSON parsing error: " + JSON.stringify(err));
+    return res.status(400).json({error: "Request rejected", reason: "Schema definition is not valid JSON."});
   }
 
-  var cache = require('./lib/cache.js')(app.locals.cache);
+  // validate schema
+  var validationErrors = schema.validateSchemaDef(theschema);
+  if(validationErrors) {
+    return res.status(400).json({error: "Request rejected", reason: "Schema validation failed. Errors: " + validationErrors.join("; ")});
+  }
+
+
+  var cache = require("./lib/cache.js")(app.locals.cache);
   if (cache) {
     cache.clearAll();
   }
@@ -173,12 +181,12 @@ app.post('/initialize', bodyParser, isloggedin.auth, function(req, res){
   // re-create index database
   db.deleteAndCreate(function(err) {
     if(err) {
-      return res.status(500).send('Index could not be re-initialized: ' + err);
+      return res.status(500).json({error: "Request failed", reason: "Index database could not be re-initialized: " + JSON.stringify(err)});
     }
     // save schema definition
     schema.save(theschema, function(err, d) {
       if(err) {
-        return res.status(500).send('Schema could not be saved: ' + err);
+        return res.status(500).json({error: "Request failed", reason: "Schema could not be saved: " + JSON.stringify(err)});
       }
       console.log('schema saved',err,d);
       return res.status(200).end();
