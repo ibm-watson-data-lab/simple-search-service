@@ -124,8 +124,6 @@ app.post('/fetch', bodyParser, isloggedin.auth, function(req, res){
 
 // import previously uploaded CSV
 app.post('/import', bodyParser, isloggedin.auth, function(req, res){
-  console.log("****",req.body.schema);
-  console.log("****");
 
   var currentUpload = app.locals.import[req.body.upload_id];
 
@@ -147,10 +145,14 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   res.status(204).end();
 });
 
+// Initialize the SSS index by deleting all data and saving the new schema
+// Request parameters: 
+//  - schema: JSON defining a valid schema (required)
+// 
 app.post('/initialize', bodyParser, isloggedin.auth, function(req, res){
 
   if((!req.body) || (! req.body.schema)) {
-    return res.status(400).send('Schema definition missing.');
+    return res.status(400).json({error: "Request rejected", reason: "Schema definition is missing."});
   }
 
   var theschema = null;
@@ -158,14 +160,21 @@ app.post('/initialize', bodyParser, isloggedin.auth, function(req, res){
   try {
     // parse schema
     theschema = JSON.parse(req.body.schema);
-    // validate schema
-    // ...
   }
-  catch(e) {
-    return res.status(400).send('Schema definition is invalid: ' + e); 
+  catch(err) {
+    // payload is not valid JSON; return client error
+    console.error("/initialize: payload " + req.body.schema + " caused JSON parsing error: " + JSON.stringify(err));
+    return res.status(400).json({error: "Request rejected", reason: "Schema definition is not valid JSON."});
   }
 
-  var cache = require('./lib/cache.js')(app.locals.cache);
+  // validate schema definition
+  var validationErrors = schema.validateSchemaDef(theschema);
+  if(validationErrors) {
+    // payload is not valid schema definition; return client error
+    return res.status(400).json({error: "Request rejected", reason: "Schema validation failed. Errors: " + validationErrors.join("; ")});
+  }
+
+  var cache = require("./lib/cache.js")(app.locals.cache);
   if (cache) {
     cache.clearAll();
   }
@@ -173,14 +182,16 @@ app.post('/initialize', bodyParser, isloggedin.auth, function(req, res){
   // re-create index database
   db.deleteAndCreate(function(err) {
     if(err) {
-      return res.status(500).send('Index could not be re-initialized: ' + err);
+      // index database could not be dropped/created; return server error
+      return res.status(500).json({error: "Request failed", reason: "Index database could not be re-initialized: " + JSON.stringify(err)});
     }
     // save schema definition
-    schema.save(theschema, function(err, d) {
+    schema.save(theschema, function(err) {
       if(err) {
-        return res.status(500).send('Schema could not be saved: ' + err);
+        // schema could not be saved; return server error
+        return res.status(500).json({error: "Request failed", reason: "Schema could not be saved: " + JSON.stringify(err)});
       }
-      console.log('schema saved',err,d);
+      // initialization complete; return OK
       return res.status(200).end();
     });
   });

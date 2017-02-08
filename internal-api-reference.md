@@ -179,3 +179,47 @@ where `"complete":true` indicates the completion of the import process.
 ## POST /deleteeverything
 
 Delete the database and start again.
+
+
+## POST /initialize
+
+Delete the database and define schema.
+
+A form-encoded HTTP POST is expected to include a valid JSON payload describing the schema
+
+```
+	"fields": [
+		{
+			"name": "id",
+			"type": "string",
+			"facet": true,
+			"example": "4a9f23"
+		}, 
+		{
+			"name": "tags",
+			"type": "arrayofstrings",
+			"facet": true,
+			"example": "eins,zwei,drei"			
+		}, 
+		...
+	]
+```
+
+Each field specification must define the [field] `name`, [field] `type` and `facet` properties.
+The `example` property is optional. If set it should contain a valid value.
+
+> All property names are case sensitive.
+
+Valid values:
+
+ * `name`: any unique string
+ * `type`: "`string`" || "`number`" || "`boolean`" || "`arrayofstrings`"  (case sensitive)
+ * `facet`: `true` or `false`
+ * `example`: any string representing a valid value for the field
+
+Return codes and responses:
+
+* `200` Request was successfully processed.
+* `400` The schema definition is invalid. JSON response includes properties `error` and `reason`.
+* `500` Request processing failed. JSON response includes properties `error` and `reason`.
+
