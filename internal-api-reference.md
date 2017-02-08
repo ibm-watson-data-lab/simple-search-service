@@ -192,18 +192,22 @@ A form-encoded HTTP POST is expected to include a valid JSON payload describing 
 		{
 			"name": "id",
 			"type": "string",
-			"facet": true
+			"facet": true,
+			"example": "4a9f23"
 		}, 
 		{
 			"name": "tags",
 			"type": "arrayofstrings",
-			"facet": true
+			"facet": true,
+			"example": "eins,zwei,drei"			
 		}, 
 		...
 	]
 ```
 
 Each field specification must define the [field] `name`, [field] `type` and `facet` properties.
+The `example` property is optional. If set it should contain a valid value.
+
 > All property names are case sensitive.
 
 Valid values:
@@ -211,6 +215,7 @@ Valid values:
  * `name`: any unique string
  * `type`: "`string`" || "`number`" || "`boolean`" || "`arrayofstrings`"  (case sensitive)
  * `facet`: `true` or `false`
+ * `example`: any string representing a valid value for the field
 
 Return codes and responses:
 
