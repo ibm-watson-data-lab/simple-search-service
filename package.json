@@ -18,7 +18,7 @@
     "couchimport": "0.3.0",
     "csv-parse": "1.0.1",
     "debug": "^2.2.0",
-    "express": "4.12.x",
+    "express": "4.13.3",
     "multer": "^0.1.8",
     "passport": "^0.3.2",
     "passport-anonymous": "^1.0.1",
