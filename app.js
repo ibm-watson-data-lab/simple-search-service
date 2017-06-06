@@ -94,16 +94,16 @@ app.get('/search', cors(), function (req, res) {
 });
 
 // upload  CSV
-app.post('/upload', multipart, isloggedin.auth, function(req, res){
+app.post('/upload', multipart.single('file'), isloggedin.auth, function(req, res){
   var obj = {
-    files: req.files,
+    file: req.file,
     body: req.body
   };
 
   dbimport.clear();
-  app.locals.import[obj.files.file.name] = obj;
-  inference.infer(obj.files.file.path, function(err, data) {
-    data.upload_id = req.files.file.name;
+  app.locals.import[req.file.originalname] = obj;
+  inference.infer(req.file.path, function(err, data) {
+    data.upload_id = req.file.originalname;
     res.send(data);
   });
 });
@@ -132,7 +132,7 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
   schema.save(theschema, function(err, d) {
     console.log("schema saved",err,d);
     // import the data
-    dbimport.file(currentUpload.url || currentUpload.files.file.path, theschema, app.locals.cloudant, function(err, d) {
+    dbimport.file(currentUpload.url || currentUpload.file.path, theschema, app.locals.cloudant, function(err, d) {
       console.log("data imported",err,d);
       var cache = require('./lib/cache.js')(app.locals.cache);
       autocomplete.populate(app.locals.autocomplete);
