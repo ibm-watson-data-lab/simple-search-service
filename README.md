@@ -1,6 +1,6 @@
 # Overview: Simple Search Service
 
-![build status](https://travis-ci.org/ibm-cds-labs/simple-search-service.svg?branch=master)
+![build status](https://travis-ci.org/ibm-watson-data-lab/simple-search-service.svg?branch=master)
 
 Simple Search Service is an IBM Bluemix app that lets you quickly create a faceted search engine, exposing an API you can use to bring search into your own apps. The service also creates a website that lets you preview the API and test it against your own data as well as manage your data via a simple CMS.
 
@@ -20,7 +20,7 @@ Once the data is uploaded, you can use the UI to browse and manage your data via
 * pagination - `?q=black+fender+strat&bookmark=<xxx>`
 * faceting
 
-You can use this along with the rest of the API to integrate the Simple Search Service into your apps. For a full API reference, [click here](https://github.com/ibm-cds-labs/simple-search-service#api-reference).
+You can use this along with the rest of the API to integrate the Simple Search Service into your apps. For a full API reference, [click here](https://github.com/ibm-watson-data-lab/simple-search-service#api-reference).
 
 While this app is a demo to showcase how easily you can build an app on Bluemix using Node.js and Cloudant, it also provides a mature search API that scales with the addition of multiple Simple Search Service nodes. In fact, a similar architecture powers the search experience in the Bluemix services catalog.
 
@@ -35,7 +35,7 @@ A more detailed walkthrough of using Simple Search Service is available [here](h
 
 The fastest way to deploy this application to Bluemix is to click the **Deploy to Bluemix** button below.
 
-[![Deploy to Bluemix](https://deployment-tracker.mybluemix.net/stats/2956f80082fb32656c54ebba001dbdf3/button.svg)](https://bluemix.net/deploy?repository=https://github.com/ibm-cds-labs/simple-search-service)
+[![Deploy to Bluemix](https://deployment-tracker.mybluemix.net/stats/2956f80082fb32656c54ebba001dbdf3/button.svg)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-data-lab/simple-search-service)
 
 **Don't have a Bluemix account?** If you haven't already, you'll be prompted to sign up for a Bluemix account when you click the button.  Sign up, verify your email address, then return here and click the the **Deploy to Bluemix** button again. Your new credentials let you deploy to the platform and also to code online with Bluemix and Git. If you have questions about working in Bluemix, find answers in the [Bluemix Docs](https://www.ng.bluemix.net/docs/).
 
@@ -44,7 +44,7 @@ The fastest way to deploy this application to Bluemix is to click the **Deploy t
 Manual deployment to Bluemix requires `git` and the [Cloud Foundry CLI](https://console.ng.bluemix.net/docs/cli/index.html)
 
 ```
-$ git clone https://github.com/ibm-cds-labs/simple-search-service.git
+$ git clone https://github.com/ibm-watson-data-lab/simple-search-service.git
 $ cf create-service cloudantNoSQLDB Lite simple-search-service-cloudant-service  
 $ cd simple-search-service
 $ cf push
@@ -75,9 +75,9 @@ The Simple Search Service utilises [Etcd](https://github.com/coreos/etcd) to dis
 
 Other services that are available to the Simple Search Service are:
 
-* [The Simple Autocomplete Service](https://github.com/ibm-cds-labs/simple-autocomplete-service) - Add auto completion to the CMS 
+* [The Simple Autocomplete Service](https://github.com/ibm-watson-data-lab/simple-autocomplete-service) - Add auto completion to the CMS 
 * [The Simple Caching Service](https://github.com/MattCollins84/simple-cache-service) - Enable caching of popular searches
-* [Metrics Collector Microservice](https://github.com/ibm-cds-labs/metrics-collector-microservice) - Enable logging of searches
+* [Metrics Collector Microservice](https://github.com/ibm-watson-data-lab/metrics-collector-microservice) - Enable logging of searches
 
 ### Enabling the Service Registry
 
