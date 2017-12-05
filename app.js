@@ -532,4 +532,4 @@ http.listen(appEnv.port, "0.0.0.0", function() {
   console.log("server starting on " + appEnv.url);
 });
 
-require("cf-deployment-tracker-client").track();
+require("metrics-tracker-client").track();
