@@ -31,17 +31,17 @@ A more detailed walkthrough of using Simple Search Service is available [here](h
 <!-- Temporary diagram -->
 ![Architecture of Simple Search Service](https://developer.ibm.com/clouddataservices/wp-content/uploads/sites/47/2016/01/tmp_simple_search_sketch.jpg)
 
-## Running the app on Bluemix
+## Running the app on IBM Cloud
 
-The fastest way to deploy this application to Bluemix is to click the **Deploy to Bluemix** button below.
+The fastest way to deploy this application to Bluemix is to click the **Deploy to IBM Cloud** button below.
 
-[![Deploy to Bluemix](https://deployment-tracker.mybluemix.net/stats/2956f80082fb32656c54ebba001dbdf3/button.svg)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-data-lab/simple-search-service)
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-data-lab/simple-search-service)
 
-**Don't have a Bluemix account?** If you haven't already, you'll be prompted to sign up for a Bluemix account when you click the button.  Sign up, verify your email address, then return here and click the the **Deploy to Bluemix** button again. Your new credentials let you deploy to the platform and also to code online with Bluemix and Git. If you have questions about working in Bluemix, find answers in the [Bluemix Docs](https://www.ng.bluemix.net/docs/).
+**Don't have a IBM Cloud account?** If you haven't already, you'll be prompted to sign up for an IBM Cloud account when you click the button.  Sign up, verify your email address, then return here and click the the **Deploy to IBM Cloud** button again. Your new credentials let you deploy to the platform and also to code online with Bluemix and Git. If you have questions about working in Bluemix, find answers in the [IBM Cloud Docs](https://www.ng.bluemix.net/docs/).
 
-### Manual deployment to Bluemix
+### Manual deployment to IBM Cloud
 
-Manual deployment to Bluemix requires `git` and the [Cloud Foundry CLI](https://console.ng.bluemix.net/docs/cli/index.html)
+Manual deployment to IBM Cloud requires `git` and the [Cloud Foundry CLI](https://console.ng.bluemix.net/docs/cli/index.html)
 
 ```
 $ git clone https://github.com/ibm-watson-data-lab/simple-search-service.git
@@ -307,19 +307,11 @@ Valid values:
 
 
 ## Privacy Notice
-
-The Simple Search Service web application includes code to track deployments to Bluemix and other Cloud Foundry platforms. The following information is sent to a [Deployment Tracker](https://github.com/IBM-Bluemix/cf-deployment-tracker-service) service on each deployment:
-
-* Application Name (`application_name`)
-* Space ID (`space_id`)
-* Application Version (`application_version`)
-* Application URIs (`application_uris`)
-
-This data is collected from the `VCAP_APPLICATION` environment variable in IBM Bluemix and other Cloud Foundry platforms. This data is used by IBM to track metrics around deployments of sample applications to IBM Bluemix. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
+Refer to https://github.com/IBM/metrics-collector-client-node#privacy-notice
 
 ### Disabling Deployment Tracking
 
-For manual deploys, deployment tracking can be disabled by removing `require("cf-deployment-tracker-client").track();` from the end of the `app.js` main server file.
+For manual deploys, deployment tracking can be disabled by removing `require("metrics-tracker-client").track();` from the end of the `app.js` main server file.
 
 ### License 
 
