@@ -1,0 +1,8 @@
+id: https://github.com/ibm-watson-data-lab/simple-search-service
+runtimes: 
+ - Cloud Foundry
+services: 
+ - Cloudant NoSQL DB
+event_id: web
+event_organizer: dev-journeys
+language: nodejs
