@@ -142,8 +142,7 @@ app.post('/import', bodyParser, isloggedin.auth, function(req, res){
         }
       });
     });
-  })
-
+  });
   
   res.status(204).end();
 });
