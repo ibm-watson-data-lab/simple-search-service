@@ -126,21 +126,24 @@ app.post('/fetch', bodyParser, isloggedin.auth, function(req, res){
 app.post('/import', bodyParser, isloggedin.auth, function(req, res){
 
   var currentUpload = app.locals.import[req.body.upload_id];
-
+  console.log('CURRENTUPLOAD',currentUpload);
   // run this in parallel to save time
   var theschema = JSON.parse(req.body.schema);
-  schema.save(theschema, function(err, d) {
-    console.log("schema saved",err,d);
-    // import the data
-    dbimport.file(currentUpload.url || currentUpload.file.path, theschema, app.locals.cloudant, function(err, d) {
-      console.log("data imported",err,d);
-      var cache = require('./lib/cache.js')(app.locals.cache);
-      autocomplete.populate(app.locals.autocomplete);
-      if (cache) {
-        cache.clearAll();
-      }
+  dbimport.preview(currentUpload.url || currentUpload.file.path, function(err, delimiter) {
+    schema.save(theschema, function(err, d) {
+      console.log("schema saved",err,d);
+      // import the data
+      dbimport.file(currentUpload.url || currentUpload.file.path, theschema, delimiter, app.locals.cloudant, function(err, d) {
+        console.log("data imported",err,d);
+        var cache = require('./lib/cache.js')(app.locals.cache);
+        autocomplete.populate(app.locals.autocomplete);
+        if (cache) {
+          cache.clearAll();
+        }
+      });
     });
-  });
+  })
+
   
   res.status(204).end();
 });
