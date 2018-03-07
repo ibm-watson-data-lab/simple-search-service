@@ -26,7 +26,7 @@
             <tr ng-repeat="field in dbschema.fields">
               <td>{{field.name}}</td>
               <td ng-if="field.type == 'string'">
-                <input type="text" name="{{field.name}}" data-autocomplete="{{ field.facet ? field.name : false }}" class="input_text" value="" placeholder="e.g. {{field.example}}">
+                <textarea type="text" name="{{field.name}}" data-autocomplete="{{ field.facet ? field.name : false }}" class="input_text" placeholder="e.g. {{field.example}}"></textarea>
               </td>
               <td ng-if="field.type == 'number'">
                 <input type="number" name="{{field.name}}" class="input_text" value="" placeholder="e.g. {{field.example}}">
