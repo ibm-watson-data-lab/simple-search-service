@@ -19,6 +19,7 @@ Once the data is uploaded, you can use the UI to browse and manage your data via
 * free-text search - `?q=black+fender+strat`
 * pagination - `?q=black+fender+strat&bookmark=<xxx>`
 * faceting
+* sorting - `?sort=color` or `?sort=-color` for descending
 
 You can use this along with the rest of the API to integrate the Simple Search Service into your apps. For a full API reference, [click here](https://github.com/ibm-watson-data-lab/simple-search-service#api-reference).
 
