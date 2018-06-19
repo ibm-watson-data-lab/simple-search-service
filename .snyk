@@ -1,0 +1,22 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.12.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:hoek:20180212':
+    - couchimport > cloudant > request > hawk > hoek:
+        patched: '2018-06-19T04:38:09.623Z'
+    - couchimport > cloudant > request > hawk > boom > hoek:
+        patched: '2018-06-19T04:38:09.623Z'
+    - couchimport > cloudant > request > hawk > sntp > hoek:
+        patched: '2018-06-19T04:38:09.623Z'
+    - couchimport > cloudant > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-06-19T04:38:09.623Z'
+    - couchimport > cloudant > cloudant-nano > cloudant-follow > request > hawk > hoek:
+        patched: '2018-06-19T04:38:09.623Z'
+    - couchimport > cloudant > cloudant-nano > cloudant-follow > request > hawk > boom > hoek:
+        patched: '2018-06-19T04:38:09.623Z'
+    - couchimport > cloudant > cloudant-nano > cloudant-follow > request > hawk > sntp > hoek:
+        patched: '2018-06-19T04:38:09.623Z'
+    - couchimport > cloudant > cloudant-nano > cloudant-follow > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-06-19T04:38:09.623Z'
