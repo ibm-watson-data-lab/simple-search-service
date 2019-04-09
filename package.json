@@ -11,7 +11,7 @@
     "async": "^2.4.1",
     "body-parser": "^1.17.2",
     "metrics-tracker-client": "*",
-    "cfenv": "1.0.4",
+    "cfenv": "1.2.1",
     "cloudant": "1.8.0",
     "compression": "^1.6.2",
     "cors": "^2.8.3",
