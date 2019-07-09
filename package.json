@@ -4,7 +4,9 @@
   "description": "A Node app that creates a faceted search engine, powered by IBM Cloudant",
   "scripts": {
     "start": "node app.js",
-    "test": "grunt"
+    "test": "grunt",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -26,7 +28,8 @@
     "request": "^2.81.0",
     "socket.io": "^2.0.2",
     "underscore": "^1.8.3",
-    "simple-service-registry": "^0.1.1"
+    "simple-service-registry": "^0.1.1",
+    "snyk": "^1.192.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.2.3",
@@ -45,5 +48,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ibm-watson-data-lab/simple-search-service"
-  }
+  },
+  "snyk": true
 }
