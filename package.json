@@ -16,7 +16,7 @@
     "compression": "^1.6.2",
     "cors": "^2.8.3",
     "couchimport": "^0.6.0",
-    "csv-parse": "^1.2.0",
+    "csv-parse": "^4.6.5",
     "debug": "^2.6.8",
     "express": "^4.15.3",
     "multer": "^1.3.0",
