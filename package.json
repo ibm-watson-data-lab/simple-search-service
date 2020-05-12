@@ -15,7 +15,7 @@
     "cloudant": "1.8.0",
     "compression": "^1.6.2",
     "cors": "^2.8.3",
-    "couchimport": "^0.6.0",
+    "couchimport": "^1.4.5",
     "csv-parse": "^1.2.0",
     "debug": "^2.6.8",
     "express": "^4.15.3",
